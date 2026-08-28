@@ -24,6 +24,7 @@ import { AdminLoginModal } from './components/AdminLoginModal';
 import { CustomerAuthModal } from './components/CustomerAuthModal';
 import { CustomerAccountDrawer } from './components/CustomerAccountDrawer';
 import { CollectionPage } from './components/CollectionPage';
+import { ProductPage } from './components/ProductPage';
 import { safeLocalStorage } from './utils/storage';
 
 import { 
@@ -159,9 +160,10 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedStory, setSelectedStory] = useState<DiscoveryStory | null>(null);
 
-  // Page View Routing (home vs collection)
-  const [currentView, setCurrentView] = useState<'home' | 'collection'>('home');
+  // Page View Routing (home vs collection vs product)
+  const [currentView, setCurrentView] = useState<'home' | 'collection' | 'product'>('home');
   const [currentCollectionSlug, setCurrentCollectionSlug] = useState<string>('new-arrivals');
+  const [activeProductPage, setActiveProductPage] = useState<Product | null>(null);
 
   // Active Category / Style / Gender Filters for home
   const [activeFilter, setActiveFilter] = useState<{
@@ -169,7 +171,7 @@ export default function App() {
     value: string;
   }>({ type: 'all', value: 'All' });
 
-  // Dedicated Route & Shortcut Listener (#admin, #/collections/..., Ctrl+Shift+A)
+  // Dedicated Route & Shortcut Listener (#admin, #/collections/..., #/product/..., Ctrl+Shift+A)
   useEffect(() => {
     const handleRouteChange = () => {
       if (typeof window === 'undefined') return;
@@ -182,6 +184,15 @@ export default function App() {
           setIsAdminDashboardOpen(true);
         } else {
           setIsAdminLoginModalOpen(true);
+        }
+      } else if (hash.startsWith('#/product/') || hash.startsWith('#product/')) {
+        const prodId = hash.replace(/^#\/?product\//, '');
+        const found = products.find((p) => p.id.toLowerCase() === prodId.toLowerCase());
+        if (found) {
+          setActiveProductPage(found);
+          setCurrentView('product');
+        } else {
+          setCurrentView('home');
         }
       } else if (hash.startsWith('#/collections/') || hash.startsWith('#collections/')) {
         const slug = hash.replace(/^#\/?collections\//, '') || 'new-arrivals';
@@ -224,6 +235,13 @@ export default function App() {
   }, [isAdminLoggedIn]);
 
   // Route Navigation Handlers
+  const navigateToProduct = (product: Product) => {
+    setActiveProductPage(product);
+    setCurrentView('product');
+    window.location.hash = `/product/${product.id}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const navigateToCollection = (slug: string = 'new-arrivals') => {
     setCurrentView('collection');
     setCurrentCollectionSlug(slug);
@@ -631,9 +649,40 @@ export default function App() {
         logoCMS={logoCMS}
       />
 
-      {/* Main Page Body: Collection View OR Home View */}
+      {/* Main Page Body: Product View OR Collection View OR Home View */}
       <main className="flex-1">
-        {currentView === 'collection' ? (
+        {currentView === 'product' && activeProductPage ? (
+          <ProductPage
+            product={activeProductPage}
+            allProducts={products}
+            onBack={() => {
+              if (window.history.length > 1) {
+                window.history.back();
+              } else {
+                navigateToCollection('new-arrivals');
+              }
+            }}
+            onAddToCart={(prod, size, qty, custom) => {
+              handleAddToCart(prod, size, qty);
+              addToast('success', `Added ${prod.name} (${size}) to your Shopping Bag`);
+            }}
+            onToggleWishlist={handleToggleWishlist}
+            isWishlisted={isWishlisted}
+            onSelectProduct={(prod) => navigateToProduct(prod)}
+            onOpenAppointment={() => setIsAppointmentOpen(true)}
+            onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+            onBuyNow={(prod, size, qty) => {
+              handleAddToCart(prod, size, qty);
+              setIsCartOpen(false);
+              setCheckoutData((prev) => ({
+                ...prev,
+                subtotal: prod.price * qty,
+                discount: 0,
+              }));
+              setIsCheckoutOpen(true);
+            }}
+          />
+        ) : currentView === 'collection' ? (
           <CollectionPage
             products={products}
             currentCollectionSlug={currentCollectionSlug}
@@ -642,7 +691,7 @@ export default function App() {
               window.location.hash = `/collections/${slug}`;
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            onSelectProduct={(product) => setSelectedProduct(product)}
+            onSelectProduct={(product) => navigateToProduct(product)}
             onAddToCart={(product, size, qty) => handleAddToCart(product, size || 'M', qty || 1)}
             onToggleWishlist={handleToggleWishlist}
             isWishlisted={isWishlisted}
@@ -863,6 +912,10 @@ export default function App() {
         isWishlisted={selectedProduct ? isWishlisted(selectedProduct.id) : false}
         onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
         onOpenAppointment={() => setIsAppointmentOpen(true)}
+        onOpenFullProductPage={(product) => {
+          setSelectedProduct(null);
+          navigateToProduct(product);
+        }}
       />
 
       <AppointmentModal

@@ -11,6 +11,7 @@ interface ProductDetailModalProps {
   isWishlisted: boolean;
   onOpenSizeGuide: () => void;
   onOpenAppointment: () => void;
+  onOpenFullProductPage?: (product: Product) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -22,6 +23,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   isWishlisted,
   onOpenSizeGuide,
   onOpenAppointment,
+  onOpenFullProductPage,
 }) => {
   if (!isOpen || !product) return null;
 
@@ -286,15 +288,31 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               </div>
 
-              {/* Guarantees */}
-              <div className="pt-2 border-t border-[#DFCBB8] grid grid-cols-2 gap-2 text-[10px] text-[#7A6F68]">
-                <div className="flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#9E472A]" />
-                  <span>Free Pan-India Delivery on orders &gt; ₹2,999</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <RotateCcw className="w-3.5 h-3.5 text-[#9E472A]" />
-                  <span>15 Days Hassle-Free Exchange</span>
+              {/* Guarantees & Full Page View */}
+              <div className="pt-2 border-t border-[#DFCBB8] space-y-2">
+                {onOpenFullProductPage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onOpenFullProductPage(product);
+                    }}
+                    className="w-full py-2 bg-[#FAF4EA] hover:bg-[#F3E8DB] border border-[#DFCBB8] text-[#9E472A] hover:text-[#85371D] font-cinzel text-xs font-semibold tracking-wider uppercase rounded-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>View Full Product Page & Sizing</span>
+                    <Sparkles className="w-3.5 h-3.5 text-[#B58A3A]" />
+                  </button>
+                )}
+
+                <div className="grid grid-cols-2 gap-2 text-[10px] text-[#7A6F68]">
+                  <div className="flex items-center gap-1.5">
+                    <Truck className="w-3.5 h-3.5 text-[#9E472A]" />
+                    <span>Free Pan-India Delivery &gt; ₹2,999</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <RotateCcw className="w-3.5 h-3.5 text-[#9E472A]" />
+                    <span>15 Days Easy Exchange</span>
+                  </div>
                 </div>
               </div>
 
