@@ -1,7 +1,6 @@
 import React from 'react';
 import { Heart, ArrowRight, ShoppingBag, Eye } from 'lucide-react';
 import { Product } from '../types';
-import { IndianArchCard } from './ArchShape';
 
 interface BestSellersProps {
   products: Product[];
@@ -32,16 +31,16 @@ export const BestSellers: React.FC<BestSellersProps> = ({
         <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" aria-hidden="true" />
             <h2 className="font-cinzel text-lg sm:text-2xl font-bold tracking-[0.2em] text-[#2C2420] uppercase text-center">
               SHOP OUR BESTSELLERS
             </h2>
-            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" aria-hidden="true" />
           </div>
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Product Cards Grid: Responsive 2-4 columns */}
+        {/* Product Cards Grid: Responsive 2-4 columns rectangular pattern */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {visibleProducts.map((product) => {
             const wish = isWishlisted(product.id);
@@ -52,76 +51,87 @@ export const BestSellers: React.FC<BestSellersProps> = ({
                 id={`product-card-${product.id}`}
                 className="group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
-                {/* Architectural Stepped Cusped Arch Frame Container matching Shop By Style width */}
+                {/* Clean Rectangular Card (3:4 ratio) matching Shop by Style */}
                 <div 
-                  className="relative w-full max-w-[280px] mb-3 transition-all duration-300"
+                  className="relative w-full max-w-[280px] aspect-[3/4] overflow-hidden rounded-xl bg-[#F0EBE1] border border-[#E4D7C8] group-hover:border-[#9E472A]/60 transition-all duration-500 shadow-sm group-hover:shadow-lg mb-3"
                   onClick={() => onSelectProduct(product)}
                 >
-                  <IndianArchCard
-                    id={`bestseller-${product.id}`}
-                    image={product.image}
+                  {/* Primary & Hover Flip Images */}
+                  <img
+                    src={product.image}
                     alt={product.name}
-                    aspectRatio="aspect-[3/4]"
-                    borderColor="#C4A894"
-                    strokeWidth={1.8}
-                    showDoubleBorder={true}
-                    showInnerGoldInlay={wish}
-                    overlayGradient={true}
+                    loading="lazy"
+                    className={`w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108 ${
+                      product.images && product.images.length > 1
+                        ? 'group-hover:opacity-0'
+                        : ''
+                    }`}
+                  />
+                  {product.images && product.images.length > 1 && (
+                    <img
+                      src={product.images[1]}
+                      alt={`${product.name} alternate view`}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover object-top opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-108 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                    />
+                  )}
+
+                  {/* Gradient Vignette Overlay on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Wishlist Heart Icon Button */}
+                  <button
+                    id={`wishlist-button-${product.id}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggleWishlist(product);
+                    }}
+                    aria-label={wish ? 'Remove from wishlist' : 'Add to wishlist'}
+                    className={`absolute top-2.5 right-2.5 p-2 rounded-full transition-all duration-200 z-20 ${
+                      wish 
+                        ? 'bg-[#9E472A] text-white shadow-md' 
+                        : 'bg-white/85 backdrop-blur-xs text-[#2C2420] hover:bg-white hover:text-[#9E472A] shadow-xs'
+                    }`}
                   >
-                    {/* Wishlist Heart Icon Button */}
+                    <Heart className={`w-3.5 h-3.5 ${wish ? 'fill-current' : ''}`} />
+                  </button>
+
+                  {/* Tag / Badge */}
+                  {product.isNew && (
+                    <span className="absolute top-2.5 left-2.5 bg-[#FAF6F0]/95 backdrop-blur-xs text-[#9E472A] text-[9px] font-cinzel font-bold px-2 py-0.5 tracking-wider uppercase rounded-sm z-20 shadow-xs border border-[#DFCBB8]">
+                      New
+                    </span>
+                  )}
+
+                  {/* Quick Action Overlay (Slide Up on Hover) */}
+                  <div className="absolute inset-x-2 bottom-2.5 p-1.5 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 flex items-center justify-center gap-1.5 z-20">
                     <button
-                      id={`wishlist-button-${product.id}`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onToggleWishlist(product);
+                        onSelectProduct(product);
                       }}
-                      aria-label={wish ? 'Remove from wishlist' : 'Add to wishlist'}
-                      className={`absolute top-10 right-2.5 p-1.5 rounded-full transition-all duration-200 z-20 ${
-                        wish 
-                          ? 'bg-[#9E472A] text-white shadow-md' 
-                          : 'bg-white/85 backdrop-blur-xs text-[#2C2420] hover:bg-white hover:text-[#9E472A] shadow-xs'
-                      }`}
+                      className="p-2 bg-white text-[#2C2420] hover:bg-[#FAF6F0] rounded text-xs font-cinzel font-medium flex items-center gap-1 shadow-md cursor-pointer"
+                      title="Quick View"
                     >
-                      <Heart className={`w-3.5 h-3.5 ${wish ? 'fill-current' : ''}`} />
+                      <Eye className="w-3.5 h-3.5" />
                     </button>
-
-                    {/* Quick Action Overlay (Slide Up on Hover) */}
-                    <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-[#2C2420]/90 via-[#2C2420]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-1.5 z-20">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectProduct(product);
-                        }}
-                        className="p-1.5 bg-white text-[#2C2420] hover:bg-[#FAF6F0] rounded-xs text-xs font-cinzel font-medium flex items-center gap-1 shadow-md cursor-pointer"
-                        title="Quick View"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onAddToCart(product);
-                        }}
-                        className="flex-1 py-1.5 px-2 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-xs text-[10px] font-cinzel font-semibold tracking-wider flex items-center justify-center gap-1 shadow-md cursor-pointer"
-                      >
-                        <ShoppingBag className="w-3 h-3" />
-                        <span>ADD</span>
-                      </button>
-                    </div>
-
-                    {/* Tag / Badge */}
-                    {product.isNew && (
-                      <span className="absolute top-10 left-2.5 bg-[#FAF6F0]/95 backdrop-blur-xs text-[#9E472A] text-[9px] font-cinzel font-bold px-1.5 py-0.5 tracking-wider uppercase rounded-2xs z-20 shadow-2xs border border-[#DFCBB8]">
-                        New
-                      </span>
-                    )}
-                  </IndianArchCard>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAddToCart(product);
+                      }}
+                      className="flex-1 py-2 px-2 bg-[#9E472A] hover:bg-[#85371D] text-white rounded text-[10px] font-cinzel font-semibold tracking-wider flex items-center justify-center gap-1 shadow-md cursor-pointer"
+                    >
+                      <ShoppingBag className="w-3 h-3" />
+                      <span>ADD TO BAG</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Product Name */}
                 <h3 
                   onClick={() => onSelectProduct(product)}
-                  className="font-cinzel text-xs sm:text-sm font-semibold text-[#2C2420] hover:text-[#9E472A] transition-colors leading-tight text-center"
+                  className="font-cinzel text-xs sm:text-sm font-semibold text-[#2C2420] hover:text-[#9E472A] transition-colors leading-tight text-center line-clamp-1"
                 >
                   {product.name}
                 </h3>
@@ -151,7 +161,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({
                 setShowAllPieces(!showAllPieces);
                 onViewAllClick();
               }}
-              className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[#9E472A] text-[#9E472A] hover:bg-[#9E472A] hover:text-white rounded-xs text-xs font-cinzel font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
+              className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[#9E472A] text-[#9E472A] hover:bg-[#9E472A] hover:text-white rounded text-xs font-cinzel font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
             >
               <span>{showAllPieces ? 'SHOW FEWER PIECES' : `VIEW ALL ${products.length} ENSEMBLES`}</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
