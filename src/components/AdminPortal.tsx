@@ -756,10 +756,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       
       {/* Mobile Top Header */}
       <div className="md:hidden bg-[#380810] border-b border-[#4E0D17] px-4 py-3 flex items-center justify-between z-30 sticky top-0 text-white">
-        <div className="flex items-center gap-2.5">
-          <BrandLogo variant="light" size="sm" />
+        <div className="flex items-center gap-3">
+          <div 
+            onClick={onCloseAdminPortal}
+            title="View Live Storefront"
+            className="bg-white px-2.5 py-1 rounded-lg border border-[#F0D5DA] shadow-xs flex items-center justify-center cursor-pointer"
+          >
+            <BrandLogo size="sm" logoCMS={logoCMS} />
+          </div>
           <span className="text-[10px] uppercase font-cinzel font-bold bg-[#7A1526] text-white px-2.5 py-0.5 rounded shadow-2xs">
-            CMS Admin
+            Admin
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -778,12 +784,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       }`}>
         
         {/* Sidebar Header: Brand & Status */}
-        <div className="p-5 border-b border-[#4E0D17]">
-          <div className="flex items-center justify-between">
-            <BrandLogo variant="light" size="md" />
+        <div className="p-4 border-b border-[#4E0D17]">
+          <div 
+            onClick={onCloseAdminPortal}
+            title="Click to view live website homepage"
+            className="bg-white p-3.5 rounded-xl border border-[#F0D5DA] shadow-xs flex flex-col items-center justify-center cursor-pointer hover:shadow-md transition-all group"
+          >
+            <BrandLogo size="md" logoCMS={logoCMS} />
+            <div className="mt-1.5 flex items-center gap-1 text-[10px] font-cinzel font-bold text-[#7A1526] tracking-wider uppercase opacity-90 group-hover:opacity-100">
+              <span>Atelier Admin</span>
+            </div>
           </div>
           
-          <div className="mt-3.5 pt-3 border-t border-[#4E0D17] flex items-center justify-between text-xs">
+          <div className="mt-3 pt-3 border-t border-[#4E0D17] flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#52C41A] animate-pulse" />
               <span className="text-[#F5DDE1] font-medium text-[11px] truncate max-w-[130px]" title={adminEmail}>
@@ -882,18 +895,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       <main className="flex-1 min-h-screen overflow-y-auto bg-[#FAF5F6]">
         
         {/* Top Header Bar */}
-        <header className="bg-white border-b border-[#F0D5DA] px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-xs">
-          <div>
-            <div className="flex items-center gap-2 text-xs text-[#7E4A53]">
-              <span>Label Shikha Warule</span>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-[#7A1526] font-medium uppercase font-cinzel">
-                {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label || 'Dashboard'}
-              </span>
+        <header className="bg-white border-b border-[#F0D5DA] px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-xs">
+          <div className="flex items-center gap-4">
+            <div 
+              onClick={onCloseAdminPortal}
+              title="Click to preview live homepage" 
+              className="cursor-pointer hover:opacity-90 transition-opacity hidden sm:block shrink-0 pr-4 border-r border-[#F0D5DA]"
+            >
+              <BrandLogo size="sm" logoCMS={logoCMS} />
             </div>
-            <h1 className="text-xl sm:text-2xl font-cinzel font-bold text-[#3B0A12] tracking-wide mt-0.5">
-              {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label}
-            </h1>
+            <div>
+              <div className="flex items-center gap-2 text-xs text-[#7E4A53]">
+                <span>Label Shikha Warule</span>
+                <ChevronRight className="w-3 h-3" />
+                <span className="text-[#7A1526] font-medium uppercase font-cinzel">
+                  {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label || 'Dashboard'}
+                </span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-cinzel font-bold text-[#3B0A12] tracking-wide mt-0.5">
+                {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label}
+              </h1>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -5021,7 +5043,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           <div className="bg-white text-[#3B0A12] border border-[#F0D5DA] rounded-xl max-w-xl w-full p-6 space-y-4 text-xs shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-gray-200">
               <div className="flex items-center gap-2">
-                <BrandLogo size="sm" />
+                <BrandLogo size="sm" logoCMS={logoCMS} />
                 <span className="font-mono font-bold text-sm text-[#7A1526]">INVOICE #{selectedOrderForInvoice.orderNumber}</span>
               </div>
               <button onClick={() => setSelectedOrderForInvoice(null)} className="p-1 hover:text-black">
