@@ -34,7 +34,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
             <h2 className="font-cinzel text-lg sm:text-2xl font-bold tracking-[0.2em] text-[#2C2420] uppercase text-center">
-              CURATED COLLECTION ({products.length} PIECES)
+              SHOP OUR BESTSELLERS
             </h2>
             <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
           </div>

@@ -4,7 +4,8 @@ import { Hero } from './components/Hero';
 import { ShopByStyle } from './components/ShopByStyle';
 import { BestSellers } from './components/BestSellers';
 import { ShopByCategory } from './components/ShopByCategory';
-import { WatchDiscovery } from './components/WatchDiscovery';
+import { DiscoverySection } from './components/DiscoverySection';
+import { FlagshipStore } from './components/FlagshipStore';
 import { ClientDiaries } from './components/ClientDiaries';
 import { BookAppointment } from './components/BookAppointment';
 import { Footer } from './components/Footer';
@@ -712,20 +713,22 @@ export default function App() {
               onViewAllCategories={() => navigateToCollection('all')}
             />
 
-            {/* 6. Watch Our Discovery Section */}
-            <WatchDiscovery
-              storiesList={discoveryStories}
-              onSelectStory={(story) => setSelectedStory(story)}
+            {/* 6. Discovery Product Carousel Section */}
+            <DiscoverySection
+              onSelectProduct={(product) => setSelectedProduct(product)}
             />
 
-            {/* 7. Client Diaries Section */}
+            {/* 7. Experience Our Flagship Store Section (Nerul Only) */}
+            <FlagshipStore />
+
+            {/* 8. Client Diaries Section */}
             <ClientDiaries
               diariesList={clientDiaries}
               onOpenReviewModal={() => setIsClientDiaryModalOpen(true)}
               onBookAppointment={() => setIsAppointmentOpen(true)}
             />
 
-            {/* 8. Book An Appointment Banner */}
+            {/* 9. Book An Appointment Banner */}
             <BookAppointment
               onOpenBooking={() => setIsAppointmentOpen(true)}
             />

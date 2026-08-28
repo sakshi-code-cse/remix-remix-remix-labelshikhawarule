@@ -95,25 +95,11 @@ export const StoreLocatorModal: React.FC<ModalProps> = ({ isOpen, onClose }) => 
 
   const stores = [
     {
-      city: 'Mumbai (Flagship Atelier)',
-      address: '14, Pali Hill Road, Bandra West, Mumbai 400050',
-      hours: 'Mon – Sun: 11:00 AM – 08:00 PM',
-      phone: '+91 22 2640 1890',
-      email: 'mumbai.atelier@shikhawarule.com',
-    },
-    {
-      city: 'New Delhi (Couture Gallery)',
-      address: 'Kalka Das Marg, Near Qutub Minar, Mehrauli, New Delhi 110030',
-      hours: 'Tue – Sun: 11:00 AM – 07:30 PM',
-      phone: '+91 11 4108 3345',
-      email: 'delhi.studio@shikhawarule.com',
-    },
-    {
-      city: 'Bengaluru (Experience Studio)',
-      address: '100ft Road, 12th Main, Indiranagar, Bengaluru 560038',
-      hours: 'Mon – Sat: 11:00 AM – 08:00 PM',
-      phone: '+91 80 4120 7712',
-      email: 'blr@shikhawarule.com',
+      city: 'Nerul, Navi Mumbai (Flagship Atelier)',
+      address: 'Sector 19A, Nerul West, Navi Mumbai, Maharashtra 400706',
+      hours: 'Mon – Sun: 11:00 AM – 08:30 PM',
+      phone: '+91 22 2770 1890 / +91 98200 12345',
+      email: 'nerul.atelier@shikhawarule.com',
     },
   ];
 
