@@ -310,26 +310,26 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
   return (
     <div
       id="image-resizer-modal"
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#20050A]/85 backdrop-blur-md p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <div className="relative w-full max-w-5xl bg-[#18110D] border border-[#4A3227] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-5xl bg-white border border-[#EAC8CE] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-5 py-4 bg-[#231712] border-b border-[#3E2921]">
+        <div className="flex items-center justify-between px-5 py-4 bg-[#FCF4F6] border-b border-[#F0D5DA]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#9E472A]/20 border border-[#9E472A]/50 flex items-center justify-center text-[#E08A68]">
+            <div className="w-9 h-9 rounded-lg bg-[#7A1526]/10 border border-[#7A1526]/30 flex items-center justify-center text-[#7A1526]">
               {isProductMode ? <ShoppingBag className="w-5 h-5" /> : <Crop className="w-5 h-5" />}
             </div>
             <div>
-              <h3 className="text-base font-cinzel font-bold text-white tracking-wide flex items-center gap-2">
+              <h3 className="text-base font-cinzel font-bold text-[#4A0E17] tracking-wide flex items-center gap-2">
                 {isProductMode ? 'Resize & Frame Garment Image' : 'Resize & Frame Hero Banner'}
-                <span className="text-[10px] px-2 py-0.5 rounded bg-[#9E472A] text-white font-sans font-medium uppercase tracking-wider">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-[#7A1526] text-white font-sans font-medium uppercase tracking-wider">
                   {isProductMode ? 'Lookbook Atelier' : 'Pro Atelier Studio'}
                 </span>
               </h3>
-              <p className="text-xs text-[#A89689] mt-0.5">
+              <p className="text-xs text-[#7E4A53] mt-0.5">
                 Drag to reposition, adjust zoom slider, and select the optimal aspect ratio for {title}.
               </p>
             </div>
@@ -338,7 +338,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="p-2 rounded-lg bg-[#2E1E17] hover:bg-[#3E2921] text-[#C4A894] hover:text-white transition-colors cursor-pointer"
+              className="p-2 rounded-lg bg-white hover:bg-[#FDF2F4] text-[#7E4A53] hover:text-[#4A0E17] border border-[#F0D5DA] transition-colors cursor-pointer"
               title="Close without saving"
             >
               <X className="w-5 h-5" />
@@ -350,23 +350,23 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 flex-1 overflow-y-auto">
           
           {/* Left Column: Interactive Canvas / Viewport Workspace */}
-          <div className="lg:col-span-8 p-4 sm:p-6 flex flex-col items-center justify-center bg-[#100B08] border-b lg:border-b-0 lg:border-r border-[#3E2921] relative select-none">
+          <div className="lg:col-span-8 p-4 sm:p-6 flex flex-col items-center justify-center bg-[#2B050B] border-b lg:border-b-0 lg:border-r border-[#EAC8CE] relative select-none">
             
             {/* Viewport Toolbar & Device Preview Toggle */}
-            <div className="w-full flex items-center justify-between mb-3 text-xs text-[#C4A894]">
+            <div className="w-full flex items-center justify-between mb-3 text-xs text-[#F5DDE1]">
               <div className="flex items-center gap-2">
-                <span className="font-cinzel text-[11px] text-[#E08A68] flex items-center gap-1">
-                  <Move className="w-3.5 h-3.5" /> Drag image to adjust model/garment focus
+                <span className="font-cinzel text-[11px] text-[#FCEEF0] flex items-center gap-1">
+                  <Move className="w-3.5 h-3.5 text-[#E3BAC2]" /> Drag image to adjust model/garment focus
                 </span>
               </div>
 
               {/* View Switcher */}
-              <div className="flex items-center gap-1 bg-[#1C120D] p-1 rounded-lg border border-[#3E2921]">
+              <div className="flex items-center gap-1 bg-[#1A0307] p-1 rounded-lg border border-[#520C17]">
                 <button
                   type="button"
                   onClick={() => setPreviewMode('desktop')}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
-                    previewMode === 'desktop' ? 'bg-[#9E472A] text-white' : 'text-[#A89689] hover:text-white'
+                    previewMode === 'desktop' ? 'bg-[#851628] text-white' : 'text-[#D9AAB3] hover:text-white'
                   }`}
                 >
                   <Laptop className="w-3.5 h-3.5" /> {isProductMode ? 'Card View' : 'Desktop View'}
@@ -375,7 +375,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                   type="button"
                   onClick={() => setPreviewMode('mobile')}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer ${
-                    previewMode === 'mobile' ? 'bg-[#9E472A] text-white' : 'text-[#A89689] hover:text-white'
+                    previewMode === 'mobile' ? 'bg-[#851628] text-white' : 'text-[#D9AAB3] hover:text-white'
                   }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" /> Mobile Cut
@@ -385,7 +385,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
 
             {/* Visual Cropping Window Frame */}
             <div
-              className={`relative overflow-hidden bg-black/90 rounded-xl border-2 border-[#E08A68]/70 shadow-2xl transition-all duration-300 ${
+              className={`relative overflow-hidden bg-black/90 rounded-xl border-2 border-[#D9AAB3] shadow-2xl transition-all duration-300 ${
                 isProductMode 
                   ? 'max-w-[420px] w-full' 
                   : (previewMode === 'mobile' ? 'w-[280px] max-w-full' : 'w-full max-w-[660px]')
@@ -452,7 +452,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
               <button
                 type="button"
                 onClick={handleRotateLeft}
-                className="p-2 rounded-lg bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] hover:text-white border border-[#6B1422] text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 title="Rotate 90° Counter-Clockwise"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> -90°
@@ -461,7 +461,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
               <button
                 type="button"
                 onClick={handleRotateRight}
-                className="p-2 rounded-lg bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] hover:text-white border border-[#6B1422] text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 title="Rotate 90° Clockwise"
               >
                 <RotateCw className="w-3.5 h-3.5" /> +90°
@@ -471,7 +471,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                 type="button"
                 onClick={() => setFlipH(!flipH)}
                 className={`p-2 rounded-lg border text-xs flex items-center gap-1 transition-colors cursor-pointer ${
-                  flipH ? 'bg-[#9E472A] text-white border-[#C56342]' : 'bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] border-[#3E2921]'
+                  flipH ? 'bg-[#851628] text-white border-[#B31D36]' : 'bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] border-[#6B1422]'
                 }`}
                 title="Flip Horizontal"
               >
@@ -482,7 +482,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                 type="button"
                 onClick={() => setFlipV(!flipV)}
                 className={`p-2 rounded-lg border text-xs flex items-center gap-1 transition-colors cursor-pointer ${
-                  flipV ? 'bg-[#9E472A] text-white border-[#C56342]' : 'bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] border-[#3E2921]'
+                  flipV ? 'bg-[#851628] text-white border-[#B31D36]' : 'bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] border-[#6B1422]'
                 }`}
                 title="Flip Vertical"
               >
@@ -492,7 +492,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
               <button
                 type="button"
                 onClick={handleFitCenter}
-                className="p-2 rounded-lg bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] hover:text-white border border-[#6B1422] text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 title="Center & Reset Pan"
               >
                 <Maximize2 className="w-3.5 h-3.5" /> Center
@@ -501,7 +501,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
               <button
                 type="button"
                 onClick={handleReset}
-                className="p-2 rounded-lg bg-[#1C120D] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                className="p-2 rounded-lg bg-[#3D0A13] hover:bg-[#540F1B] text-[#F5DDE1] hover:text-white border border-[#6B1422] text-xs flex items-center gap-1 transition-colors cursor-pointer"
                 title="Reset All Adjustments"
               >
                 <RefreshCw className="w-3.5 h-3.5" /> Reset
@@ -510,11 +510,11 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
           </div>
 
           {/* Right Column: Settings & Aspect Ratio Panel */}
-          <div className="lg:col-span-4 p-5 bg-[#18110D] space-y-5 overflow-y-auto">
+          <div className="lg:col-span-4 p-5 bg-white space-y-5 overflow-y-auto">
             
             {/* Aspect Ratio Presets */}
             <div className="space-y-2">
-              <label className="block text-xs font-cinzel font-bold text-white uppercase tracking-wider">
+              <label className="block text-xs font-cinzel font-bold text-[#4A0E17] uppercase tracking-wider">
                 1. Select Silhouette Ratio
               </label>
               <div className="grid grid-cols-1 gap-1.5">
@@ -527,25 +527,25 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                       onClick={() => setSelectedRatio(item.ratio)}
                       className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer ${
                         isSelected
-                          ? 'bg-[#2E1C15] border-[#E08A68] shadow-sm'
-                          : 'bg-[#211510] border-[#3E2921] hover:bg-[#281A14]'
+                          ? 'bg-[#FCF0F2] border-[#7A1526] shadow-2xs'
+                          : 'bg-white border-[#F0D5DA] hover:bg-[#FAF4F5]'
                       }`}
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className={`text-xs font-cinzel font-semibold ${isSelected ? 'text-[#E08A68]' : 'text-white'}`}>
+                          <span className={`text-xs font-cinzel font-semibold ${isSelected ? 'text-[#7A1526]' : 'text-[#3B0A12]'}`}>
                             {item.label}
                           </span>
                           {item.recommended && (
-                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#9E472A]/30 text-[#E08A68] border border-[#9E472A]/50 font-sans">
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#7A1526]/10 text-[#7A1526] border border-[#7A1526]/20 font-sans">
                               Best Look
                             </span>
                           )}
                         </div>
-                        <p className="text-[10px] text-[#A89689] mt-0.5">{item.desc}</p>
+                        <p className="text-[10px] text-[#7E4A53] mt-0.5">{item.desc}</p>
                       </div>
                       <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                        isSelected ? 'border-[#E08A68] bg-[#E08A68]' : 'border-[#4A3227]'
+                        isSelected ? 'border-[#7A1526] bg-[#7A1526]' : 'border-[#DFBAC2]'
                       }`}>
                         {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                       </div>
@@ -556,12 +556,12 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
             </div>
 
             {/* Zoom Slider */}
-            <div className="space-y-2 pt-3 border-t border-[#34221A]">
+            <div className="space-y-2 pt-3 border-t border-[#F0D5DA]">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-cinzel font-bold text-white uppercase tracking-wider">
+                <label className="text-xs font-cinzel font-bold text-[#4A0E17] uppercase tracking-wider">
                   2. Scale & Zoom
                 </label>
-                <span className="text-xs font-mono text-[#E08A68] font-bold">
+                <span className="text-xs font-mono text-[#7A1526] font-bold">
                   {Math.round(zoom * 100)}%
                 </span>
               </div>
@@ -570,7 +570,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setZoom((prev) => Math.max(0.5, prev - 0.1))}
-                  className="p-1.5 rounded bg-[#211510] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] cursor-pointer"
+                  className="p-1.5 rounded bg-[#FAF4F5] hover:bg-[#FCEEF0] text-[#7A1526] border border-[#F0D5DA] cursor-pointer"
                 >
                   <ZoomOut className="w-4 h-4" />
                 </button>
@@ -582,13 +582,13 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                   step="0.02"
                   value={zoom}
                   onChange={(e) => setZoom(parseFloat(e.target.value))}
-                  className="flex-1 accent-[#9E472A] cursor-pointer h-1.5 bg-[#2E1E17] rounded-lg"
+                  className="flex-1 accent-[#7A1526] cursor-pointer h-1.5 bg-[#FAF2F4] rounded-lg"
                 />
 
                 <button
                   type="button"
                   onClick={() => setZoom((prev) => Math.min(3.0, prev + 0.1))}
-                  className="p-1.5 rounded bg-[#211510] hover:bg-[#34221A] text-[#C4A894] hover:text-white border border-[#3E2921] cursor-pointer"
+                  className="p-1.5 rounded bg-[#FAF4F5] hover:bg-[#FCEEF0] text-[#7A1526] border border-[#F0D5DA] cursor-pointer"
                 >
                   <ZoomIn className="w-4 h-4" />
                 </button>
@@ -596,8 +596,8 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
             </div>
 
             {/* Output Resolution Setting */}
-            <div className="space-y-2 pt-3 border-t border-[#34221A]">
-              <label className="block text-xs font-cinzel font-bold text-white uppercase tracking-wider">
+            <div className="space-y-2 pt-3 border-t border-[#F0D5DA]">
+              <label className="block text-xs font-cinzel font-bold text-[#4A0E17] uppercase tracking-wider">
                 3. Output Resolution Quality
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -621,8 +621,8 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
                     onClick={() => setTargetWidth(res.width)}
                     className={`py-2 px-2.5 rounded-lg text-xs font-cinzel text-center border transition-all cursor-pointer ${
                       targetWidth === res.width
-                        ? 'bg-[#9E472A] text-white border-[#C56342] font-bold shadow-md'
-                        : 'bg-[#211510] text-[#A89689] border-[#3E2921] hover:text-white'
+                        ? 'bg-[#7A1526] text-white border-[#7A1526] font-bold shadow-xs'
+                        : 'bg-white text-[#5E2B34] border-[#F0D5DA] hover:bg-[#FAF4F5]'
                     }`}
                   >
                     {res.label}
@@ -633,14 +633,14 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
 
             {/* Image Details Pill */}
             {naturalSize.width > 0 && (
-              <div className="p-3 bg-[#211510] rounded-xl border border-[#34221A] text-[11px] text-[#A89689] space-y-1">
+              <div className="p-3 bg-[#FCF4F6] rounded-xl border border-[#F0D5DA] text-[11px] text-[#6B3740] space-y-1">
                 <div className="flex justify-between">
                   <span>Source Dimensions:</span>
-                  <span className="text-white font-mono">{naturalSize.width} × {naturalSize.height} px</span>
+                  <span className="text-[#3B0A12] font-mono">{naturalSize.width} × {naturalSize.height} px</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Target Export:</span>
-                  <span className="text-[#E08A68] font-mono font-semibold">
+                  <span className="text-[#7A1526] font-mono font-semibold">
                     {targetWidth} × {Math.round(targetWidth / activeRatio)} px
                   </span>
                 </div>
@@ -651,11 +651,11 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
         </div>
 
         {/* Modal Footer (Action Buttons) */}
-        <div className="flex items-center justify-between px-5 py-3.5 bg-[#231712] border-t border-[#3E2921]">
+        <div className="flex items-center justify-between px-5 py-3.5 bg-[#FCF4F6] border-t border-[#F0D5DA]">
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl border border-[#4A3227] text-stone-300 hover:text-white hover:bg-[#2E1E17] text-xs font-cinzel tracking-wider uppercase transition-colors cursor-pointer"
+            className="px-5 py-2.5 rounded-xl border border-[#DFBAC2] text-[#6B3740] hover:text-[#3B0A12] hover:bg-white text-xs font-cinzel tracking-wider uppercase transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -665,7 +665,7 @@ export const ImageResizerModal: React.FC<ImageResizerModalProps> = ({
               type="button"
               onClick={handleApplyCrop}
               disabled={isProcessing || !imageSrc}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-bold tracking-wider uppercase transition-all shadow-lg hover:shadow-[#9E472A]/40 hover:scale-[1.02] cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#7A1526] via-[#851628] to-[#991B30] hover:from-[#61101E] hover:to-[#801426] text-white text-xs font-cinzel font-bold tracking-wider uppercase transition-all shadow-md hover:shadow-lg cursor-pointer disabled:opacity-50"
             >
               {isProcessing ? (
                 <>

@@ -752,20 +752,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#18110D] text-[#EADDCF] flex flex-col md:flex-row font-sans selection:bg-[#9E472A] selection:text-white">
+    <div className="min-h-screen bg-[#FAF5F6] text-[#3B0A12] flex flex-col md:flex-row font-sans selection:bg-[#7A1526] selection:text-white">
       
       {/* Mobile Top Header */}
-      <div className="md:hidden bg-[#241712] border-b border-[#3E2921] px-4 py-3 flex items-center justify-between z-30 sticky top-0">
+      <div className="md:hidden bg-[#380810] border-b border-[#4E0D17] px-4 py-3 flex items-center justify-between z-30 sticky top-0 text-white">
         <div className="flex items-center gap-2.5">
           <BrandLogo variant="light" size="sm" />
-          <span className="text-[10px] uppercase font-cinzel font-bold bg-[#9E472A] text-white px-2 py-0.5 rounded">
+          <span className="text-[10px] uppercase font-cinzel font-bold bg-[#7A1526] text-white px-2.5 py-0.5 rounded shadow-2xs">
             CMS Admin
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 text-[#EADDCF] hover:bg-[#34221A] rounded-lg"
+            className="p-2 text-[#F5DDE1] hover:bg-[#4E0D17] rounded-lg cursor-pointer"
           >
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -773,24 +773,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       </div>
 
       {/* 1. VERTICAL SIDEBAR MENU (Pura Menu in Vertical Format) */}
-      <aside className={`fixed md:sticky top-0 z-40 h-screen w-72 bg-[#201510] border-r border-[#38241C] flex flex-col justify-between transition-transform duration-300 md:translate-x-0 ${
+      <aside className={`fixed md:sticky top-0 z-40 h-screen w-72 bg-[#380810] border-r border-[#4E0D17] flex flex-col justify-between transition-transform duration-300 md:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         
         {/* Sidebar Header: Brand & Status */}
-        <div className="p-5 border-b border-[#38241C]">
+        <div className="p-5 border-b border-[#4E0D17]">
           <div className="flex items-center justify-between">
             <BrandLogo variant="light" size="md" />
           </div>
           
-          <div className="mt-3.5 pt-3 border-t border-[#34221A] flex items-center justify-between text-xs">
+          <div className="mt-3.5 pt-3 border-t border-[#4E0D17] flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#52C41A] animate-pulse" />
-              <span className="text-[#C4A894] font-medium text-[11px] truncate max-w-[130px]" title={adminEmail}>
+              <span className="text-[#F5DDE1] font-medium text-[11px] truncate max-w-[130px]" title={adminEmail}>
                 {adminEmail.split('@')[0]}
               </span>
             </div>
-            <span className="text-[9px] font-cinzel font-bold text-[#E08A68] bg-[#3A2218] px-2 py-0.5 rounded border border-[#9E472A]/40 uppercase">
+            <span className="text-[9px] font-cinzel font-bold text-[#FCEEF0] bg-[#4E0D17] px-2 py-0.5 rounded border border-[#7A1526]/60 uppercase">
               Principal Staff
             </span>
           </div>
@@ -800,7 +800,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6 no-scrollbar">
           {navSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-1.5">
-              <span className="px-3 text-[10px] font-cinzel font-bold tracking-[0.18em] text-[#9E8A7D] uppercase block">
+              <span className="px-3 text-[10px] font-cinzel font-bold tracking-[0.18em] text-[#E3BAC2] uppercase block">
                 {section.title}
               </span>
               
@@ -819,31 +819,31 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
                         isActive
-                          ? 'bg-[#9E472A] text-white font-semibold shadow-md shadow-[#9E472A]/20'
-                          : 'text-[#D0BFB2] hover:bg-[#2F1F17] hover:text-white'
+                          ? 'bg-white text-[#4A0E17] font-bold shadow-md shadow-black/10'
+                          : 'text-[#F5DDE1] hover:bg-[#4E0D17] hover:text-white'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#C4A894]'}`} />
+                        <Icon className={`w-4 h-4 ${isActive ? 'text-[#7A1526]' : 'text-[#D9AAB3]'}`} />
                         <span className="tracking-wide">{item.label}</span>
                       </div>
 
                       <div className="flex items-center gap-1.5">
                         {item.badge && (
                           <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
-                            isActive ? 'bg-white/20 text-white' : 'bg-[#3E2920] text-[#E08A68]'
+                            isActive ? 'bg-[#7A1526]/15 text-[#7A1526]' : 'bg-[#4E0D17] text-[#FCEEF0]'
                           }`}>
                             {item.badge}
                           </span>
                         )}
 
                         {item.alert && (
-                          <span className="w-2 h-2 rounded-full bg-[#E08A68] animate-ping" />
+                          <span className="w-2 h-2 rounded-full bg-[#7A1526] animate-ping" />
                         )}
 
                         {item.count !== undefined && (
                           <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono font-medium ${
-                            isActive ? 'bg-white/25 text-white' : 'bg-[#2F1E16] text-[#A69284]'
+                            isActive ? 'bg-[#7A1526]/10 text-[#7A1526]' : 'bg-[#2D060C] text-[#E3BAC2]'
                           }`}>
                             {item.count}
                           </span>
@@ -858,18 +858,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
 
         {/* Sidebar Footer: Back to Storefront & Logout */}
-        <div className="p-4 border-t border-[#38241C] bg-[#1B110B] space-y-2">
+        <div className="p-4 border-t border-[#4E0D17] bg-[#2D060C] space-y-2">
           <button
             onClick={onCloseAdminPortal}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-[#2E1E17] hover:bg-[#3E2920] text-[#EADDCF] hover:text-white text-xs font-cinzel font-semibold transition-all border border-[#482E22] cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-[#4E0D17] hover:bg-[#60121E] text-white text-xs font-cinzel font-semibold transition-all border border-[#7A1526] cursor-pointer shadow-2xs"
           >
-            <ExternalLink className="w-3.5 h-3.5 text-[#9E472A]" />
+            <ExternalLink className="w-3.5 h-3.5 text-[#F5DDE1]" />
             <span>View Live Storefront</span>
           </button>
 
           <button
             onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-[#A89285] hover:text-[#FF6B6B] hover:bg-[#2A1714] text-xs font-medium transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-[#E3BAC2] hover:text-[#FF7875] hover:bg-[#4E0D17] text-xs font-medium transition-all cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Sign Out Session</span>
@@ -879,19 +879,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       </aside>
 
       {/* 2. MAIN CONTENT VIEW CANVAS */}
-      <main className="flex-1 min-h-screen overflow-y-auto bg-[#18110D]">
+      <main className="flex-1 min-h-screen overflow-y-auto bg-[#FAF5F6]">
         
         {/* Top Header Bar */}
-        <header className="bg-[#201510] border-b border-[#38241C] px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20">
+        <header className="bg-white border-b border-[#F0D5DA] px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-xs">
           <div>
-            <div className="flex items-center gap-2 text-xs text-[#9E8A7D]">
+            <div className="flex items-center gap-2 text-xs text-[#7E4A53]">
               <span>Label Shikha Warule</span>
               <ChevronRight className="w-3 h-3" />
-              <span className="text-[#E08A68] font-medium uppercase font-cinzel">
+              <span className="text-[#7A1526] font-medium uppercase font-cinzel">
                 {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label || 'Dashboard'}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-cinzel font-bold text-white tracking-wide mt-0.5">
+            <h1 className="text-xl sm:text-2xl font-cinzel font-bold text-[#3B0A12] tracking-wide mt-0.5">
               {navSections.flatMap(s => s.items).find(i => i.id === activeTab)?.label}
             </h1>
           </div>
@@ -899,7 +899,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={onCloseAdminPortal}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7A1526] via-[#851628] to-[#991B30] hover:from-[#61101E] hover:to-[#801426] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
             >
               <Eye className="w-4 h-4" />
               <span>Preview Live Site</span>
@@ -916,14 +916,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               
               {/* KPI Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                <div className="bg-[#241712] p-5 rounded-xl border border-[#3E2921] shadow-md">
+                <div className="bg-white p-5 rounded-xl border border-[#F0D5DA] shadow-md">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-semibold text-[#A89689] uppercase tracking-wider">Gross Couture Revenue</span>
-                    <div className="p-2 rounded-lg bg-[#9E472A]/20 text-[#E08A68]">
+                    <span className="text-xs font-cinzel font-semibold text-[#7E4A53] uppercase tracking-wider">Gross Couture Revenue</span>
+                    <div className="p-2 rounded-lg bg-[#7A1526]/20 text-[#7A1526]">
                       <DollarSign className="w-5 h-5" />
                     </div>
                   </div>
-                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-white">
+                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-[#3B0A12]">
                     ₹{metrics.totalRevenue.toLocaleString('en-IN')}
                   </div>
                   <div className="mt-2 flex items-center gap-1.5 text-xs text-[#52C41A]">
@@ -932,29 +932,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
                 </div>
 
-                <div className="bg-[#241712] p-5 rounded-xl border border-[#3E2921] shadow-md">
+                <div className="bg-white p-5 rounded-xl border border-[#F0D5DA] shadow-md">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-semibold text-[#A89689] uppercase tracking-wider">Active Orders</span>
-                    <div className="p-2 rounded-lg bg-[#2E3B55] text-[#85A5FF]">
+                    <span className="text-xs font-cinzel font-semibold text-[#7E4A53] uppercase tracking-wider">Active Orders</span>
+                    <div className="p-2 rounded-lg bg-[#EEF2FF] text-[#85A5FF]">
                       <ShoppingBag className="w-5 h-5" />
                     </div>
                   </div>
-                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-white">
-                    {orders.length} <span className="text-xs text-[#A89689] font-sans font-normal">({metrics.pendingOrders} in craft)</span>
+                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-[#3B0A12]">
+                    {orders.length} <span className="text-xs text-[#7E4A53] font-sans font-normal">({metrics.pendingOrders} in craft)</span>
                   </div>
-                  <div className="mt-2 text-xs text-[#C4A894]">
+                  <div className="mt-2 text-xs text-[#6B3740]">
                     ₹{metrics.paidRevenue.toLocaleString('en-IN')} successfully settled
                   </div>
                 </div>
 
-                <div className="bg-[#241712] p-5 rounded-xl border border-[#3E2921] shadow-md">
+                <div className="bg-white p-5 rounded-xl border border-[#F0D5DA] shadow-md">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-semibold text-[#A89689] uppercase tracking-wider">Bespoke Consultations</span>
-                    <div className="p-2 rounded-lg bg-[#432B20] text-[#E08A68]">
+                    <span className="text-xs font-cinzel font-semibold text-[#7E4A53] uppercase tracking-wider">Bespoke Consultations</span>
+                    <div className="p-2 rounded-lg bg-[#FDF2F4] text-[#7A1526]">
                       <Calendar className="w-5 h-5" />
                     </div>
                   </div>
-                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-white">
+                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-[#3B0A12]">
                     {appointments.length}
                   </div>
                   <div className="mt-2 text-xs text-[#52C41A] flex items-center gap-1">
@@ -963,75 +963,75 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
                 </div>
 
-                <div className="bg-[#241712] p-5 rounded-xl border border-[#3E2921] shadow-md">
+                <div className="bg-white p-5 rounded-xl border border-[#F0D5DA] shadow-md">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-semibold text-[#A89689] uppercase tracking-wider">Active Catalog</span>
-                    <div className="p-2 rounded-lg bg-[#28382C] text-[#73D13D]">
+                    <span className="text-xs font-cinzel font-semibold text-[#7E4A53] uppercase tracking-wider">Active Catalog</span>
+                    <div className="p-2 rounded-lg bg-[#ECFDF5] text-[#73D13D]">
                       <Package className="w-5 h-5" />
                     </div>
                   </div>
-                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-white">
-                    {metrics.totalProducts} <span className="text-xs text-[#A89689] font-sans font-normal">({metrics.inStockCount} In Stock)</span>
+                  <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-[#3B0A12]">
+                    {metrics.totalProducts} <span className="text-xs text-[#7E4A53] font-sans font-normal">({metrics.inStockCount} In Stock)</span>
                   </div>
-                  <div className="mt-2 text-xs text-[#C4A894]">
+                  <div className="mt-2 text-xs text-[#6B3740]">
                     4 Style Collections • 6 Categories
                   </div>
                 </div>
               </div>
 
               {/* Quick CMS Action Cards */}
-              <div className="bg-[#201510] p-6 rounded-xl border border-[#38241C] space-y-4">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-cinzel text-base font-bold text-white tracking-wider flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#9E472A]" />
+                  <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#7A1526]" />
                     QUICK CONTENT MANAGEMENT SHORTCUTS
                   </h2>
-                  <span className="text-xs text-[#A89689]">Direct visual content triggers</span>
+                  <span className="text-xs text-[#7E4A53]">Direct visual content triggers</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   <button
                     onClick={() => setActiveTab('cms-hero')}
-                    className="p-4 rounded-lg bg-[#271A14] hover:bg-[#34221A] border border-[#3E2921] text-left transition-all group cursor-pointer"
+                    className="p-4 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left transition-all group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between text-[#E08A68] mb-1">
+                    <div className="flex items-center justify-between text-[#7A1526] mb-1">
                       <span className="text-xs font-bold font-cinzel">Hero Banner</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
-                    <p className="text-[11px] text-[#A89689]">Change top headlines, sublines & main model arch photo</p>
+                    <p className="text-[11px] text-[#7E4A53]">Change top headlines, sublines & main model arch photo</p>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('cms-announcement')}
-                    className="p-4 rounded-lg bg-[#271A14] hover:bg-[#34221A] border border-[#3E2921] text-left transition-all group cursor-pointer"
+                    className="p-4 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left transition-all group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between text-[#E08A68] mb-1">
+                    <div className="flex items-center justify-between text-[#7A1526] mb-1">
                       <span className="text-xs font-bold font-cinzel">Top Announcement</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
-                    <p className="text-[11px] text-[#A89689]">Update coupon bar, marquee text & promo highlight</p>
+                    <p className="text-[11px] text-[#7E4A53]">Update coupon bar, marquee text & promo highlight</p>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('cms-stories')}
-                    className="p-4 rounded-lg bg-[#271A14] hover:bg-[#34221A] border border-[#3E2921] text-left transition-all group cursor-pointer"
+                    className="p-4 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left transition-all group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between text-[#E08A68] mb-1">
+                    <div className="flex items-center justify-between text-[#7A1526] mb-1">
                       <span className="text-xs font-bold font-cinzel">Discovery Reels</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
-                    <p className="text-[11px] text-[#A89689]">Manage craft videos, thumbnails and artisan quotes</p>
+                    <p className="text-[11px] text-[#7E4A53]">Manage craft videos, thumbnails and artisan quotes</p>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('cms-diaries')}
-                    className="p-4 rounded-lg bg-[#271A14] hover:bg-[#34221A] border border-[#3E2921] text-left transition-all group cursor-pointer"
+                    className="p-4 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left transition-all group cursor-pointer"
                   >
-                    <div className="flex items-center justify-between text-[#E08A68] mb-1">
+                    <div className="flex items-center justify-between text-[#7A1526] mb-1">
                       <span className="text-xs font-bold font-cinzel">Client Testimonials</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
-                    <p className="text-[11px] text-[#A89689]">Approve, add or edit luxury client review cards</p>
+                    <p className="text-[11px] text-[#7E4A53]">Approve, add or edit luxury client review cards</p>
                   </button>
                 </div>
               </div>
@@ -1040,15 +1040,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 {/* Recent Orders */}
-                <div className="bg-[#201510] rounded-xl border border-[#38241C] p-5 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#34221A]">
-                    <h3 className="font-cinzel text-sm font-bold text-white tracking-wider flex items-center gap-2">
-                      <ShoppingBag className="w-4 h-4 text-[#9E472A]" />
+                <div className="bg-white rounded-xl border border-[#F0D5DA] p-5 space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
+                    <h3 className="font-cinzel text-sm font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                      <ShoppingBag className="w-4 h-4 text-[#7A1526]" />
                       RECENT COUTURE ORDERS
                     </h3>
                     <button
                       onClick={() => setActiveTab('orders')}
-                      className="text-xs font-cinzel text-[#E08A68] hover:underline"
+                      className="text-xs font-cinzel text-[#7A1526] hover:underline"
                     >
                       View All ({orders.length})
                     </button>
@@ -1058,14 +1058,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     {orders.slice(0, 4).map((ord) => (
                       <div
                         key={ord.id}
-                        className="p-3.5 rounded-lg bg-[#271A14] border border-[#38241C] flex items-center justify-between text-xs"
+                        className="p-3.5 rounded-lg bg-[#FCF4F6] border border-[#F0D5DA] flex items-center justify-between text-xs"
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-white">{ord.orderNumber}</span>
-                            <span className="text-[#A89689]">• {ord.customerName}</span>
+                            <span className="font-mono font-bold text-[#3B0A12]">{ord.orderNumber}</span>
+                            <span className="text-[#7E4A53]">• {ord.customerName}</span>
                           </div>
-                          <div className="text-[11px] text-[#7A6B61]">
+                          <div className="text-[11px] text-[#8F6C72]">
                             {ord.items.length} items • {ord.city} • ₹{ord.total.toLocaleString('en-IN')}
                           </div>
                         </div>
@@ -1074,7 +1074,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           ord.orderStatus === 'Delivered'
                             ? 'bg-[#52C41A]/20 text-[#73D13D]'
                             : ord.orderStatus === 'Handcrafting'
-                            ? 'bg-[#E08A68]/20 text-[#E08A68]'
+                            ? 'bg-[#E08A68]/20 text-[#7A1526]'
                             : 'bg-[#1890FF]/20 text-[#69C0FF]'
                         }`}>
                           {ord.orderStatus}
@@ -1085,15 +1085,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 {/* Upcoming Appointments */}
-                <div className="bg-[#201510] rounded-xl border border-[#38241C] p-5 space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#34221A]">
-                    <h3 className="font-cinzel text-sm font-bold text-white tracking-wider flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-[#9E472A]" />
+                <div className="bg-white rounded-xl border border-[#F0D5DA] p-5 space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
+                    <h3 className="font-cinzel text-sm font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-[#7A1526]" />
                       UPCOMING BESPOKE CONSULTATIONS
                     </h3>
                     <button
                       onClick={() => setActiveTab('appointments')}
-                      className="text-xs font-cinzel text-[#E08A68] hover:underline"
+                      className="text-xs font-cinzel text-[#7A1526] hover:underline"
                     >
                       View All ({appointments.length})
                     </button>
@@ -1103,12 +1103,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     {appointments.slice(0, 4).map((apt) => (
                       <div
                         key={apt.id}
-                        className="p-3.5 rounded-lg bg-[#271A14] border border-[#38241C] flex items-center justify-between text-xs"
+                        className="p-3.5 rounded-lg bg-[#FCF4F6] border border-[#F0D5DA] flex items-center justify-between text-xs"
                       >
                         <div className="space-y-1">
-                          <div className="font-semibold text-white">{apt.fullName}</div>
-                          <div className="text-[11px] text-[#E08A68]">{apt.experienceType}</div>
-                          <div className="text-[10px] text-[#7A6B61] flex items-center gap-2">
+                          <div className="font-semibold text-[#3B0A12]">{apt.fullName}</div>
+                          <div className="text-[11px] text-[#7A1526]">{apt.experienceType}</div>
+                          <div className="text-[10px] text-[#8F6C72] flex items-center gap-2">
                             <span>📅 {apt.date}</span>
                             <span>⏰ {apt.timeSlot}</span>
                             <span>🏛️ {apt.mode}</span>
@@ -1139,24 +1139,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-6 animate-in fade-in duration-300">
               
               {/* Controls Bar */}
-              <div className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row items-center justify-between gap-4">
                 
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <div className="relative flex-1 sm:w-72">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#A89689]" />
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7E4A53]" />
                     <input
                       type="text"
                       placeholder="Search pieces, fabric, style..."
                       value={productSearch}
                       onChange={(e) => setProductSearch(e.target.value)}
-                      className="w-full bg-[#271A14] border border-[#3E2921] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#7A6B61] focus:outline-none focus:border-[#9E472A]"
+                      className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
                     />
                   </div>
 
                   <select
                     value={productCategoryFilter}
                     onChange={(e) => setProductCategoryFilter(e.target.value)}
-                    className="bg-[#271A14] border border-[#3E2921] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                   >
                     <option value="All">All Categories</option>
                     <option value="Kurtas">Kurtas</option>
@@ -1176,7 +1176,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     setProductFormHoverImage('');
                     setIsAddProductOpen(true);
                   }}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add New Garment</span>
@@ -1185,10 +1185,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Products Table */}
-              <div className="bg-[#201510] rounded-xl border border-[#38241C] overflow-hidden">
+              <div className="bg-white rounded-xl border border-[#F0D5DA] overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-[#D0BFB2]">
-                    <thead className="bg-[#291B15] text-[11px] font-cinzel font-bold text-[#EADDCF] uppercase tracking-wider border-b border-[#38241C]">
+                  <table className="w-full text-left text-xs text-[#4A1821]">
+                    <thead className="bg-[#FDF2F4] text-[11px] font-cinzel font-bold text-[#3B0A12] uppercase tracking-wider border-b border-[#F0D5DA]">
                       <tr>
                         <th className="p-3.5">Piece</th>
                         <th className="p-3.5">Category & Style</th>
@@ -1198,16 +1198,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <th className="p-3.5 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#2E1E17]">
+                    <tbody className="divide-y divide-[#F0D5DA]">
                       {filteredProducts.map((prod) => (
-                        <tr key={prod.id} className="hover:bg-[#271A14]/70 transition-colors">
+                        <tr key={prod.id} className="hover:bg-[#FCF4F6]/70 transition-colors">
                           
                           <td className="p-3.5 flex items-center gap-3">
                             <div className="relative group">
                               <img
                                 src={prod.image}
                                 alt={prod.name}
-                                className="w-12 h-16 object-cover rounded-md border border-[#3E2921] shadow-xs"
+                                className="w-12 h-16 object-cover rounded-md border border-[#F0D5DA] shadow-xs"
                               />
                               <button
                                 type="button"
@@ -1224,14 +1224,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 title="Resize / Crop image"
                                 className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-md transition-opacity cursor-pointer text-white"
                               >
-                                <Crop className="w-4 h-4 text-[#F5C7A9]" />
+                                <Crop className="w-4 h-4 text-[#7A1526]" />
                               </button>
                             </div>
                             <div>
-                              <div className="font-semibold text-white font-serif-luxury text-sm">{prod.name}</div>
-                              <div className="text-[10px] text-[#A89689]">{prod.gender} • ID: {prod.id}</div>
+                              <div className="font-semibold text-[#3B0A12] font-serif-luxury text-sm">{prod.name}</div>
+                              <div className="text-[10px] text-[#7E4A53]">{prod.gender} • ID: {prod.id}</div>
                               {prod.isBestSeller && (
-                                <span className="inline-block mt-0.5 text-[9px] bg-[#9E472A] text-white px-1.5 py-0.2 rounded font-bold">
+                                <span className="inline-block mt-0.5 text-[9px] bg-[#7A1526] text-white px-1.5 py-0.2 rounded font-bold">
                                   Best Seller
                                 </span>
                               )}
@@ -1239,18 +1239,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           </td>
 
                           <td className="p-3.5">
-                            <div className="font-medium text-white">{prod.category}</div>
-                            <div className="text-[10px] text-[#A89689]">{prod.style} Silhouette</div>
+                            <div className="font-medium text-[#3B0A12]">{prod.category}</div>
+                            <div className="text-[10px] text-[#7E4A53]">{prod.style} Silhouette</div>
                           </td>
 
                           <td className="p-3.5 font-mono">
-                            <div className="font-bold text-white">₹{prod.price.toLocaleString('en-IN')}</div>
+                            <div className="font-bold text-[#3B0A12]">₹{prod.price.toLocaleString('en-IN')}</div>
                             {prod.originalPrice && (
-                              <div className="text-[10px] text-[#A89689] line-through">₹{prod.originalPrice.toLocaleString('en-IN')}</div>
+                              <div className="text-[10px] text-[#7E4A53] line-through">₹{prod.originalPrice.toLocaleString('en-IN')}</div>
                             )}
                           </td>
 
-                          <td className="p-3.5 text-[#C4A894]">
+                          <td className="p-3.5 text-[#6B3740]">
                             {prod.fabric}
                           </td>
 
@@ -1270,10 +1270,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           <td className="p-3.5 text-right space-x-2">
                             {/* Quick Upload from Device */}
                             <label
-                              className="inline-flex items-center justify-center p-1.5 rounded bg-[#34221A] hover:bg-[#9E472A] text-stone-300 hover:text-white transition-colors cursor-pointer"
+                              className="inline-flex items-center justify-center p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-[#3B0A12] hover:text-white transition-colors cursor-pointer"
                               title="Upload & Replace Image from Device"
                             >
-                              <Upload className="w-3.5 h-3.5 text-[#E08A68]" />
+                              <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
                               <input
                                 type="file"
                                 accept="image/*"
@@ -1313,7 +1313,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                   }
                                 );
                               }}
-                              className="p-1.5 rounded bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white transition-colors cursor-pointer"
+                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white transition-colors cursor-pointer"
                               title="Resize & Crop Garment Photo (Lookbook 3:4 / 4:5 / 1:1)"
                             >
                               <Crop className="w-3.5 h-3.5" />
@@ -1325,7 +1325,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 setProductFormHoverImage(prod.hoverImage || '');
                                 setEditingProduct(prod);
                               }}
-                              className="p-1.5 rounded bg-[#34221A] hover:bg-[#9E472A] text-white transition-colors cursor-pointer"
+                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-white transition-colors cursor-pointer"
                               title="Edit piece"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -1337,7 +1337,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                   onDeleteProduct(prod.id);
                                 }
                               }}
-                              className="p-1.5 rounded bg-[#34221A] hover:bg-[#FF4D4F] text-white transition-colors cursor-pointer"
+                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#FF4D4F] text-white transition-colors cursor-pointer"
                               title="Delete piece"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1359,24 +1359,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-6 animate-in fade-in duration-300">
               
               {/* Filter controls */}
-              <div className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="relative flex-1 w-full sm:w-80">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#A89689]" />
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7E4A53]" />
                   <input
                     type="text"
                     placeholder="Search by order #, client name, city..."
                     value={orderSearch}
                     onChange={(e) => setOrderSearch(e.target.value)}
-                    className="w-full bg-[#271A14] border border-[#3E2921] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#7A6B61] focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <span className="text-xs text-[#A89689]">Status:</span>
+                  <span className="text-xs text-[#7E4A53]">Status:</span>
                   <select
                     value={orderStatusFilter}
                     onChange={(e) => setOrderStatusFilter(e.target.value)}
-                    className="bg-[#271A14] border border-[#3E2921] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                   >
                     <option value="All">All Statuses</option>
                     <option value="Processing">Processing</option>
@@ -1393,12 +1393,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 {filteredOrders.map((ord) => (
                   <div
                     key={ord.id}
-                    className="bg-[#201510] rounded-xl border border-[#38241C] p-5 space-y-4 shadow-sm"
+                    className="bg-white rounded-xl border border-[#F0D5DA] p-5 space-y-4 shadow-sm"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#34221A]">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#F0D5DA]">
                       <div className="flex items-center gap-3">
                         <span className="font-mono text-base font-bold text-white">{ord.orderNumber}</span>
-                        <span className="text-xs text-[#A89689]">Placed on {ord.createdAt}</span>
+                        <span className="text-xs text-[#7E4A53]">Placed on {ord.createdAt}</span>
                       </div>
 
                       <div className="flex items-center gap-2.5">
@@ -1411,7 +1411,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <select
                           value={ord.orderStatus}
                           onChange={(e) => onUpdateOrderStatus(ord.id, e.target.value as AdminOrder['orderStatus'])}
-                          className="bg-[#2D1C15] border border-[#9E472A]/40 rounded px-2.5 py-1 text-xs font-semibold text-[#E08A68] focus:outline-none"
+                          className="bg-[#FCF4F6] border border-[#7A1526]/40 rounded px-2.5 py-1 text-xs font-semibold text-[#7A1526] focus:outline-none"
                         >
                           <option value="Processing">Processing</option>
                           <option value="Handcrafting">Handcrafting</option>
@@ -1422,7 +1422,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                         <button
                           onClick={() => setSelectedOrderForInvoice(ord)}
-                          className="p-1.5 bg-[#34221A] hover:bg-[#9E472A] text-white rounded transition-colors text-xs flex items-center gap-1 cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-white rounded transition-colors text-xs flex items-center gap-1 cursor-pointer"
                         >
                           <FileText className="w-3.5 h-3.5" />
                           <span className="hidden sm:inline">Receipt</span>
@@ -1433,24 +1433,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                       {/* Customer Info */}
                       <div>
-                        <span className="text-[#A89689] block mb-1 uppercase font-cinzel text-[10px]">Client Details</span>
-                        <div className="font-semibold text-white">{ord.customerName}</div>
-                        <div className="text-[#C4A894]">{ord.customerEmail}</div>
-                        <div className="text-[#C4A894]">{ord.customerPhone}</div>
-                        <div className="text-[#7A6B61] mt-1">{ord.shippingAddress}, {ord.city}</div>
+                        <span className="text-[#7E4A53] block mb-1 uppercase font-cinzel text-[10px]">Client Details</span>
+                        <div className="font-semibold text-[#3B0A12]">{ord.customerName}</div>
+                        <div className="text-[#6B3740]">{ord.customerEmail}</div>
+                        <div className="text-[#6B3740]">{ord.customerPhone}</div>
+                        <div className="text-[#8F6C72] mt-1">{ord.shippingAddress}, {ord.city}</div>
                       </div>
 
                       {/* Items */}
                       <div className="md:col-span-2">
-                        <span className="text-[#A89689] block mb-1 uppercase font-cinzel text-[10px]">Ensembles Ordered</span>
+                        <span className="text-[#7E4A53] block mb-1 uppercase font-cinzel text-[10px]">Ensembles Ordered</span>
                         <div className="space-y-2">
                           {ord.items.map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-[#271A14] p-2 rounded border border-[#34221A]">
+                            <div key={idx} className="flex items-center justify-between bg-[#FCF4F6] p-2 rounded border border-[#F0D5DA]">
                               <div className="flex items-center gap-2.5">
                                 <img src={item.image} alt={item.productName} className="w-8 h-10 object-cover rounded" />
                                 <div>
-                                  <div className="font-medium text-white">{item.productName}</div>
-                                  <div className="text-[10px] text-[#A89689]">Size: {item.size} • Qty: {item.quantity}</div>
+                                  <div className="font-medium text-[#3B0A12]">{item.productName}</div>
+                                  <div className="text-[10px] text-[#7E4A53]">Size: {item.size} • Qty: {item.quantity}</div>
                                 </div>
                               </div>
                               <div className="font-mono font-bold text-white">₹{(item.price * item.quantity).toLocaleString('en-IN')}</div>
@@ -1458,10 +1458,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           ))}
                         </div>
 
-                        <div className="mt-3 flex justify-end gap-6 text-xs pt-2 border-t border-[#34221A]">
-                          <div><span className="text-[#A89689]">Subtotal:</span> ₹{ord.subtotal.toLocaleString('en-IN')}</div>
-                          {ord.discount > 0 && <div className="text-[#52C41A]"><span className="text-[#A89689]">Discount:</span> -₹{ord.discount.toLocaleString('en-IN')}</div>}
-                          <div className="font-bold text-[#E08A68] text-sm"><span className="text-[#A89689]">Total:</span> ₹{ord.total.toLocaleString('en-IN')}</div>
+                        <div className="mt-3 flex justify-end gap-6 text-xs pt-2 border-t border-[#F0D5DA]">
+                          <div><span className="text-[#7E4A53]">Subtotal:</span> ₹{ord.subtotal.toLocaleString('en-IN')}</div>
+                          {ord.discount > 0 && <div className="text-[#52C41A]"><span className="text-[#7E4A53]">Discount:</span> -₹{ord.discount.toLocaleString('en-IN')}</div>}
+                          <div className="font-bold text-[#7A1526] text-sm"><span className="text-[#7E4A53]">Total:</span> ₹{ord.total.toLocaleString('en-IN')}</div>
                         </div>
                       </div>
                     </div>
@@ -1476,17 +1476,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'appointments' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex items-center justify-between">
+              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex items-center justify-between">
                 <h2 className="font-cinzel text-sm font-bold text-white tracking-wider">
                   ATELIER CONSULTATION SCHEDULE
                 </h2>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#A89689]">Filter:</span>
+                  <span className="text-xs text-[#7E4A53]">Filter:</span>
                   <select
                     value={appointmentFilter}
                     onChange={(e) => setAppointmentFilter(e.target.value)}
-                    className="bg-[#271A14] border border-[#3E2921] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none"
+                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none"
                   >
                     <option value="All">All Consultations</option>
                     <option value="Confirmed">Confirmed</option>
@@ -1501,18 +1501,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 {filteredAppointments.map((apt) => (
                   <div
                     key={apt.id}
-                    className="bg-[#201510] rounded-xl border border-[#38241C] p-5 space-y-3 relative overflow-hidden"
+                    className="bg-white rounded-xl border border-[#F0D5DA] p-5 space-y-3 relative overflow-hidden"
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="font-serif-luxury text-base font-bold text-white">{apt.fullName}</h3>
-                        <div className="text-xs text-[#E08A68] font-cinzel font-semibold mt-0.5">{apt.experienceType}</div>
+                        <div className="text-xs text-[#7A1526] font-cinzel font-semibold mt-0.5">{apt.experienceType}</div>
                       </div>
 
                       <select
                         value={apt.status}
                         onChange={(e) => onUpdateAppointmentStatus(apt.id, e.target.value as AdminAppointment['status'])}
-                        className="bg-[#2E1E17] border border-[#9E472A]/40 rounded px-2 py-1 text-xs font-semibold text-white focus:outline-none"
+                        className="bg-[#FCF4F6] border border-[#7A1526]/40 rounded px-2 py-1 text-xs font-semibold text-white focus:outline-none"
                       >
                         <option value="Confirmed">Confirmed</option>
                         <option value="Pending">Pending</option>
@@ -1522,14 +1522,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </select>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-xs text-[#C4A894] pt-2 border-t border-[#34221A]">
+                    <div className="grid grid-cols-2 gap-2 text-xs text-[#6B3740] pt-2 border-t border-[#F0D5DA]">
                       <div>📅 <strong>Date:</strong> {apt.date}</div>
                       <div>⏰ <strong>Time:</strong> {apt.timeSlot}</div>
                       <div>🏛️ <strong>Mode:</strong> {apt.mode}</div>
                       <div>📞 <strong>Phone:</strong> {apt.phone}</div>
                       <div className="col-span-2">✉️ <strong>Email:</strong> {apt.email}</div>
                       {apt.notes && (
-                        <div className="col-span-2 text-[#A89689] italic bg-[#271A14] p-2 rounded">
+                        <div className="col-span-2 text-[#7E4A53] italic bg-[#FCF4F6] p-2 rounded">
                           "{apt.notes}"
                         </div>
                       )}
@@ -1545,55 +1545,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'customers' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="relative flex-1 w-full sm:w-80">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#A89689]" />
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#7E4A53]" />
                   <input
                     type="text"
                     placeholder="Search client by name, email, city..."
                     value={customerSearch}
                     onChange={(e) => setCustomerSearch(e.target.value)}
-                    className="w-full bg-[#271A14] border border-[#3E2921] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#7A6B61] focus:outline-none"
+                    className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#B59199] focus:outline-none"
                   />
                 </div>
-                <span className="text-xs text-[#A89689]">{filteredCustomers.length} registered clientele profiles</span>
+                <span className="text-xs text-[#7E4A53]">{filteredCustomers.length} registered clientele profiles</span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {filteredCustomers.map((cust) => (
                   <div
                     key={cust.id}
-                    className="bg-[#201510] rounded-xl border border-[#38241C] p-5 space-y-4"
+                    className="bg-white rounded-xl border border-[#F0D5DA] p-5 space-y-4"
                   >
                     <div className="flex items-center gap-3">
                       {cust.avatar ? (
-                        <img src={cust.avatar} alt={cust.name} className="w-12 h-12 rounded-full object-cover border-2 border-[#9E472A]" />
+                        <img src={cust.avatar} alt={cust.name} className="w-12 h-12 rounded-full object-cover border-2 border-[#7A1526]" />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-[#3E2921] flex items-center justify-center font-bold text-white text-lg">
+                        <div className="w-12 h-12 rounded-full bg-[#FAF2F4] flex items-center justify-center font-bold text-white text-lg">
                           {cust.name[0]}
                         </div>
                       )}
 
                       <div>
                         <h3 className="font-cinzel text-sm font-bold text-white">{cust.name}</h3>
-                        <div className="text-[11px] text-[#A89689]">{cust.city}</div>
-                        <span className="inline-block text-[9px] bg-[#9E472A] text-white px-2 py-0.5 rounded font-bold uppercase mt-1">
+                        <div className="text-[11px] text-[#7E4A53]">{cust.city}</div>
+                        <span className="inline-block text-[9px] bg-[#7A1526] text-white px-2 py-0.5 rounded font-bold uppercase mt-1">
                           {cust.tier}
                         </span>
                       </div>
                     </div>
 
-                    <div className="space-y-1.5 text-xs text-[#C4A894] pt-3 border-t border-[#34221A]">
+                    <div className="space-y-1.5 text-xs text-[#6B3740] pt-3 border-t border-[#F0D5DA]">
                       <div>✉️ {cust.email}</div>
                       <div>📞 {cust.phone}</div>
                       <div className="flex items-center justify-between text-white font-mono pt-1">
                         <span>Couture Points:</span>
-                        <strong className="text-[#E08A68]">{cust.couturePoints} pts</strong>
+                        <strong className="text-[#7A1526]">{cust.couturePoints} pts</strong>
                       </div>
                     </div>
 
                     {cust.measurements && (
-                      <div className="bg-[#271A14] p-3 rounded-lg text-[11px] text-[#A89689] space-y-1">
+                      <div className="bg-[#FCF4F6] p-3 rounded-lg text-[11px] text-[#7E4A53] space-y-1">
                         <span className="font-cinzel font-bold text-white block text-[10px]">Saved Bespoke Measurements</span>
                         <div className="grid grid-cols-3 gap-1">
                           <div>Bust: {cust.measurements.bust || '–'}</div>
@@ -1614,20 +1614,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-8 animate-in fade-in duration-300">
               
               {/* Main CMS Container Card */}
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-6 shadow-xl">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-6 shadow-xl">
                 
                 {/* Header & Quick Action Buttons */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#38241C]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#F0D5DA]">
                   <div>
                     <div className="flex items-center gap-2">
                       <h2 className="font-cinzel text-lg font-bold text-white tracking-wider">
                         BRAND LOGO & CREST CMS
                       </h2>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-cinzel font-bold bg-[#9E472A]/20 text-[#E08A68] border border-[#9E472A]/40 uppercase">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-cinzel font-bold bg-[#7A1526]/20 text-[#7A1526] border border-[#7A1526]/40 uppercase">
                         Live Reactive
                       </span>
                     </div>
-                    <p className="text-xs text-[#A89689] mt-1">
+                    <p className="text-xs text-[#7E4A53] mt-1">
                       Customize the storefront header & footer logo. Upload your own image logo, style the handcrafted vector monogram, or customize the luxury typography.
                     </p>
                   </div>
@@ -1635,7 +1635,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <button
                       type="button"
                       onClick={handleResetLogoCMS}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1C120D] hover:bg-[#2C1D16] text-[#C4A894] hover:text-white rounded-lg text-xs font-cinzel font-semibold border border-[#3E2921] transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-[#FCF4F6] text-[#6B3740] hover:text-white rounded-lg text-xs font-cinzel font-semibold border border-[#F0D5DA] transition-all cursor-pointer"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
                       <span>Reset Default</span>
@@ -1643,7 +1643,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <button
                       type="button"
                       onClick={() => handleSaveLogoCMS()}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-lg text-xs font-cinzel font-semibold shadow-lg transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg text-xs font-cinzel font-semibold shadow-lg transition-all cursor-pointer"
                     >
                       <Save className="w-4 h-4" />
                       <span>Save Logo Changes</span>
@@ -1654,11 +1654,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 {/* 1. Dual Real-time Live Preview Simulator */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-cinzel font-bold text-[#E08A68] uppercase tracking-wider flex items-center gap-2">
+                    <span className="text-xs font-cinzel font-bold text-[#7A1526] uppercase tracking-wider flex items-center gap-2">
                       <Eye className="w-4 h-4" />
                       Dual Live Preview (Header vs Footer Simulation)
                     </span>
-                    <span className="text-[11px] text-[#A89689] font-cinzel">
+                    <span className="text-[11px] text-[#7E4A53] font-cinzel">
                       Current Mode: <strong className="text-white capitalize">{logoForm.logoType.replace('-', ' ')}</strong>
                     </span>
                   </div>
@@ -1678,8 +1678,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </div>
 
                     {/* Dark Background Footer Simulation */}
-                    <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] flex flex-col items-center justify-center min-h-[160px] text-center shadow-inner relative overflow-hidden group">
-                      <div className="absolute top-2.5 left-3 px-2 py-0.5 rounded bg-white/10 text-[#EADDCF] text-[10px] font-cinzel font-bold">
+                    <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] flex flex-col items-center justify-center min-h-[160px] text-center shadow-inner relative overflow-hidden group">
+                      <div className="absolute top-2.5 left-3 px-2 py-0.5 rounded bg-white/10 text-[#3B0A12] text-[10px] font-cinzel font-bold">
                         Dark Footer & Navigation
                       </div>
                       <div className="py-3 transform transition-transform group-hover:scale-105">
@@ -1694,7 +1694,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 {/* 2. Format / Architecture Selector (3 Modern Cards) */}
                 <div className="space-y-3 pt-2">
-                  <label className="block text-xs font-cinzel font-bold text-[#E08A68] uppercase tracking-wider">
+                  <label className="block text-xs font-cinzel font-bold text-[#7A1526] uppercase tracking-wider">
                     Select Logo Format & Architecture
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1705,22 +1705,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       onClick={() => setLogoForm({ ...logoForm, logoType: 'svg-monogram' })}
                       className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                         logoForm.logoType === 'svg-monogram'
-                          ? 'bg-[#9E472A]/15 border-[#9E472A] shadow-md text-white ring-1 ring-[#9E472A]'
-                          : 'bg-[#1C120D] border-[#3E2921] text-[#A89689] hover:text-white hover:border-[#5C3C30]'
+                          ? 'bg-[#7A1526]/15 border-[#7A1526] shadow-md text-white ring-1 ring-[#7A1526]'
+                          : 'bg-white border-[#F0D5DA] text-[#7E4A53] hover:text-white hover:border-[#DFBAC2]'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="p-2 rounded-lg bg-[#9E472A]/20 text-[#E08A68]">
+                        <div className="p-2 rounded-lg bg-[#7A1526]/20 text-[#7A1526]">
                           <Crown className="w-5 h-5" />
                         </div>
                         {logoForm.logoType === 'svg-monogram' && (
-                          <CheckCircle className="w-4 h-4 text-[#E08A68]" />
+                          <CheckCircle className="w-4 h-4 text-[#7A1526]" />
                         )}
                       </div>
                       <h4 className="font-cinzel font-bold text-xs text-white">
                         Signature Vector Monogram
                       </h4>
-                      <p className="text-[11px] text-[#A89689] mt-1 line-clamp-2">
+                      <p className="text-[11px] text-[#7E4A53] mt-1 line-clamp-2">
                         Handcrafted SVG with curved arch, couture thread loops, and needle detailing.
                       </p>
                     </button>
@@ -1731,12 +1731,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       onClick={() => setLogoForm({ ...logoForm, logoType: 'custom-image' })}
                       className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                         logoForm.logoType === 'custom-image'
-                          ? 'bg-[#9E472A]/15 border-[#9E472A] shadow-md text-white ring-1 ring-[#9E472A]'
-                          : 'bg-[#1C120D] border-[#3E2921] text-[#A89689] hover:text-white hover:border-[#5C3C30]'
+                          ? 'bg-[#7A1526]/15 border-[#7A1526] shadow-md text-white ring-1 ring-[#7A1526]'
+                          : 'bg-white border-[#F0D5DA] text-[#7E4A53] hover:text-white hover:border-[#DFBAC2]'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="p-2 rounded-lg bg-[#2E3B55] text-[#85A5FF]">
+                        <div className="p-2 rounded-lg bg-[#EEF2FF] text-[#85A5FF]">
                           <Upload className="w-5 h-5" />
                         </div>
                         {logoForm.logoType === 'custom-image' && (
@@ -1746,7 +1746,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <h4 className="font-cinzel font-bold text-xs text-white">
                         Upload Custom Logo / Image
                       </h4>
-                      <p className="text-[11px] text-[#A89689] mt-1 line-clamp-2">
+                      <p className="text-[11px] text-[#7E4A53] mt-1 line-clamp-2">
                         Upload your PNG, SVG or WebP logo file with transparent background or provide an image link.
                       </p>
                     </button>
@@ -1757,12 +1757,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       onClick={() => setLogoForm({ ...logoForm, logoType: 'text-luxury' })}
                       className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                         logoForm.logoType === 'text-luxury'
-                          ? 'bg-[#9E472A]/15 border-[#9E472A] shadow-md text-white ring-1 ring-[#9E472A]'
-                          : 'bg-[#1C120D] border-[#3E2921] text-[#A89689] hover:text-white hover:border-[#5C3C30]'
+                          ? 'bg-[#7A1526]/15 border-[#7A1526] shadow-md text-white ring-1 ring-[#7A1526]'
+                          : 'bg-white border-[#F0D5DA] text-[#7E4A53] hover:text-white hover:border-[#DFBAC2]'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="p-2 rounded-lg bg-[#28382C] text-[#73D13D]">
+                        <div className="p-2 rounded-lg bg-[#ECFDF5] text-[#73D13D]">
                           <Type className="w-5 h-5" />
                         </div>
                         {logoForm.logoType === 'text-luxury' && (
@@ -1772,7 +1772,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <h4 className="font-cinzel font-bold text-xs text-white">
                         Haute Couture Wordmark
                       </h4>
-                      <p className="text-[11px] text-[#A89689] mt-1 line-clamp-2">
+                      <p className="text-[11px] text-[#7E4A53] mt-1 line-clamp-2">
                         High-contrast serif luxury typography with custom brand title and subtitle.
                       </p>
                     </button>
@@ -1781,13 +1781,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 {/* 3. 1-Click Luxury Theme Quick Presets */}
-                <div className="p-4 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-2.5">
+                <div className="p-4 bg-white rounded-xl border border-[#F0D5DA] space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-cinzel font-bold text-[#C4A894] uppercase tracking-wider flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-[#E08A68]" />
+                    <span className="text-[11px] font-cinzel font-bold text-[#6B3740] uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#7A1526]" />
                       1-Click Couture Logo Presets
                     </span>
-                    <span className="text-[10px] text-[#A89689]">Instant styling presets</span>
+                    <span className="text-[10px] text-[#7E4A53]">Instant styling presets</span>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -1802,10 +1802,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         footerColorHex: '#F8F2EA',
                         heightScale: 1.0,
                       })}
-                      className="p-2 rounded-lg bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-left text-xs text-white transition-all cursor-pointer truncate"
+                      className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-white transition-all cursor-pointer truncate"
                     >
                       <span className="block font-cinzel font-semibold text-[11px]">👑 Official Khaki Gold</span>
-                      <span className="text-[10px] text-[#A89689]">Classic atelier monogram</span>
+                      <span className="text-[10px] text-[#7E4A53]">Classic atelier monogram</span>
                     </button>
 
                     <button
@@ -1815,14 +1815,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         logoType: 'svg-monogram',
                         curvedArchText: 'HAUTE',
                         subtitleLine: 'ATELIER SHIKHA WARULE',
-                        primaryColorHex: '#9E472A',
+                        primaryColorHex: '#7A1526',
                         footerColorHex: '#EADDCF',
                         heightScale: 1.05,
                       })}
-                      className="p-2 rounded-lg bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-left text-xs text-white transition-all cursor-pointer truncate"
+                      className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-white transition-all cursor-pointer truncate"
                     >
                       <span className="block font-cinzel font-semibold text-[11px]">✨ Imperial Terracotta</span>
-                      <span className="text-[10px] text-[#A89689]">Warm heritage motif</span>
+                      <span className="text-[10px] text-[#7E4A53]">Warm heritage motif</span>
                     </button>
 
                     <button
@@ -1836,10 +1836,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         footerColorHex: '#FAF6F0',
                         heightScale: 1.0,
                       })}
-                      className="p-2 rounded-lg bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-left text-xs text-white transition-all cursor-pointer truncate"
+                      className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-white transition-all cursor-pointer truncate"
                     >
                       <span className="block font-cinzel font-semibold text-[11px]">🏛️ Editorial Wordmark</span>
-                      <span className="text-[10px] text-[#A89689]">Parisian serif elegance</span>
+                      <span className="text-[10px] text-[#7E4A53]">Parisian serif elegance</span>
                     </button>
 
                     <button
@@ -1853,10 +1853,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         footerColorHex: '#FFFFFF',
                         heightScale: 1.1,
                       })}
-                      className="p-2 rounded-lg bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-left text-xs text-white transition-all cursor-pointer truncate"
+                      className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-white transition-all cursor-pointer truncate"
                     >
                       <span className="block font-cinzel font-semibold text-[11px]">🌟 24K Royal Gold</span>
-                      <span className="text-[10px] text-[#A89689]">Opulent bridal seal</span>
+                      <span className="text-[10px] text-[#7E4A53]">Opulent bridal seal</span>
                     </button>
                   </div>
                 </div>
@@ -1865,27 +1865,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 {/* ================= MODE: CUSTOM IMAGE UPLOAD ================= */}
                 {logoForm.logoType === 'custom-image' && (
-                  <div className="p-5 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-5 animate-in fade-in">
+                  <div className="p-5 bg-white rounded-xl border border-[#F0D5DA] space-y-5 animate-in fade-in">
                     
-                    <div className="flex items-center justify-between pb-3 border-b border-[#34221A]">
+                    <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
                       <div className="flex items-center gap-2">
                         <Upload className="w-4 h-4 text-[#85A5FF]" />
-                        <h3 className="font-cinzel font-bold text-sm text-white">
+                        <h3 className="font-cinzel font-bold text-sm text-[#3B0A12]">
                           Custom Image & Graphic Logo Settings
                         </h3>
                       </div>
-                      <span className="text-[11px] text-[#A89689]">PNG / SVG / JPG</span>
+                      <span className="text-[11px] text-[#7E4A53]">PNG / SVG / JPG</span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       
                       {/* Left: File Upload Dropzone */}
                       <div className="space-y-3">
-                        <label className="block text-xs font-cinzel font-semibold text-[#C4A894]">
+                        <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
                           Upload Logo File (From your computer)
                         </label>
                         
-                        <div className="relative border-2 border-dashed border-[#3E2921] hover:border-[#9E472A] rounded-xl p-5 text-center bg-[#241712]/60 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer group">
+                        <div className="relative border-2 border-dashed border-[#F0D5DA] hover:border-[#7A1526] rounded-xl p-5 text-center bg-white/60 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer group">
                           <input
                             type="file"
                             id="custom-logo-file-picker"
@@ -1893,20 +1893,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             onChange={(e) => handleLogoImageUpload(e, false)}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                           />
-                          <div className="p-3 rounded-full bg-[#9E472A]/20 text-[#E08A68] group-hover:scale-110 transition-transform">
+                          <div className="p-3 rounded-full bg-[#7A1526]/20 text-[#7A1526] group-hover:scale-110 transition-transform">
                             <Upload className="w-5 h-5" />
                           </div>
                           <span className="text-xs font-cinzel font-semibold text-white">
                             Click to Browse or Drag & Drop Logo
                           </span>
-                          <span className="text-[10px] text-[#A89689]">
+                          <span className="text-[10px] text-[#7E4A53]">
                             Recommended: High-resolution PNG or SVG with transparent background
                           </span>
                         </div>
 
                         {/* Optional Dark Background Alternative */}
                         <div className="pt-2">
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Dark Background Image Variant (Optional for Footer)
                           </label>
                           <div className="flex gap-2">
@@ -1915,9 +1915,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               value={logoForm.customImageDarkUrl || ''}
                               onChange={(e) => setLogoForm({ ...logoForm, customImageDarkUrl: e.target.value })}
                               placeholder="URL for white/gold logo on dark background..."
-                              className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                              className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                             />
-                            <label className="px-3 py-2 bg-[#2E3B55] hover:bg-[#3B4D6F] text-white rounded-lg text-xs font-cinzel font-semibold cursor-pointer shrink-0 flex items-center gap-1.5">
+                            <label className="px-3 py-2 bg-[#EEF2FF] hover:bg-[#3B4D6F] text-white rounded-lg text-xs font-cinzel font-semibold cursor-pointer shrink-0 flex items-center gap-1.5">
                               <Upload className="w-3.5 h-3.5" />
                               <span>Upload</span>
                               <input
@@ -1934,7 +1934,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {/* Right: Direct Image URL & Scaling Slider */}
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Direct Image / CDN URL
                           </label>
                           <input
@@ -1942,20 +1942,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             value={logoForm.customImageUrl || ''}
                             onChange={(e) => setLogoForm({ ...logoForm, customImageUrl: e.target.value })}
                             placeholder="https://example.com/brand-logo.png"
-                            className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                           />
-                          <span className="text-[10px] text-[#A89689] block mt-1">
+                          <span className="text-[10px] text-[#7E4A53] block mt-1">
                             Direct web link to your hosted logo asset.
                           </span>
                         </div>
 
                         {/* Height Scaling Slider */}
-                        <div className="p-3 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
+                        <div className="p-3 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="font-cinzel font-semibold text-[#C4A894]">
+                            <span className="font-cinzel font-semibold text-[#6B3740]">
                               Logo Height Scale
                             </span>
-                            <span className="font-mono text-[#E08A68] font-bold">
+                            <span className="font-mono text-[#7A1526] font-bold">
                               {Math.round((logoForm.heightScale || 1.0) * 100)}%
                             </span>
                           </div>
@@ -1966,9 +1966,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             step="0.05"
                             value={logoForm.heightScale || 1.0}
                             onChange={(e) => setLogoForm({ ...logoForm, heightScale: parseFloat(e.target.value) })}
-                            className="w-full accent-[#9E472A] cursor-pointer"
+                            className="w-full accent-[#7A1526] cursor-pointer"
                           />
-                          <div className="flex justify-between text-[10px] text-[#A89689]">
+                          <div className="flex justify-between text-[10px] text-[#7E4A53]">
                             <span>Compact (60%)</span>
                             <span>Standard (100%)</span>
                             <span>Prominent (150%)</span>
@@ -1977,7 +1977,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                         {/* Quick Sample Image Logos */}
                         <div className="space-y-1.5">
-                          <span className="text-[10px] font-cinzel text-[#C4A894] block">Sample Custom Couture Artwork:</span>
+                          <span className="text-[10px] font-cinzel text-[#6B3740] block">Sample Custom Couture Artwork:</span>
                           <div className="grid grid-cols-2 gap-2">
                             <button
                               type="button"
@@ -1986,7 +1986,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 customImageUrl: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=300&auto=format&fit=crop',
                                 heightScale: 1.0,
                               })}
-                              className="p-1.5 rounded bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-[10px] text-stone-300 truncate text-left cursor-pointer"
+                              className="p-1.5 rounded bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-[10px] text-[#3B0A12] truncate text-left cursor-pointer"
                             >
                               🌸 Silk Weave Emblem
                             </button>
@@ -1997,7 +1997,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 customImageUrl: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=300&auto=format&fit=crop',
                                 heightScale: 1.0,
                               })}
-                              className="p-1.5 rounded bg-[#241712] hover:bg-[#34221A] border border-[#3E2921] text-[10px] text-stone-300 truncate text-left cursor-pointer"
+                              className="p-1.5 rounded bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-[10px] text-[#3B0A12] truncate text-left cursor-pointer"
                             >
                               ✨ Golden Zardozi Seal
                             </button>
@@ -2013,16 +2013,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 {/* ================= MODE: SIGNATURE VECTOR MONOGRAM ================= */}
                 {logoForm.logoType === 'svg-monogram' && (
-                  <div className="p-5 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-5 animate-in fade-in">
+                  <div className="p-5 bg-white rounded-xl border border-[#F0D5DA] space-y-5 animate-in fade-in">
                     
-                    <div className="flex items-center justify-between pb-3 border-b border-[#34221A]">
+                    <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
                       <div className="flex items-center gap-2">
-                        <Crown className="w-4 h-4 text-[#E08A68]" />
-                        <h3 className="font-cinzel font-bold text-sm text-white">
+                        <Crown className="w-4 h-4 text-[#7A1526]" />
+                        <h3 className="font-cinzel font-bold text-sm text-[#3B0A12]">
                           Signature Vector Monogram Settings
                         </h3>
                       </div>
-                      <span className="text-[11px] text-[#A89689]">Scalable Vector SVG</span>
+                      <span className="text-[11px] text-[#7E4A53]">Scalable Vector SVG</span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -2030,7 +2030,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {/* Left: Typography & Arch Text */}
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Curved Top Arch Text
                           </label>
                           <input
@@ -2038,15 +2038,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             value={logoForm.curvedArchText || 'LABEL'}
                             onChange={(e) => setLogoForm({ ...logoForm, curvedArchText: e.target.value })}
                             placeholder="e.g. LABEL, ATELIER, COUTURE"
-                            className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                           />
-                          <span className="text-[10px] text-[#A89689] block mt-1">
+                          <span className="text-[10px] text-[#7E4A53] block mt-1">
                             Follows the architectural circular crest arc above the monogram.
                           </span>
                         </div>
 
                         <div>
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Bottom Subtitle Line
                           </label>
                           <input
@@ -2054,20 +2054,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             value={logoForm.subtitleLine || 'BY SHIKHA WARULE'}
                             onChange={(e) => setLogoForm({ ...logoForm, subtitleLine: e.target.value })}
                             placeholder="e.g. BY SHIKHA WARULE, MUMBAI • PARIS"
-                            className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                           />
-                          <span className="text-[10px] text-[#A89689] block mt-1">
+                          <span className="text-[10px] text-[#7E4A53] block mt-1">
                             Engraved below the couture needle detailing.
                           </span>
                         </div>
 
                         {/* Scaling Slider */}
-                        <div className="p-3 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
+                        <div className="p-3 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="font-cinzel font-semibold text-[#C4A894]">
+                            <span className="font-cinzel font-semibold text-[#6B3740]">
                               Monogram Height Scale
                             </span>
-                            <span className="font-mono text-[#E08A68] font-bold">
+                            <span className="font-mono text-[#7A1526] font-bold">
                               {Math.round((logoForm.heightScale || 1.0) * 100)}%
                             </span>
                           </div>
@@ -2078,7 +2078,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             step="0.05"
                             value={logoForm.heightScale || 1.0}
                             onChange={(e) => setLogoForm({ ...logoForm, heightScale: parseFloat(e.target.value) })}
-                            className="w-full accent-[#9E472A] cursor-pointer"
+                            className="w-full accent-[#7A1526] cursor-pointer"
                           />
                         </div>
                       </div>
@@ -2087,8 +2087,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <div className="space-y-4">
                         
                         {/* Light Background Theme Color */}
-                        <div className="p-3.5 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894]">
+                        <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
                             Light Header Primary Theme Color
                           </label>
                           <div className="flex items-center gap-3">
@@ -2096,13 +2096,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               type="color"
                               value={logoForm.primaryColorHex || '#A59173'}
                               onChange={(e) => setLogoForm({ ...logoForm, primaryColorHex: e.target.value })}
-                              className="w-9 h-9 rounded border border-[#3E2921] bg-transparent cursor-pointer"
+                              className="w-9 h-9 rounded border border-[#F0D5DA] bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
                               value={logoForm.primaryColorHex || '#A59173'}
                               onChange={(e) => setLogoForm({ ...logoForm, primaryColorHex: e.target.value })}
-                              className="w-28 bg-[#1C120D] border border-[#3E2921] rounded px-2.5 py-1.5 text-xs text-white font-mono"
+                              className="w-28 bg-white border border-[#F0D5DA] rounded px-2.5 py-1.5 text-xs text-white font-mono"
                             />
                           </div>
 
@@ -2110,7 +2110,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           <div className="flex items-center gap-1.5 pt-1">
                             {[
                               { label: 'Khaki Gold', hex: '#A59173' },
-                              { label: 'Terracotta', hex: '#9E472A' },
+                              { label: 'Terracotta', hex: '#7A1526' },
                               { label: 'Royal Bronze', hex: '#C59B27' },
                               { label: 'Espresso', hex: '#2C2420' },
                               { label: 'Rose Gold', hex: '#C48B71' },
@@ -2128,8 +2128,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
 
                         {/* Dark Background Footer Color */}
-                        <div className="p-3.5 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894]">
+                        <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
                             Dark Footer Theme Color
                           </label>
                           <div className="flex items-center gap-3">
@@ -2137,13 +2137,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               type="color"
                               value={logoForm.footerColorHex || '#F8F2EA'}
                               onChange={(e) => setLogoForm({ ...logoForm, footerColorHex: e.target.value })}
-                              className="w-9 h-9 rounded border border-[#3E2921] bg-transparent cursor-pointer"
+                              className="w-9 h-9 rounded border border-[#F0D5DA] bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
                               value={logoForm.footerColorHex || '#F8F2EA'}
                               onChange={(e) => setLogoForm({ ...logoForm, footerColorHex: e.target.value })}
-                              className="w-28 bg-[#1C120D] border border-[#3E2921] rounded px-2.5 py-1.5 text-xs text-white font-mono"
+                              className="w-28 bg-white border border-[#F0D5DA] rounded px-2.5 py-1.5 text-xs text-white font-mono"
                             />
                           </div>
 
@@ -2176,54 +2176,54 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 {/* ================= MODE: HAUTE COUTURE LUXURY WORDMARK ================= */}
                 {logoForm.logoType === 'text-luxury' && (
-                  <div className="p-5 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-5 animate-in fade-in">
+                  <div className="p-5 bg-white rounded-xl border border-[#F0D5DA] space-y-5 animate-in fade-in">
                     
-                    <div className="flex items-center justify-between pb-3 border-b border-[#34221A]">
+                    <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
                       <div className="flex items-center gap-2">
                         <Type className="w-4 h-4 text-[#73D13D]" />
-                        <h3 className="font-cinzel font-bold text-sm text-white">
+                        <h3 className="font-cinzel font-bold text-sm text-[#3B0A12]">
                           Haute Couture Luxury Wordmark Settings
                         </h3>
                       </div>
-                      <span className="text-[11px] text-[#A89689]">Serif Typography</span>
+                      <span className="text-[11px] text-[#7E4A53]">Serif Typography</span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Primary Brand Title
                           </label>
                           <input
                             type="text"
                             value={logoForm.textBrandName || 'LABEL SHIKHA WARULE'}
                             onChange={(e) => setLogoForm({ ...logoForm, textBrandName: e.target.value })}
-                            className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894] mb-1">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740] mb-1">
                             Secondary Atelier Tagline / Subtitle
                           </label>
                           <input
                             type="text"
                             value={logoForm.textSubtitle || 'HAUTE COUTURE & ATELIER'}
                             onChange={(e) => setLogoForm({ ...logoForm, textSubtitle: e.target.value })}
-                            className="w-full bg-[#241712] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#9E472A]"
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A1526]"
                           />
                         </div>
                       </div>
 
                       <div className="space-y-4">
                         {/* Scaling Slider */}
-                        <div className="p-3.5 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
+                        <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="font-cinzel font-semibold text-[#C4A894]">
+                            <span className="font-cinzel font-semibold text-[#6B3740]">
                               Typography Scale
                             </span>
-                            <span className="font-mono text-[#E08A68] font-bold">
+                            <span className="font-mono text-[#7A1526] font-bold">
                               {Math.round((logoForm.heightScale || 1.0) * 100)}%
                             </span>
                           </div>
@@ -2234,13 +2234,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             step="0.05"
                             value={logoForm.heightScale || 1.0}
                             onChange={(e) => setLogoForm({ ...logoForm, heightScale: parseFloat(e.target.value) })}
-                            className="w-full accent-[#9E472A] cursor-pointer"
+                            className="w-full accent-[#7A1526] cursor-pointer"
                           />
                         </div>
 
                         {/* Color Customizer */}
-                        <div className="p-3.5 bg-[#241712] rounded-lg border border-[#3E2921] space-y-2">
-                          <label className="block text-xs font-cinzel font-semibold text-[#C4A894]">
+                        <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
+                          <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
                             Text Color (Light Header)
                           </label>
                           <div className="flex items-center gap-3">
@@ -2248,13 +2248,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               type="color"
                               value={logoForm.primaryColorHex || '#2C2420'}
                               onChange={(e) => setLogoForm({ ...logoForm, primaryColorHex: e.target.value })}
-                              className="w-9 h-9 rounded border border-[#3E2921] bg-transparent cursor-pointer"
+                              className="w-9 h-9 rounded border border-[#F0D5DA] bg-transparent cursor-pointer"
                             />
                             <input
                               type="text"
                               value={logoForm.primaryColorHex || '#2C2420'}
                               onChange={(e) => setLogoForm({ ...logoForm, primaryColorHex: e.target.value })}
-                              className="w-28 bg-[#1C120D] border border-[#3E2921] rounded px-2.5 py-1.5 text-xs text-white font-mono"
+                              className="w-28 bg-white border border-[#F0D5DA] rounded px-2.5 py-1.5 text-xs text-white font-mono"
                             />
                           </div>
                         </div>
@@ -2267,14 +2267,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 )}
 
                 {/* Bottom Publish Bar */}
-                <div className="pt-3 flex items-center justify-between border-t border-[#34221A]">
-                  <span className="text-xs text-[#A89689]">
+                <div className="pt-3 flex items-center justify-between border-t border-[#F0D5DA]">
+                  <span className="text-xs text-[#7E4A53]">
                     All changes take effect immediately across Header, Footer, and Navigation.
                   </span>
                   <button
                     type="button"
                     onClick={() => handleSaveLogoCMS()}
-                    className="px-6 py-3 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold rounded-lg shadow-lg text-xs tracking-wider uppercase cursor-pointer flex items-center gap-2"
+                    className="px-6 py-3 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold rounded-lg shadow-lg text-xs tracking-wider uppercase cursor-pointer flex items-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     <span>Apply & Publish Brand Logo</span>
@@ -2290,19 +2290,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'cms-hero' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-[#F0D5DA]">
                   <div>
                     <h2 className="font-cinzel text-lg font-bold text-white tracking-wider">
                       HERO BANNER & SLOGAN CMS
                     </h2>
-                    <p className="text-xs text-[#A89689]">
+                    <p className="text-xs text-[#7E4A53]">
                       Edit the main headline, script callout, CTA buttons, and background arch model image displayed on the storefront.
                     </p>
                   </div>
                   <button
                     onClick={handleSaveHeroCMS}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-lg text-xs font-cinzel font-semibold shadow-lg transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg text-xs font-cinzel font-semibold shadow-lg transition-all cursor-pointer"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Hero Changes</span>
@@ -2314,73 +2314,73 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   {/* Left Column: Headlines & Text */}
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Tagline Pill Label</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Tagline Pill Label</label>
                       <input
                         type="text"
                         value={heroForm.tagline}
                         onChange={(e) => setHeroForm({ ...heroForm, tagline: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7A1526]"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Headline Part 1</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Headline Part 1</label>
                         <input
                           type="text"
                           value={heroForm.headlinePart1}
                           onChange={(e) => setHeroForm({ ...heroForm, headlinePart1: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Headline Part 2</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Headline Part 2</label>
                         <input
                           type="text"
                           value={heroForm.headlinePart2}
                           onChange={(e) => setHeroForm({ ...heroForm, headlinePart2: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Italic Script Subline (Playfair Luxury)</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Italic Script Subline (Playfair Luxury)</label>
                       <input
                         type="text"
                         value={heroForm.italicSubline}
                         onChange={(e) => setHeroForm({ ...heroForm, italicSubline: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-[#7A1526]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Hero Description</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Hero Description</label>
                       <textarea
                         rows={3}
                         value={heroForm.description}
                         onChange={(e) => setHeroForm({ ...heroForm, description: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-[#9E472A]"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-[#7A1526]"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Primary CTA Button</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Primary CTA Button</label>
                         <input
                           type="text"
                           value={heroForm.exploreButtonText}
                           onChange={(e) => setHeroForm({ ...heroForm, exploreButtonText: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Secondary Consult Button</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Secondary Consult Button</label>
                         <input
                           type="text"
                           value={heroForm.consultButtonText}
                           onChange={(e) => setHeroForm({ ...heroForm, consultButtonText: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
                     </div>
@@ -2390,10 +2390,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="space-y-5">
                     
                     {/* Banner Layout Selector */}
-                    <div className="p-3.5 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-2.5">
+                    <div className="p-3.5 bg-white rounded-xl border border-[#F0D5DA] space-y-2.5">
                       <div className="flex items-center justify-between">
-                        <label className="block text-[#C4A894] font-cinzel font-semibold text-xs">Hero Presentation Layout</label>
-                        <span className="text-[10px] text-[#A89689]">Switch layout styles</span>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold text-xs">Hero Presentation Layout</label>
+                        <span className="text-[10px] text-[#7E4A53]">Switch layout styles</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <button
@@ -2401,8 +2401,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           onClick={() => setHeroForm({ ...heroForm, bannerLayout: 'full-size' })}
                           className={`py-2 px-3 rounded-lg text-xs font-cinzel font-semibold border transition-all cursor-pointer ${
                             heroForm.bannerLayout !== 'split-arch'
-                              ? 'bg-[#9E472A] text-white border-[#C56342] shadow-md'
-                              : 'bg-[#241712] text-[#A89689] border-[#3E2921] hover:text-white'
+                              ? 'bg-[#7A1526] text-white border-[#851628] shadow-md'
+                              : 'bg-white text-[#7E4A53] border-[#F0D5DA] hover:text-white'
                           }`}
                         >
                           Full-Size Hero Banner
@@ -2412,8 +2412,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           onClick={() => setHeroForm({ ...heroForm, bannerLayout: 'split-arch' })}
                           className={`py-2 px-3 rounded-lg text-xs font-cinzel font-semibold border transition-all cursor-pointer ${
                             heroForm.bannerLayout === 'split-arch'
-                              ? 'bg-[#9E472A] text-white border-[#C56342] shadow-md'
-                              : 'bg-[#241712] text-[#A89689] border-[#3E2921] hover:text-white'
+                              ? 'bg-[#7A1526] text-white border-[#851628] shadow-md'
+                              : 'bg-white text-[#7E4A53] border-[#F0D5DA] hover:text-white'
                           }`}
                         >
                           Split Arch Portal
@@ -2422,15 +2422,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </div>
 
                     {/* HERO BANNER COMPUTER UPLOAD SECTION */}
-                    <div className="p-4 bg-[#1C120D] rounded-xl border border-[#3E2921] space-y-3.5">
+                    <div className="p-4 bg-white rounded-xl border border-[#F0D5DA] space-y-3.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Laptop className="w-4 h-4 text-[#E08A68]" />
+                          <Laptop className="w-4 h-4 text-[#7A1526]" />
                           <span className="font-cinzel font-bold text-white text-xs uppercase tracking-wider">
                             Upload Hero Banner from Computer
                           </span>
                         </div>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#9E472A]/20 text-[#E08A68] border border-[#9E472A]/40 font-mono">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-[#7A1526]/20 text-[#7A1526] border border-[#7A1526]/40 font-mono">
                           Local / Device Upload
                         </span>
                       </div>
@@ -2451,8 +2451,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         }}
                         className={`relative border-2 border-dashed rounded-xl p-5 text-center transition-all cursor-pointer group ${
                           isDraggingBanner
-                            ? 'border-[#E08A68] bg-[#9E472A]/20 scale-[1.01]'
-                            : 'border-[#4A3227] hover:border-[#9E472A] bg-[#241712]/70 hover:bg-[#241712]'
+                            ? 'border-[#E08A68] bg-[#7A1526]/20 scale-[1.01]'
+                            : 'border-[#DFBAC2] hover:border-[#7A1526] bg-white/70 hover:bg-white'
                         }`}
                       >
                         <input
@@ -2464,30 +2464,30 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
                         <div className="flex flex-col items-center justify-center space-y-2 pointer-events-none">
-                          <div className="w-10 h-10 rounded-full bg-[#34221A] flex items-center justify-center text-[#E08A68] group-hover:scale-110 transition-transform">
+                          <div className="w-10 h-10 rounded-full bg-[#FAF2F4] flex items-center justify-center text-[#7A1526] group-hover:scale-110 transition-transform">
                             <UploadCloud className="w-5 h-5" />
                           </div>
                           <div>
                             <p className="text-xs font-cinzel font-semibold text-white">
                               Click or Drag & Drop Banner Images Here
                             </p>
-                            <p className="text-[10px] text-[#A89689] mt-0.5">
+                            <p className="text-[10px] text-[#7E4A53] mt-0.5">
                               Supports JPG, PNG, WEBP from your computer (Single or Multiple Slides)
                             </p>
                           </div>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#9E472A] text-white text-[10px] font-cinzel tracking-wider uppercase shadow-md">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#7A1526] text-white text-[10px] font-cinzel tracking-wider uppercase shadow-md">
                             <ImagePlus className="w-3 h-3" /> Select Images from Computer
                           </span>
                         </div>
                       </div>
 
                       {/* Active Hero Banner Slides Management */}
-                      <div className="space-y-2 pt-2 border-t border-[#34221A]">
+                      <div className="space-y-2 pt-2 border-t border-[#F0D5DA]">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-cinzel text-[#C4A894] font-semibold">
+                          <span className="text-xs font-cinzel text-[#6B3740] font-semibold">
                             Active Banner Slides ({heroForm.bannerImages && heroForm.bannerImages.length > 0 ? heroForm.bannerImages.length : (heroForm.heroImage ? 1 : 1)})
                           </span>
-                          <span className="text-[10px] text-[#A89689]">
+                          <span className="text-[10px] text-[#7E4A53]">
                             Auto-rotates on storefront
                           </span>
                         </div>
@@ -2506,12 +2506,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 key={idx}
                                 className={`flex items-center gap-3 p-2.5 rounded-lg border transition-all ${
                                   isPrimary
-                                    ? 'bg-[#2E1C15] border-[#E08A68]/60 shadow-sm'
-                                    : 'bg-[#241712] border-[#3E2921]'
+                                    ? 'bg-[#FCF4F6] border-[#E08A68]/60 shadow-sm'
+                                    : 'bg-white border-[#F0D5DA]'
                                 }`}
                               >
                                 {/* Thumbnail Preview */}
-                                <div className="relative w-20 h-12 rounded bg-black/60 overflow-hidden border border-[#4A3227] flex-shrink-0">
+                                <div className="relative w-20 h-12 rounded bg-black/60 overflow-hidden border border-[#DFBAC2] flex-shrink-0">
                                   {imageSrc ? (
                                     <img
                                       src={imageSrc}
@@ -2520,12 +2520,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                       referrerPolicy="no-referrer"
                                     />
                                   ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-[9px] text-[#A89689]">
+                                    <div className="w-full h-full flex items-center justify-center text-[9px] text-[#7E4A53]">
                                       Default
                                     </div>
                                   )}
                                   {isPrimary && (
-                                    <span className="absolute top-0.5 left-0.5 bg-[#9E472A] text-white text-[8px] px-1 rounded font-bold">
+                                    <span className="absolute top-0.5 left-0.5 bg-[#7A1526] text-white text-[8px] px-1 rounded font-bold">
                                       ★ Main
                                     </span>
                                   )}
@@ -2542,12 +2542,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                         Computer File
                                       </span>
                                     ) : (
-                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#34221A] text-[#C4A894] border border-[#4A3227]">
+                                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#FAF2F4] text-[#6B3740] border border-[#DFBAC2]">
                                         Preset / URL
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-[10px] text-[#A89689] truncate">
+                                  <p className="text-[10px] text-[#7E4A53] truncate">
                                     {isLocalBase64 ? 'Local Uploaded Asset' : (imageSrc || 'Default Atelier Model')}
                                   </p>
                                 </div>
@@ -2559,16 +2559,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                     type="button"
                                     title="Resize & Crop this banner (Aspect Ratio, Zoom, Pan, Rotation)"
                                     onClick={() => handleOpenResizer(idx, imageSrc, `Slide #${idx + 1}`)}
-                                    className="px-2 py-1 rounded bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-[10px] font-cinzel flex items-center gap-1 border border-[#4A3227] hover:border-[#C56342] transition-colors cursor-pointer"
+                                    className="px-2 py-1 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-[10px] font-cinzel flex items-center gap-1 border border-[#DFBAC2] hover:border-[#851628] transition-colors cursor-pointer"
                                   >
-                                    <Crop className="w-3 h-3 text-[#E08A68]" />
+                                    <Crop className="w-3 h-3 text-[#7A1526]" />
                                     <span>Resize / Crop</span>
                                   </button>
 
                                   {/* Replace from computer input */}
                                   <label
                                     title="Replace with file from computer"
-                                    className="p-1.5 rounded hover:bg-[#3E2921] text-[#C4A894] hover:text-white cursor-pointer transition-colors"
+                                    className="p-1.5 rounded hover:bg-[#FAF2F4] text-[#6B3740] hover:text-white cursor-pointer transition-colors"
                                   >
                                     <input
                                       type="file"
@@ -2585,7 +2585,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                       type="button"
                                       title="Move Up"
                                       onClick={() => handleMoveBannerSlide(idx, 'up')}
-                                      className="p-1.5 rounded hover:bg-[#3E2921] text-[#C4A894] hover:text-white cursor-pointer transition-colors"
+                                      className="p-1.5 rounded hover:bg-[#FAF2F4] text-[#6B3740] hover:text-white cursor-pointer transition-colors"
                                     >
                                       <ArrowUp className="w-3.5 h-3.5" />
                                     </button>
@@ -2597,7 +2597,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                       type="button"
                                       title="Move Down"
                                       onClick={() => handleMoveBannerSlide(idx, 'down')}
-                                      className="p-1.5 rounded hover:bg-[#3E2921] text-[#C4A894] hover:text-white cursor-pointer transition-colors"
+                                      className="p-1.5 rounded hover:bg-[#FAF2F4] text-[#6B3740] hover:text-white cursor-pointer transition-colors"
                                     >
                                       <ArrowDown className="w-3.5 h-3.5" />
                                     </button>
@@ -2609,7 +2609,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                       type="button"
                                       title="Set as Main Banner"
                                       onClick={() => handleSetPrimaryBannerSlide(idx)}
-                                      className="px-1.5 py-1 rounded bg-[#34221A] hover:bg-[#9E472A] text-white text-[9px] font-cinzel transition-colors cursor-pointer"
+                                      className="px-1.5 py-1 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-white text-[9px] font-cinzel transition-colors cursor-pointer"
                                     >
                                       Make Main
                                     </button>
@@ -2632,15 +2632,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       {/* Fallback Direct URL input */}
-                      <div className="pt-2 border-t border-[#34221A] space-y-1.5">
-                        <label className="block text-[11px] text-[#C4A894] font-cinzel">Or Enter Image URL:</label>
+                      <div className="pt-2 border-t border-[#F0D5DA] space-y-1.5">
+                        <label className="block text-[11px] text-[#6B3740] font-cinzel">Or Enter Image URL:</label>
                         <div className="flex gap-2">
                           <input
                             type="text"
                             value={heroForm.heroImage}
                             placeholder="https://images.unsplash.com/..."
                             onChange={(e) => setHeroForm({ ...heroForm, heroImage: e.target.value })}
-                            className="flex-1 bg-[#241712] border border-[#3E2921] rounded px-3 py-1.5 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                            className="flex-1 bg-white border border-[#F0D5DA] rounded px-3 py-1.5 text-white text-xs focus:outline-none focus:border-[#7A1526]"
                           />
                           <button
                             type="button"
@@ -2650,7 +2650,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               }
                             }}
                             disabled={!heroForm.heroImage || heroForm.heroImage.trim() === ''}
-                            className="px-2.5 py-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded flex items-center gap-1 border border-[#4A3227] disabled:opacity-50 cursor-pointer"
+                            className="px-2.5 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded flex items-center gap-1 border border-[#DFBAC2] disabled:opacity-50 cursor-pointer"
                           >
                             <Crop className="w-3.5 h-3.5" />
                             <span>Resize & Frame</span>
@@ -2662,7 +2662,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 handleAddPresetBanner(heroForm.heroImage);
                               }
                             }}
-                            className="px-2.5 py-1.5 bg-[#34221A] hover:bg-[#4A3227] text-white text-xs font-cinzel rounded cursor-pointer"
+                            className="px-2.5 py-1.5 bg-[#FCF4F6] hover:bg-[#F8E2E6] text-[#7A1526] border border-[#F0D5DA] text-xs font-cinzel rounded cursor-pointer"
                           >
                             + Add Direct
                           </button>
@@ -2670,34 +2670,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       {/* 1-Click Banner Image Presets */}
-                      <div className="pt-2 border-t border-[#34221A] space-y-1.5">
-                        <span className="text-[10px] text-[#C4A894] font-cinzel block">Curated Royal Presets:</span>
+                      <div className="pt-2 border-t border-[#F0D5DA] space-y-1.5">
+                        <span className="text-[10px] text-[#6B3740] font-cinzel block">Curated Royal Presets:</span>
                         <div className="grid grid-cols-2 gap-1.5">
                           <button
                             type="button"
                             onClick={() => setHeroForm({ ...heroForm, heroImage: '', bannerImages: [''] })}
-                            className="text-left text-[10px] p-1.5 rounded bg-[#241712] hover:bg-[#34221A] text-stone-300 truncate cursor-pointer"
+                            className="text-left text-[10px] p-1.5 rounded bg-white hover:bg-[#FAF2F4] text-[#3B0A12] truncate cursor-pointer"
                           >
                             ⭐ Default Atelier Asset
                           </button>
                           <button
                             type="button"
                             onClick={() => handleAddPresetBanner('https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920&auto=format&fit=crop')}
-                            className="text-left text-[10px] p-1.5 rounded bg-[#241712] hover:bg-[#34221A] text-stone-300 truncate cursor-pointer"
+                            className="text-left text-[10px] p-1.5 rounded bg-white hover:bg-[#FAF2F4] text-[#3B0A12] truncate cursor-pointer"
                           >
                             👑 Banarasi Silk Bridal & Groom
                           </button>
                           <button
                             type="button"
                             onClick={() => handleAddPresetBanner('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop')}
-                            className="text-left text-[10px] p-1.5 rounded bg-[#241712] hover:bg-[#34221A] text-stone-300 truncate cursor-pointer"
+                            className="text-left text-[10px] p-1.5 rounded bg-white hover:bg-[#FAF2F4] text-[#3B0A12] truncate cursor-pointer"
                           >
                             ✨ Festive Royal Menswear
                           </button>
                           <button
                             type="button"
                             onClick={() => handleAddPresetBanner('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1920&auto=format&fit=crop')}
-                            className="text-left text-[10px] p-1.5 rounded bg-[#241712] hover:bg-[#34221A] text-stone-300 truncate cursor-pointer"
+                            className="text-left text-[10px] p-1.5 rounded bg-white hover:bg-[#FAF2F4] text-[#3B0A12] truncate cursor-pointer"
                           >
                             🌿 Chanderi Drape Couture
                           </button>
@@ -2706,8 +2706,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </div>
 
                     {/* Script Callout Text */}
-                    <div className="p-3 bg-[#1C120D] rounded-lg border border-[#3E2921] space-y-2">
-                      <span className="font-cinzel font-bold text-[#E08A68] text-[11px] block">
+                    <div className="p-3 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
+                      <span className="font-cinzel font-bold text-[#7A1526] text-[11px] block">
                         Floating Calligraphic Script Callout
                       </span>
                       <div className="grid grid-cols-3 gap-2">
@@ -2715,29 +2715,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           type="text"
                           value={heroForm.scriptCalloutLine1}
                           onChange={(e) => setHeroForm({ ...heroForm, scriptCalloutLine1: e.target.value })}
-                          className="bg-[#241712] border border-[#3E2921] rounded p-2 text-white text-xs"
+                          className="bg-white border border-[#F0D5DA] rounded p-2 text-[#3B0A12] text-xs"
                           placeholder="Line 1"
                         />
                         <input
                           type="text"
                           value={heroForm.scriptCalloutLine2}
                           onChange={(e) => setHeroForm({ ...heroForm, scriptCalloutLine2: e.target.value })}
-                          className="bg-[#241712] border border-[#3E2921] rounded p-2 text-white text-xs"
+                          className="bg-white border border-[#F0D5DA] rounded p-2 text-[#3B0A12] text-xs"
                           placeholder="Line 2"
                         />
                         <input
                           type="text"
                           value={heroForm.scriptCalloutLine3}
                           onChange={(e) => setHeroForm({ ...heroForm, scriptCalloutLine3: e.target.value })}
-                          className="bg-[#241712] border border-[#3E2921] rounded p-2 text-white text-xs"
+                          className="bg-white border border-[#F0D5DA] rounded p-2 text-[#3B0A12] text-xs"
                           placeholder="Line 3"
                         />
                       </div>
                     </div>
 
                     {/* Stats Highlights */}
-                    <div className="p-3 bg-[#1C120D] rounded-lg border border-[#3E2921] space-y-2">
-                      <span className="font-cinzel font-bold text-[#E08A68] text-[11px] block">
+                    <div className="p-3 bg-white rounded-lg border border-[#F0D5DA] space-y-2">
+                      <span className="font-cinzel font-bold text-[#7A1526] text-[11px] block">
                         Three Hero Footprint Badges
                       </span>
                       <div className="grid grid-cols-3 gap-2">
@@ -2746,13 +2746,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             type="text"
                             value={heroForm.stat1Value}
                             onChange={(e) => setHeroForm({ ...heroForm, stat1Value: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1.5 text-white text-xs w-full mb-1"
+                            className="bg-white border border-[#F0D5DA] rounded p-1.5 text-white text-xs w-full mb-1"
                           />
                           <input
                             type="text"
                             value={heroForm.stat1Label}
                             onChange={(e) => setHeroForm({ ...heroForm, stat1Label: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1 text-[#A89689] text-[10px] w-full"
+                            className="bg-white border border-[#F0D5DA] rounded p-1 text-[#7E4A53] text-[10px] w-full"
                           />
                         </div>
 
@@ -2761,13 +2761,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             type="text"
                             value={heroForm.stat2Value}
                             onChange={(e) => setHeroForm({ ...heroForm, stat2Value: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1.5 text-white text-xs w-full mb-1"
+                            className="bg-white border border-[#F0D5DA] rounded p-1.5 text-white text-xs w-full mb-1"
                           />
                           <input
                             type="text"
                             value={heroForm.stat2Label}
                             onChange={(e) => setHeroForm({ ...heroForm, stat2Label: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1 text-[#A89689] text-[10px] w-full"
+                            className="bg-white border border-[#F0D5DA] rounded p-1 text-[#7E4A53] text-[10px] w-full"
                           />
                         </div>
 
@@ -2776,13 +2776,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             type="text"
                             value={heroForm.stat3Value}
                             onChange={(e) => setHeroForm({ ...heroForm, stat3Value: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1.5 text-white text-xs w-full mb-1"
+                            className="bg-white border border-[#F0D5DA] rounded p-1.5 text-white text-xs w-full mb-1"
                           />
                           <input
                             type="text"
                             value={heroForm.stat3Label}
                             onChange={(e) => setHeroForm({ ...heroForm, stat3Label: e.target.value })}
-                            className="bg-[#241712] border border-[#3E2921] rounded p-1 text-[#A89689] text-[10px] w-full"
+                            className="bg-white border border-[#F0D5DA] rounded p-1 text-[#7E4A53] text-[10px] w-full"
                           />
                         </div>
                       </div>
@@ -2793,7 +2793,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="col-span-full pt-4 flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold rounded-lg shadow-lg text-xs tracking-wider uppercase cursor-pointer"
+                      className="px-6 py-3 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold rounded-lg shadow-lg text-xs tracking-wider uppercase cursor-pointer"
                     >
                       Apply & Publish Hero Banner
                     </button>
@@ -2808,57 +2808,57 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {/* CMS TAB 2: ANNOUNCEMENT & TOP MARQUEE */}
           {activeTab === 'cms-announcement' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-5">
-                <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
                   <div>
                     <h2 className="font-cinzel text-lg font-bold text-white tracking-wider">
                       ANNOUNCEMENT BAR & TOP TICKER
                     </h2>
-                    <p className="text-xs text-[#A89689]">
+                    <p className="text-xs text-[#7E4A53]">
                       This promotional message appears in the royal maroon top bar across every page of the storefront.
                     </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-[#58111A] text-[#F3D7C5] border border-[#8E3B4B] text-[11px] font-cinzel font-bold uppercase">
+                  <span className="px-2.5 py-1 rounded bg-[#58111A] text-[#7A1526] border border-[#8E3B4B] text-[11px] font-cinzel font-bold uppercase">
                     Maroon Bar Active
                   </span>
                 </div>
 
                 <div className="space-y-3">
-                  <label className="block text-xs font-cinzel font-semibold text-[#E08A68]">
+                  <label className="block text-xs font-cinzel font-semibold text-[#7A1526]">
                     Top Bar Banner Text
                   </label>
                   <textarea
                     rows={3}
                     value={announcementDraft}
                     onChange={(e) => setAnnouncementDraft(e.target.value)}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-3.5 text-sm text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-3.5 text-sm text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                     placeholder="Enter promotion or shipping message..."
                   />
 
                   {/* 1-Click Promotional Presets */}
                   <div className="space-y-2 pt-1">
-                    <span className="text-[11px] font-cinzel font-semibold text-[#C4A894] block">
+                    <span className="text-[11px] font-cinzel font-semibold text-[#6B3740] block">
                       Quick Couture Presets:
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <button
                         type="button"
                         onClick={() => setAnnouncementDraft('COMPLIMENTARY WORLDWIDE COUTURE SHIPPING ON ORDERS ABOVE ₹2,999 • USE CODE: WELCOME10')}
-                        className="p-2 rounded bg-[#1C120D] hover:bg-[#2C1D16] border border-[#3E2921] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
+                        className="p-2 rounded bg-white hover:bg-[#FCF4F6] border border-[#F0D5DA] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
                       >
                         🚚 Worldwide Free Shipping
                       </button>
                       <button
                         type="button"
                         onClick={() => setAnnouncementDraft('FESTIVE COUTURE PREVIEW: ENJOY 15% ATELIER SAVINGS WITH CODE: FESTIVE15 • LIMITED EDITIONS')}
-                        className="p-2 rounded bg-[#1C120D] hover:bg-[#2C1D16] border border-[#3E2921] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
+                        className="p-2 rounded bg-white hover:bg-[#FCF4F6] border border-[#F0D5DA] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
                       >
                         ✨ Festive 15% Offer
                       </button>
                       <button
                         type="button"
                         onClick={() => setAnnouncementDraft('BESPOKE BRIDAL APPOINTMENTS NOW OPEN FOR AUTUMN/WINTER • BOOK COMPLIMENTARY STYLING')}
-                        className="p-2 rounded bg-[#1C120D] hover:bg-[#2C1D16] border border-[#3E2921] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
+                        className="p-2 rounded bg-white hover:bg-[#FCF4F6] border border-[#F0D5DA] text-[11px] text-left text-stone-200 transition-colors cursor-pointer"
                       >
                         👑 Bridal Appointments
                       </button>
@@ -2868,17 +2868,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   {/* Live Simulation of the Maroon Bar */}
                   <div className="p-3.5 bg-[#58111A] text-[#FDF8F3] border border-[#420B13] rounded-lg text-xs font-medium flex items-center justify-between shadow-inner">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#F3D7C5] shrink-0" />
+                      <Sparkles className="w-4 h-4 text-[#7A1526] shrink-0" />
                       <span className="tracking-wide">Live Preview: {announcementDraft}</span>
                     </div>
-                    <span className="text-[10px] text-[#F3D7C5] hidden sm:inline">Royal Maroon</span>
+                    <span className="text-[10px] text-[#7A1526] hidden sm:inline">Royal Maroon</span>
                   </div>
                 </div>
 
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={handleSaveAnnouncement}
-                    className="px-6 py-2.5 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer flex items-center gap-2"
+                    className="px-6 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer flex items-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     <span>Update Announcement Banner</span>
@@ -2893,20 +2893,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-10 animate-in fade-in duration-300">
               
               {/* SECTION 1: SHOP BY STYLE (ARCHITECTURAL SILHOUETTES) */}
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F0D5DA]">
                   <div>
-                    <h2 className="font-cinzel text-base font-bold text-white tracking-wider flex items-center gap-2">
-                      <Layers className="w-5 h-5 text-[#E08A68]" />
+                    <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                      <Layers className="w-5 h-5 text-[#7A1526]" />
                       <span>SHOP BY STYLE (ARCHITECTURAL ARCH SILHOUETTES)</span>
                     </h2>
-                    <p className="text-xs text-[#A89689] mt-0.5">
+                    <p className="text-xs text-[#7E4A53] mt-0.5">
                       Configure the 4 iconic Mughal arch style cards featured on the storefront homepage.
                     </p>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-[#E08A68] font-cinzel font-semibold bg-[#34221A] px-2.5 py-1 rounded border border-[#4A3227]">
+                    <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
                       {stylesList.length} Silhouettes
                     </span>
                     <button
@@ -2922,7 +2922,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         });
                         setIsAddStyleOpen(true);
                       }}
-                      className="px-3.5 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+                      className="px-3.5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Style Silhouette</span>
@@ -2932,10 +2932,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {stylesList.map((style, idx) => (
-                    <div key={style.id} className="bg-[#1C120D] rounded-xl border border-[#38241C] p-4 flex flex-col justify-between space-y-3 group hover:border-[#9E472A]/60 transition-all shadow-md">
+                    <div key={style.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4 flex flex-col justify-between space-y-3 group hover:border-[#7A1526]/60 transition-all shadow-md">
                       
                       {/* Image Thumbnail with Overlay Crop & Edit Trigger */}
-                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#3E2921] bg-black">
+                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black">
                         <img src={style.image} alt={style.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-opacity p-2">
@@ -2946,7 +2946,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               setStyleForm({ ...style });
                               setIsAddStyleOpen(true);
                             }}
-                            className="px-3 py-1.5 bg-[#9E472A] text-white text-xs font-cinzel rounded flex items-center gap-1 hover:bg-[#B35232] cursor-pointer"
+                            className="px-3 py-1.5 bg-[#7A1526] text-white text-xs font-cinzel rounded flex items-center gap-1 hover:bg-[#991B30] cursor-pointer"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                             <span>Edit Style</span>
@@ -2965,7 +2965,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 }
                               );
                             }}
-                            className="px-3 py-1.5 bg-[#2A1B14] text-[#F5C7A9] text-xs font-cinzel rounded flex items-center gap-1 border border-[#4A3227] hover:bg-[#38241C] cursor-pointer"
+                            className="px-3 py-1.5 bg-[#FCF4F6] text-[#7A1526] text-xs font-cinzel rounded flex items-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
                           >
                             <Crop className="w-3.5 h-3.5" />
                             <span>Resize 3:4</span>
@@ -2973,7 +2973,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
 
                         {/* Top badge */}
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-cinzel text-[#F5C7A9] font-bold border border-white/10">
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-cinzel text-[#7A1526] font-bold border border-white/10">
                           #{idx + 1}
                         </div>
                       </div>
@@ -2982,24 +2982,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
                           <h3 className="font-cinzel text-sm font-bold text-white tracking-wide">{style.title}</h3>
-                          <span className="text-[11px] font-mono text-[#E08A68]">{style.itemCount} Designs</span>
+                          <span className="text-[11px] font-mono text-[#7A1526]">{style.itemCount} Designs</span>
                         </div>
                         {style.accentText && (
-                          <div className="text-[11px] text-[#A89689] font-serif italic line-clamp-1">{style.accentText}</div>
+                          <div className="text-[11px] text-[#7E4A53] font-serif italic line-clamp-1">{style.accentText}</div>
                         )}
                         {style.description && (
-                          <p className="text-[10px] text-[#7A6B61] line-clamp-2 mt-1">{style.description}</p>
+                          <p className="text-[10px] text-[#8F6C72] line-clamp-2 mt-1">{style.description}</p>
                         )}
                       </div>
 
                       {/* Action Bar */}
-                      <div className="pt-2 border-t border-[#2D1C15] flex items-center justify-between">
+                      <div className="pt-2 border-t border-[#F0D5DA] flex items-center justify-between">
                         <div className="flex items-center gap-1">
                           <button
                             type="button"
                             disabled={idx === 0}
                             onClick={() => moveStyle(idx, 'up')}
-                            className="p-1.5 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Move Left / Earlier"
                           >
                             <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
@@ -3008,7 +3008,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             type="button"
                             disabled={idx === stylesList.length - 1}
                             onClick={() => moveStyle(idx, 'down')}
-                            className="p-1.5 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Move Right / Later"
                           >
                             <ArrowDown className="w-3.5 h-3.5 -rotate-90" />
@@ -3023,7 +3023,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               setStyleForm({ ...style });
                               setIsAddStyleOpen(true);
                             }}
-                            className="p-1.5 bg-[#34221A] hover:bg-[#9E472A] text-white rounded transition-colors cursor-pointer"
+                            className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-white rounded transition-colors cursor-pointer"
                             title="Edit Style Details"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -3042,7 +3042,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 }
                               );
                             }}
-                            className="p-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white rounded transition-colors cursor-pointer"
+                            className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
                             title="Resize & Crop Arch Image (3:4)"
                           >
                             <Crop className="w-3.5 h-3.5" />
@@ -3056,7 +3056,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 onUpdateStylesList(updated);
                               }
                             }}
-                            className="p-1.5 bg-[#2A1B14] hover:bg-red-700 text-[#A89689] hover:text-white rounded transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1.5 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Delete Style"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -3070,20 +3070,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* SECTION 2: SHOP BY COLLECTION / CATEGORIES */}
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F0D5DA]">
                   <div>
-                    <h2 className="font-cinzel text-base font-bold text-white tracking-wider flex items-center gap-2">
-                      <ShoppingBag className="w-5 h-5 text-[#E08A68]" />
+                    <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                      <ShoppingBag className="w-5 h-5 text-[#7A1526]" />
                       <span>SHOP BY COLLECTION (MUGHAL ARCH CATEGORY CARDS)</span>
                     </h2>
-                    <p className="text-xs text-[#A89689] mt-0.5">
+                    <p className="text-xs text-[#7E4A53] mt-0.5">
                       Curate product categories (Kurtas, Sarees, Dresses, Sets, etc.) displayed in cusped arch frames.
                     </p>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-[#E08A68] font-cinzel font-semibold bg-[#34221A] px-2.5 py-1 rounded border border-[#4A3227]">
+                    <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
                       {categoriesList.length} Collections
                     </span>
                     <button
@@ -3098,7 +3098,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         });
                         setIsAddCategoryOpen(true);
                       }}
-                      className="px-3.5 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+                      className="px-3.5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Add Collection Card</span>
@@ -3108,10 +3108,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                   {categoriesList.map((cat, idx) => (
-                    <div key={cat.id} className="bg-[#1C120D] rounded-xl border border-[#38241C] p-3 flex flex-col justify-between space-y-2.5 group hover:border-[#9E472A]/60 transition-all shadow-md">
+                    <div key={cat.id} className="bg-white rounded-xl border border-[#F0D5DA] p-3 flex flex-col justify-between space-y-2.5 group hover:border-[#7A1526]/60 transition-all shadow-md">
                       
                       {/* Image Thumbnail with Overlay Crop & Edit Trigger */}
-                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#3E2921] bg-black">
+                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black">
                         <img src={cat.image} alt={cat.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-1.5">
@@ -3122,7 +3122,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               setCategoryForm({ ...cat });
                               setIsAddCategoryOpen(true);
                             }}
-                            className="px-2 py-1 bg-[#9E472A] text-white text-[10px] font-cinzel rounded flex items-center gap-1 hover:bg-[#B35232] cursor-pointer"
+                            className="px-2 py-1 bg-[#7A1526] text-white text-[10px] font-cinzel rounded flex items-center gap-1 hover:bg-[#991B30] cursor-pointer"
                           >
                             <Edit3 className="w-3 h-3" />
                             <span>Edit</span>
@@ -3141,7 +3141,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 }
                               );
                             }}
-                            className="px-2 py-1 bg-[#2A1B14] text-[#F5C7A9] text-[10px] font-cinzel rounded flex items-center gap-1 border border-[#4A3227] hover:bg-[#38241C] cursor-pointer"
+                            className="px-2 py-1 bg-[#FCF4F6] text-[#7A1526] text-[10px] font-cinzel rounded flex items-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
                           >
                             <Crop className="w-3 h-3" />
                             <span>Crop</span>
@@ -3152,17 +3152,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {/* Content Details */}
                       <div>
                         <h4 className="font-cinzel text-xs font-bold text-white text-center line-clamp-1">{cat.title}</h4>
-                        <div className="text-[10px] text-[#E08A68] text-center font-mono mt-0.5">{cat.itemCount} Ensembles</div>
+                        <div className="text-[10px] text-[#7A1526] text-center font-mono mt-0.5">{cat.itemCount} Ensembles</div>
                       </div>
 
                       {/* Action Bar */}
-                      <div className="pt-2 border-t border-[#2D1C15] flex items-center justify-between">
+                      <div className="pt-2 border-t border-[#F0D5DA] flex items-center justify-between">
                         <div className="flex items-center gap-0.5">
                           <button
                             type="button"
                             disabled={idx === 0}
                             onClick={() => moveCategory(idx, 'up')}
-                            className="p-1 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Move Left"
                           >
                             <ArrowUp className="w-3 h-3 -rotate-90" />
@@ -3171,7 +3171,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             type="button"
                             disabled={idx === categoriesList.length - 1}
                             onClick={() => moveCategory(idx, 'down')}
-                            className="p-1 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Move Right"
                           >
                             <ArrowDown className="w-3 h-3 -rotate-90" />
@@ -3186,7 +3186,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               setCategoryForm({ ...cat });
                               setIsAddCategoryOpen(true);
                             }}
-                            className="p-1 bg-[#34221A] hover:bg-[#9E472A] text-white rounded transition-colors cursor-pointer"
+                            className="p-1 bg-[#FAF2F4] hover:bg-[#7A1526] text-white rounded transition-colors cursor-pointer"
                             title="Edit"
                           >
                             <Edit3 className="w-3 h-3" />
@@ -3200,7 +3200,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 onUpdateCategoriesList(updated);
                               }
                             }}
-                            className="p-1 bg-[#2A1B14] hover:bg-red-700 text-[#A89689] hover:text-white rounded transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="p-1 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                             title="Delete"
                           >
                             <Trash2 className="w-3 h-3" />
@@ -3220,19 +3220,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'cms-stories' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-[#201510] p-6 rounded-xl border border-[#38241C] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="font-cinzel text-base font-bold text-white tracking-wider flex items-center gap-2">
-                    <Tv className="w-5 h-5 text-[#E08A68]" />
+                  <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                    <Tv className="w-5 h-5 text-[#7A1526]" />
                     <span>WATCH OUR DISCOVERY (CRAFT & WEAVE VIDEO REELS)</span>
                   </h2>
-                  <p className="text-xs text-[#A89689] mt-0.5">
+                  <p className="text-xs text-[#7E4A53] mt-0.5">
                     Add, edit, crop thumbnails, and organize the artisan documentary reels shown in the storefront carousel.
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-[#E08A68] font-cinzel font-semibold bg-[#34221A] px-2.5 py-1 rounded border border-[#4A3227]">
+                  <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
                     {discoveryStories.length} Active Reels
                   </span>
                   <button
@@ -3252,7 +3252,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       });
                       setIsAddStoryOpen(true);
                     }}
-                    className="px-4 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+                    className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add Discovery Reel</span>
@@ -3262,10 +3262,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {discoveryStories.map((story, idx) => (
-                  <div key={story.id} className="bg-[#241712] rounded-xl border border-[#38241C] overflow-hidden p-4 flex flex-col justify-between space-y-3 group hover:border-[#9E472A]/60 transition-all shadow-md">
+                  <div key={story.id} className="bg-white rounded-xl border border-[#F0D5DA] overflow-hidden p-4 flex flex-col justify-between space-y-3 group hover:border-[#7A1526]/60 transition-all shadow-md">
                     
                     {/* Video Thumbnail with Badges & Action Overlay */}
-                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#3E2921]">
+                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#F0D5DA]">
                       <img src={story.thumbnail} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95" />
                       
                       {/* Terracotta Gradient Vignette */}
@@ -3279,7 +3279,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       {/* Top Badges */}
-                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[9px] font-mono text-[#F5C7A9] font-bold border border-white/10">
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[9px] font-mono text-[#7A1526] font-bold border border-white/10">
                         #{idx + 1}
                       </div>
 
@@ -3290,7 +3290,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {/* Bottom Title inside Thumbnail */}
                       <div className="absolute inset-x-0 bottom-0 p-2.5 text-center">
                         <div className="font-cinzel text-xs font-bold text-white drop-shadow-md leading-tight">{story.title}</div>
-                        <div className="text-[10px] text-[#F3D7C5] font-light mt-0.5">{story.subtitle}</div>
+                        <div className="text-[10px] text-[#7A1526] font-light mt-0.5">{story.subtitle}</div>
                       </div>
 
                       {/* Action Overlay on Hover */}
@@ -3302,7 +3302,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             setStoryForm({ ...story });
                             setIsAddStoryOpen(true);
                           }}
-                          className="px-3.5 py-1.5 bg-[#9E472A] text-white text-xs font-cinzel rounded-md flex items-center gap-1.5 hover:bg-[#B35232] cursor-pointer"
+                          className="px-3.5 py-1.5 bg-[#7A1526] text-white text-xs font-cinzel rounded-md flex items-center gap-1.5 hover:bg-[#991B30] cursor-pointer"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                           <span>Edit Full Reel</span>
@@ -3321,7 +3321,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               }
                             );
                           }}
-                          className="px-3.5 py-1.5 bg-[#2A1B14] text-[#F5C7A9] text-xs font-cinzel rounded-md flex items-center gap-1.5 border border-[#4A3227] hover:bg-[#38241C] cursor-pointer"
+                          className="px-3.5 py-1.5 bg-[#FCF4F6] text-[#7A1526] text-xs font-cinzel rounded-md flex items-center gap-1.5 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
                         >
                           <Crop className="w-3.5 h-3.5" />
                           <span>Resize 4:5</span>
@@ -3331,10 +3331,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                     {/* Content Details */}
                     <div className="space-y-1.5">
-                      <div className="text-[11px] text-[#C4A894] italic line-clamp-2">
+                      <div className="text-[11px] text-[#6B3740] italic line-clamp-2">
                         "{story.artisanQuote}"
                       </div>
-                      <div className="text-[10px] text-[#A89689] flex items-center justify-between">
+                      <div className="text-[10px] text-[#7E4A53] flex items-center justify-between">
                         <span>Artisan: <strong className="text-white font-medium">{story.artisanName}</strong></span>
                       </div>
 
@@ -3342,7 +3342,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {story.tags && story.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 pt-1">
                           {story.tags.map((tag, tIdx) => (
-                            <span key={tIdx} className="px-1.5 py-0.2 bg-[#2F1D15] text-[#D8B49C] text-[9px] rounded font-cinzel">
+                            <span key={tIdx} className="px-1.5 py-0.2 bg-[#FCF4F6] text-[#7A1526] text-[9px] rounded font-cinzel">
                               #{tag}
                             </span>
                           ))}
@@ -3351,13 +3351,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </div>
 
                     {/* Action Bar */}
-                    <div className="pt-2.5 border-t border-[#34221A] flex items-center justify-between">
+                    <div className="pt-2.5 border-t border-[#F0D5DA] flex items-center justify-between">
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
                           disabled={idx === 0}
                           onClick={() => moveDiscoveryStory(idx, 'up')}
-                          className="p-1.5 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                          className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                           title="Move Left / Earlier in Carousel"
                         >
                           <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
@@ -3366,7 +3366,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           type="button"
                           disabled={idx === discoveryStories.length - 1}
                           onClick={() => moveDiscoveryStory(idx, 'down')}
-                          className="p-1.5 rounded bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                          className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                           title="Move Right / Later in Carousel"
                         >
                           <ArrowDown className="w-3.5 h-3.5 -rotate-90" />
@@ -3381,7 +3381,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             setStoryForm({ ...story });
                             setIsAddStoryOpen(true);
                           }}
-                          className="p-1.5 bg-[#34221A] hover:bg-[#9E472A] text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-white rounded transition-colors cursor-pointer"
                           title="Edit Discovery Reel"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
@@ -3401,7 +3401,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               }
                             );
                           }}
-                          className="p-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
                           title="Resize / Crop Thumbnail"
                         >
                           <Crop className="w-3.5 h-3.5" />
@@ -3415,7 +3415,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               onUpdateDiscoveryStories(filtered);
                             }
                           }}
-                          className="p-1.5 bg-[#2A1B14] hover:bg-red-700 text-[#A89689] hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors cursor-pointer"
                           title="Delete Reel"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -3434,19 +3434,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'cms-diaries' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex items-center justify-between">
+              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex items-center justify-between">
                 <div>
-                  <h2 className="font-cinzel text-base font-bold text-white tracking-wider">
+                  <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
                     CLIENT DIARIES & VERIFIED REVIEWS CMS
                   </h2>
-                  <p className="text-xs text-[#A89689]">
+                  <p className="text-xs text-[#7E4A53]">
                     Add, edit, or remove testimonials from esteemed patrons.
                   </p>
                 </div>
 
                 <button
                   onClick={() => setIsAddDiaryOpen(true)}
-                  className="px-4 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Patron Story</span>
@@ -3455,12 +3455,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {clientDiaries.map((diary, idx) => (
-                  <div key={diary.id} className="bg-[#241712] rounded-xl border border-[#38241C] p-4.5 space-y-3">
+                  <div key={diary.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4.5 space-y-3">
                     <div className="flex items-center gap-3">
-                      <img src={diary.image} alt={diary.author} className="w-14 h-14 object-cover rounded-lg border border-[#3E2921]" />
+                      <img src={diary.image} alt={diary.author} className="w-14 h-14 object-cover rounded-lg border border-[#F0D5DA]" />
                       <div>
                         <h3 className="font-cinzel text-sm font-bold text-white">{diary.author}</h3>
-                        <div className="text-xs text-[#E08A68]">{diary.city} • {diary.date}</div>
+                        <div className="text-xs text-[#7A1526]">{diary.city} • {diary.date}</div>
                         <div className="flex text-[#FFD700] text-xs mt-0.5">
                           {[...Array(diary.rating)].map((_, i) => (
                             <Star key={i} className="w-3 h-3 fill-current stroke-none" />
@@ -3469,11 +3469,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
                     </div>
 
-                    <blockquote className="text-xs text-[#D0BFB2] italic font-serif-luxury leading-relaxed bg-[#1C120D] p-3 rounded-lg border border-[#38241C]">
+                    <blockquote className="text-xs text-[#4A1821] italic font-serif-luxury leading-relaxed bg-white p-3 rounded-lg border border-[#F0D5DA]">
                       "{diary.quote}"
                     </blockquote>
 
-                    <div className="flex items-center justify-between pt-1 text-[11px] text-[#A89689]">
+                    <div className="flex items-center justify-between pt-1 text-[11px] text-[#7E4A53]">
                       <span>Outfit: {diary.outfit}</span>
                       <button
                         onClick={() => {
@@ -3495,19 +3495,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {/* CMS TAB 6: BRAND STORY & ATELIER MANIFESTO */}
           {activeTab === 'cms-brand' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-5">
+                <div className="flex items-center justify-between pb-4 border-b border-[#F0D5DA]">
                   <div>
                     <h2 className="font-cinzel text-lg font-bold text-white tracking-wider">
                       BRAND STORY & ATELIER MANIFESTO
                     </h2>
-                    <p className="text-xs text-[#A89689]">
+                    <p className="text-xs text-[#7E4A53]">
                       Update the Atelier philosophy, founder message from Shikha Warule, and heritage clusters.
                     </p>
                   </div>
                   <button
                     onClick={handleSaveBrandStory}
-                    className="inline-flex items-center gap-2 px-5 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Brand Story</span>
@@ -3517,85 +3517,85 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <form onSubmit={handleSaveBrandStory} className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Section Heading</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Section Heading</label>
                       <input
                         type="text"
                         value={brandStoryForm.heading}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, heading: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Subheading</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Subheading</label>
                       <input
                         type="text"
                         value={brandStoryForm.subheading}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, subheading: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Founder / Couturier Name</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Founder / Couturier Name</label>
                         <input
                           type="text"
                           value={brandStoryForm.founderName}
                           onChange={(e) => setBrandStoryForm({ ...brandStoryForm, founderName: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Founder Role</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Founder Role</label>
                         <input
                           type="text"
                           value={brandStoryForm.founderRole}
                           onChange={(e) => setBrandStoryForm({ ...brandStoryForm, founderRole: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Founder Quote</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Founder Quote</label>
                       <textarea
                         rows={2}
                         value={brandStoryForm.founderQuote}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, founderQuote: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Story Paragraph 1</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Story Paragraph 1</label>
                       <textarea
                         rows={3}
                         value={brandStoryForm.storyParagraph1}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, storyParagraph1: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Story Paragraph 2</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Story Paragraph 2</label>
                       <textarea
                         rows={3}
                         value={brandStoryForm.storyParagraph2}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, storyParagraph2: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Founder Photo URL</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Founder Photo URL</label>
                       <input
                         type="text"
                         value={brandStoryForm.founderImage}
                         onChange={(e) => setBrandStoryForm({ ...brandStoryForm, founderImage: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
                   </div>
@@ -3603,7 +3603,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="col-span-full pt-2 flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer"
+                      className="px-6 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer"
                     >
                       Publish Atelier Story
                     </button>
@@ -3616,19 +3616,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {/* CMS TAB 7: FOOTER & POLICIES */}
           {activeTab === 'cms-footer' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-[#38241C]">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-5">
+                <div className="flex items-center justify-between pb-4 border-b border-[#F0D5DA]">
                   <div>
                     <h2 className="font-cinzel text-lg font-bold text-white tracking-wider">
                       FOOTER CONTACT & STORE POLICIES
                     </h2>
-                    <p className="text-xs text-[#A89689]">
+                    <p className="text-xs text-[#7E4A53]">
                       Manage phone, studio address, WhatsApp concierge, and returns policy text.
                     </p>
                   </div>
                   <button
                     onClick={handleSaveStoreSettings}
-                    className="inline-flex items-center gap-2 px-5 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Policy Settings</span>
@@ -3638,95 +3638,95 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <form onSubmit={handleSaveStoreSettings} className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Store Legal Name</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Store Legal Name</label>
                       <input
                         type="text"
                         value={storeSettingsForm.storeName}
                         onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, storeName: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Contact Phone</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Contact Phone</label>
                         <input
                           type="text"
                           value={storeSettingsForm.phone}
                           onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, phone: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Email Concierge</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Email Concierge</label>
                         <input
                           type="text"
                           value={storeSettingsForm.email}
                           onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, email: e.target.value })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Flagship Atelier Studio Address</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Flagship Atelier Studio Address</label>
                       <textarea
                         rows={2}
                         value={storeSettingsForm.atelierAddress}
                         onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, atelierAddress: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">WhatsApp Concierge Number</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">WhatsApp Concierge Number</label>
                       <input
                         type="text"
                         value={storeSettingsForm.whatsappNumber}
                         onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, whatsappNumber: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Shipping Policy Details</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Shipping Policy Details</label>
                       <textarea
                         rows={3}
                         value={storeSettingsForm.shippingPolicyText}
                         onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, shippingPolicyText: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Returns & Alterations Policy Details</label>
+                      <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Returns & Alterations Policy Details</label>
                       <textarea
                         rows={3}
                         value={storeSettingsForm.returnsPolicyText}
                         onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, returnsPolicyText: e.target.value })}
-                        className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Free Shipping Threshold (₹)</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Free Shipping Threshold (₹)</label>
                         <input
                           type="number"
                           value={storeSettingsForm.freeShippingThreshold}
                           onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, freeShippingThreshold: parseInt(e.target.value) || 0 })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-[#C4A894] font-cinzel font-semibold mb-1">Return Window (Days)</label>
+                        <label className="block text-[#6B3740] font-cinzel font-semibold mb-1">Return Window (Days)</label>
                         <input
                           type="number"
                           value={storeSettingsForm.returnWindowDays}
                           onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, returnWindowDays: parseInt(e.target.value) || 0 })}
-                          className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white focus:outline-none"
+                          className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] focus:outline-none"
                         />
                       </div>
                     </div>
@@ -3735,7 +3735,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="col-span-full pt-2 flex justify-end">
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer"
+                      className="px-6 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer"
                     >
                       Save Policy Settings
                     </button>
@@ -3750,51 +3750,51 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-6 animate-in fade-in duration-300">
               
               {/* Create Promo Code Box */}
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-4">
-                <h2 className="font-cinzel text-base font-bold text-white tracking-wider">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-4">
+                <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
                   CREATE NEW COUTURE PROMO CODE
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <label className="block text-[#A89689] mb-1">Promo Code</label>
+                    <label className="block text-[#7E4A53] mb-1">Promo Code</label>
                     <input
                       type="text"
                       placeholder="e.g. FESTIVE20"
                       value={newPromoCode.code}
                       onChange={(e) => setNewPromoCode({ ...newPromoCode, code: e.target.value.toUpperCase() })}
-                      className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white font-mono uppercase"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] font-mono uppercase"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[#A89689] mb-1">Discount %</label>
+                    <label className="block text-[#7E4A53] mb-1">Discount %</label>
                     <input
                       type="number"
                       value={newPromoCode.discountPercentage}
                       onChange={(e) => setNewPromoCode({ ...newPromoCode, discountPercentage: parseInt(e.target.value) || 0 })}
-                      className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white font-mono"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[#A89689] mb-1">Min Order Value (₹)</label>
+                    <label className="block text-[#7E4A53] mb-1">Min Order Value (₹)</label>
                     <input
                       type="number"
                       value={newPromoCode.minOrder}
                       onChange={(e) => setNewPromoCode({ ...newPromoCode, minOrder: parseInt(e.target.value) || 0 })}
-                      className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white font-mono"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[#A89689] mb-1">Description</label>
+                    <label className="block text-[#7E4A53] mb-1">Description</label>
                     <input
                       type="text"
                       placeholder="e.g. 20% off on Festive"
                       value={newPromoCode.description}
                       onChange={(e) => setNewPromoCode({ ...newPromoCode, description: e.target.value })}
-                      className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12]"
                     />
                   </div>
                 </div>
@@ -3806,7 +3806,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       onAddPromoCode(newPromoCode);
                       setNewPromoCode({ code: '', discountPercentage: 15, minOrder: 3000, description: '' });
                     }}
-                    className="px-5 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md cursor-pointer"
+                    className="px-5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md cursor-pointer"
                   >
                     Activate Promo Code
                   </button>
@@ -3816,7 +3816,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Active Codes List */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {promoCodes.map((p) => (
-                  <div key={p.code} className="bg-[#201510] p-4 rounded-xl border border-[#38241C] flex items-center justify-between">
+                  <div key={p.code} className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex items-center justify-between">
                     <div>
                       <div className="font-mono text-base font-bold text-white flex items-center gap-2">
                         <span>{p.code}</span>
@@ -3824,13 +3824,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           {p.discountPercentage}% OFF
                         </span>
                       </div>
-                      <div className="text-xs text-[#A89689] mt-1">Min order: ₹{p.minOrder.toLocaleString('en-IN')}</div>
-                      <div className="text-[11px] text-[#C4A894] mt-0.5">{p.description}</div>
+                      <div className="text-xs text-[#7E4A53] mt-1">Min order: ₹{p.minOrder.toLocaleString('en-IN')}</div>
+                      <div className="text-[11px] text-[#6B3740] mt-0.5">{p.description}</div>
                     </div>
 
                     <button
                       onClick={() => onDeletePromoCode(p.code)}
-                      className="p-1.5 bg-[#34221A] hover:bg-[#FF4D4F] text-white rounded transition-colors"
+                      className="p-1.5 bg-[#FAF2F4] hover:bg-[#FF4D4F] text-white rounded transition-colors"
                       title="Delete code"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -3845,24 +3845,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {/* TAB 9: SETTINGS */}
           {activeTab === 'settings' && (
             <div className="space-y-6 animate-in fade-in duration-300">
-              <div className="bg-[#241712] p-6 rounded-xl border border-[#3E2921] space-y-4">
-                <h2 className="font-cinzel text-base font-bold text-white tracking-wider">
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-4">
+                <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
                   GENERAL ATELIER SYSTEM CONFIGURATION
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                  <div className="bg-[#1C120D] p-4 rounded-lg border border-[#38241C]">
-                    <span className="text-[#A89689] block mb-1">Base Currency</span>
+                  <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
+                    <span className="text-[#7E4A53] block mb-1">Base Currency</span>
                     <strong className="text-white text-base font-mono">INR (₹ - Indian Rupee)</strong>
                   </div>
 
-                  <div className="bg-[#1C120D] p-4 rounded-lg border border-[#38241C]">
-                    <span className="text-[#A89689] block mb-1">Standard GST Rate</span>
+                  <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
+                    <span className="text-[#7E4A53] block mb-1">Standard GST Rate</span>
                     <strong className="text-white text-base font-mono">12% (Apparel / Handloom)</strong>
                   </div>
 
-                  <div className="bg-[#1C120D] p-4 rounded-lg border border-[#38241C]">
-                    <span className="text-[#A89689] block mb-1">Insured Logistics Partners</span>
+                  <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
+                    <span className="text-[#7E4A53] block mb-1">Insured Logistics Partners</span>
                     <strong className="text-white text-sm">BlueDart / Delhivery / DHL</strong>
                   </div>
                 </div>
@@ -3877,8 +3877,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* MODAL: ADD / EDIT PRODUCT */}
       {(isAddProductOpen || editingProduct) && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#241712] border border-[#482E22] rounded-2xl max-w-2xl w-full p-6 space-y-4 text-xs my-8 text-[#EADDCF]">
-            <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+          <div className="bg-white border border-[#DFBAC2] rounded-2xl max-w-2xl w-full p-6 space-y-4 text-xs my-8 text-[#3B0A12]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
               <h2 className="font-cinzel text-base font-bold text-white">
                 {editingProduct ? `Edit Piece: ${editingProduct.name}` : 'Add New Handcrafted Ensemble'}
               </h2>
@@ -3887,7 +3887,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   setIsAddProductOpen(false);
                   setEditingProduct(null);
                 }}
-                className="p-1 text-[#A89689] hover:text-white"
+                className="p-1 text-[#7E4A53] hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -3934,43 +3934,43 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             >
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Ensemble Name *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Ensemble Name *</label>
                   <input
                     name="name"
                     required
                     defaultValue={editingProduct?.name || ''}
                     placeholder="e.g. Saffron Raw Silk Zardozi Kurta Set"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Selling Price (₹) *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Selling Price (₹) *</label>
                   <input
                     name="price"
                     type="number"
                     required
                     defaultValue={editingProduct?.price || 4499}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Original Price (₹) [For Sale badge]</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Original Price (₹) [For Sale badge]</label>
                   <input
                     name="originalPrice"
                     type="number"
                     defaultValue={editingProduct?.originalPrice || ''}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Category *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Category *</label>
                   <select
                     name="category"
                     defaultValue={editingProduct?.category || 'Kurtas'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   >
                     <option value="Kurtas">Kurtas</option>
                     <option value="Sarees">Sarees</option>
@@ -3984,11 +3984,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Style Silhouette *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Style Silhouette *</label>
                   <select
                     name="style"
                     defaultValue={editingProduct?.style || 'Ethnic'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   >
                     <option value="Ethnic">Ethnic</option>
                     <option value="Classic">Classic</option>
@@ -3998,11 +3998,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Gender *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Gender *</label>
                   <select
                     name="gender"
                     defaultValue={editingProduct?.gender || 'Women'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   >
                     <option value="Women">Women</option>
                     <option value="Men">Men</option>
@@ -4012,22 +4012,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Fabric Details *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Fabric Details *</label>
                   <input
                     name="fabric"
                     required
                     defaultValue={editingProduct?.fabric || 'Pure Chanderi Silk with Zari Border'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none"
                   />
                 </div>
 
                 {/* PRODUCT LOOKBOOK & GARMENT IMAGES STUDIO */}
-                <div className="col-span-2 space-y-3 bg-[#1B110C] p-3.5 rounded-xl border border-[#3E2921]">
+                <div className="col-span-2 space-y-3 bg-[#FCF4F6] p-3.5 rounded-xl border border-[#F0D5DA]">
                   <div className="flex items-center justify-between">
-                    <label className="block text-[#E08A68] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#E08A68]" />
+                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Crop className="w-4 h-4 text-[#7A1526]" />
                       <span>Primary Garment Lookbook Image *</span>
-                      <span className="text-[9px] font-sans font-normal px-1.5 py-0.2 rounded bg-[#9E472A]/30 text-[#F5C7A9] border border-[#9E472A]/40">
+                      <span className="text-[9px] font-sans font-normal px-1.5 py-0.2 rounded bg-[#7A1526]/30 text-[#7A1526] border border-[#7A1526]/40">
                         3:4 / 4:5 Recommended
                       </span>
                     </label>
@@ -4037,7 +4037,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     {/* Left: Interactive Preview Thumbnail */}
                     <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-28 h-36 rounded-lg overflow-hidden border-2 border-[#54382B] bg-black shadow-lg flex items-center justify-center">
+                      <div className="relative group w-28 h-36 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
                         {productFormImage ? (
                           <img
                             src={productFormImage}
@@ -4045,7 +4045,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="text-center p-2 text-[#7A6B61]">
+                          <div className="text-center p-2 text-[#8F6C72]">
                             <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
                             <span className="text-[10px]">No image</span>
                           </div>
@@ -4058,25 +4058,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             onClick={() => handleOpenProductImageResizer(productFormImage, editingProduct ? `Edit Image: ${editingProduct.name}` : 'New Garment Image')}
                             className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
                           >
-                            <Crop className="w-4 h-4 text-[#F5C7A9]" />
+                            <Crop className="w-4 h-4 text-[#7A1526]" />
                             <span>Resize & Crop</span>
                           </button>
                         )}
                       </div>
-                      <span className="text-[9px] text-[#A89689] mt-1 font-mono">Catalog 3:4 Frame</span>
+                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">Catalog 3:4 Frame</span>
                     </div>
 
                     {/* Right: Inputs & Action Studio Buttons */}
                     <div className="sm:col-span-8 space-y-2">
                       <div>
-                        <span className="text-[10px] text-[#A89689] block mb-1">Image URL or Base64</span>
+                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL or Base64</span>
                         <input
                           name="image"
                           required
                           value={productFormImage}
                           onChange={(e) => setProductFormImage(e.target.value)}
                           placeholder="https://... or upload below"
-                          className="w-full bg-[#140C08] border border-[#3E2921] rounded-lg p-2 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
 
@@ -4084,7 +4084,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         {/* Direct File Upload (Instant) */}
                         <label
                           title="Upload new image from your device directly"
-                          className="px-3 py-1.5 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
                         >
                           <Upload className="w-3.5 h-3.5 text-white" />
                           <span>Upload Photo</span>
@@ -4125,7 +4125,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }
                           }}
                           disabled={!productFormImage}
-                          className="px-3 py-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#4A3227] hover:border-[#C56342] transition-colors cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] hover:border-[#851628] transition-colors cursor-pointer disabled:opacity-50"
                         >
                           <Crop className="w-3.5 h-3.5" />
                           <span>Crop / Frame (3:4)</span>
@@ -4135,11 +4135,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
 
                   {/* Secondary / Hover Angle Image (Optional) */}
-                  <div className="pt-2.5 border-t border-[#2D1C15]">
+                  <div className="pt-2.5 border-t border-[#F0D5DA]">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] font-cinzel text-[#C4A894] flex items-center gap-1">
+                      <span className="text-[11px] font-cinzel text-[#6B3740] flex items-center gap-1">
                         <span>Secondary / Hover Angle Image</span>
-                        <span className="text-[9px] text-[#7A6B61]">(Back view or close-up detail)</span>
+                        <span className="text-[9px] text-[#8F6C72]">(Back view or close-up detail)</span>
                       </span>
                     </div>
 
@@ -4149,7 +4149,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         value={productFormHoverImage}
                         onChange={(e) => setProductFormHoverImage(e.target.value)}
                         placeholder="Optional secondary hover image URL"
-                        className="flex-1 bg-[#140C08] border border-[#3E2921] rounded-lg p-2 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                        className="flex-1 bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                       />
 
                       <button
@@ -4160,7 +4160,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           }
                         }}
                         disabled={!productFormHoverImage}
-                        className="px-2.5 py-2 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#4A3227] disabled:opacity-50 cursor-pointer"
+                        className="px-2.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#DFBAC2] disabled:opacity-50 cursor-pointer"
                         title="Resize Hover Image"
                       >
                         <Crop className="w-3.5 h-3.5" />
@@ -4169,9 +4169,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                       <label
                         title="Upload hover image from computer"
-                        className="px-2.5 py-2 bg-[#251812] hover:bg-[#34221A] text-stone-200 text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#3E2921] cursor-pointer"
+                        className="px-2.5 py-2 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#F0D5DA] cursor-pointer"
                       >
-                        <Upload className="w-3.5 h-3.5 text-[#E08A68]" />
+                        <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
                         <span>Upload</span>
                         <input
                           type="file"
@@ -4205,21 +4205,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Description</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Description</label>
                   <textarea
                     name="description"
                     rows={2}
                     defaultValue={editingProduct?.description || 'Tailored to perfection with hand-pleated details and royal borders.'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none"
                   />
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Artisan Story / Craft Note</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan Story / Craft Note</label>
                   <input
                     name="artisanNote"
                     defaultValue={editingProduct?.artisanNote || 'Handwoven by master weavers of Maheshwar cluster.'}
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none"
                   />
                 </div>
 
@@ -4229,7 +4229,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     id="isBestSeller"
                     name="isBestSeller"
                     defaultChecked={editingProduct?.isBestSeller}
-                    className="w-4 h-4 accent-[#9E472A]"
+                    className="w-4 h-4 accent-[#7A1526]"
                   />
                   <label htmlFor="isBestSeller" className="text-white cursor-pointer font-cinzel">
                     Mark as Best Seller Collection Piece
@@ -4237,21 +4237,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#38241C]">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddProductOpen(false);
                     setEditingProduct(null);
                   }}
-                  className="px-4 py-2 bg-[#34221A] text-white rounded-lg"
+                  className="px-4 py-2 bg-[#FAF2F4] text-white rounded-lg"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white font-cinzel font-semibold rounded-lg shadow-md cursor-pointer"
+                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold rounded-lg shadow-md cursor-pointer"
                 >
                   {editingProduct ? 'Update Piece' : 'Publish Piece'}
                 </button>
@@ -4264,10 +4264,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* MODAL: ADD PATRON STORY */}
       {isAddDiaryOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#241712] border border-[#482E22] rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs text-[#EADDCF]">
-            <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+          <div className="bg-white border border-[#DFBAC2] rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs text-[#3B0A12]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
               <h2 className="font-cinzel text-base font-bold text-white">Add Verified Patron Testimonial</h2>
-              <button onClick={() => setIsAddDiaryOpen(false)} className="text-[#A89689] hover:text-white">
+              <button onClick={() => setIsAddDiaryOpen(false)} className="text-[#7E4A53] hover:text-white">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -4281,55 +4281,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               className="space-y-3"
             >
               <div>
-                <label className="block text-[#C4A894] font-cinzel mb-1">Patron Name *</label>
+                <label className="block text-[#6B3740] font-cinzel mb-1">Patron Name *</label>
                 <input
                   required
                   value={diaryForm.author}
                   onChange={(e) => setDiaryForm({ ...diaryForm, author: e.target.value })}
                   placeholder="e.g. Priyanka Singhania"
-                  className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white"
+                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">City</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">City</label>
                   <input
                     value={diaryForm.city}
                     onChange={(e) => setDiaryForm({ ...diaryForm, city: e.target.value })}
                     placeholder="e.g. Mumbai"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Outfit</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Outfit</label>
                   <input
                     value={diaryForm.outfit}
                     onChange={(e) => setDiaryForm({ ...diaryForm, outfit: e.target.value })}
                     placeholder="e.g. Festive Kurta Set"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[#C4A894] font-cinzel mb-1">Quote / Review *</label>
+                <label className="block text-[#6B3740] font-cinzel mb-1">Quote / Review *</label>
                 <textarea
                   rows={3}
                   required
                   value={diaryForm.quote}
                   onChange={(e) => setDiaryForm({ ...diaryForm, quote: e.target.value })}
                   placeholder="The craftsmanship was sublime..."
-                  className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white"
+                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                 />
               </div>
 
               <div>
-                <label className="block text-[#C4A894] font-cinzel mb-1">Customer / Garment Photo URL</label>
+                <label className="block text-[#6B3740] font-cinzel mb-1">Customer / Garment Photo URL</label>
                 <input
                   value={diaryForm.image}
                   onChange={(e) => setDiaryForm({ ...diaryForm, image: e.target.value })}
-                  className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white"
+                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                 />
               </div>
 
@@ -4337,13 +4337,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddDiaryOpen(false)}
-                  className="px-4 py-2 bg-[#34221A] text-white rounded"
+                  className="px-4 py-2 bg-[#FAF2F4] text-white rounded"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#9E472A] text-white font-cinzel font-semibold rounded"
+                  className="px-5 py-2 bg-[#7A1526] text-white font-cinzel font-semibold rounded"
                 >
                   Save Review
                 </button>
@@ -4355,11 +4355,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       {/* MODAL: ADD / EDIT WATCH DISCOVERY REEL */}
       {isAddStoryOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#241712] border border-[#3E2921] rounded-2xl max-w-2xl w-full p-6 text-xs text-stone-300 space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+        <div className="fixed inset-0 z-50 bg-[#20050A]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-2xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
               <div className="flex items-center gap-2">
-                <Tv className="w-5 h-5 text-[#E08A68]" />
+                <Tv className="w-5 h-5 text-[#7A1526]" />
                 <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
                   {editingStory ? `EDIT DISCOVERY REEL: ${editingStory.title}` : 'ADD NEW WATCH DISCOVERY REEL'}
                 </h3>
@@ -4370,7 +4370,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   setIsAddStoryOpen(false);
                   setEditingStory(null);
                 }}
-                className="p-1.5 rounded-lg bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -4392,49 +4392,49 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1 font-semibold">Story / Reel Title *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Story / Reel Title *</label>
                   <input
                     required
                     value={storyForm.title}
                     onChange={(e) => setStoryForm({ ...storyForm, title: e.target.value })}
                     placeholder="e.g. The Weaves of Maheshwar"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Subtitle / Theme</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Subtitle / Theme</label>
                   <input
                     value={storyForm.subtitle}
                     onChange={(e) => setStoryForm({ ...storyForm, subtitle: e.target.value })}
                     placeholder="e.g. Behind The Loom"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Duration Badge (MM:SS)</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Duration Badge (MM:SS)</label>
                   <input
                     value={storyForm.videoDuration}
                     onChange={(e) => setStoryForm({ ...storyForm, videoDuration: e.target.value })}
                     placeholder="e.g. 02:45"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white font-mono focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] font-mono focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 {/* Thumbnail & Cropper Studio */}
-                <div className="sm:col-span-2 bg-[#1A100B] p-4 rounded-xl border border-[#3E2921] space-y-3">
+                <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="block text-[#E08A68] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#E08A68]" />
+                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Crop className="w-4 h-4 text-[#7A1526]" />
                       <span>Reel Video Thumbnail (4:5 Ratio) *</span>
                     </label>
-                    <span className="text-[10px] text-[#A89689] font-mono">Vertical Video Aspect</span>
+                    <span className="text-[10px] text-[#7E4A53] font-mono">Vertical Video Aspect</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#54382B] bg-black shadow-lg flex items-center justify-center">
+                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
                         {storyForm.thumbnail ? (
                           <img
                             src={storyForm.thumbnail}
@@ -4442,7 +4442,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="text-center p-2 text-[#7A6B61]">
+                          <div className="text-center p-2 text-[#8F6C72]">
                             <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
                             <span className="text-[10px]">No image</span>
                           </div>
@@ -4461,23 +4461,23 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }}
                             className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
                           >
-                            <Crop className="w-4 h-4 text-[#F5C7A9]" />
+                            <Crop className="w-4 h-4 text-[#7A1526]" />
                             <span>Resize & Crop</span>
                           </button>
                         )}
                       </div>
-                      <span className="text-[9px] text-[#A89689] mt-1 font-mono">4:5 Reel Frame</span>
+                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">4:5 Reel Frame</span>
                     </div>
 
                     <div className="sm:col-span-8 space-y-2">
                       <div>
-                        <span className="text-[10px] text-[#A89689] block mb-1">Thumbnail Image URL</span>
+                        <span className="text-[10px] text-[#7E4A53] block mb-1">Thumbnail Image URL</span>
                         <input
                           required
                           value={storyForm.thumbnail}
                           onChange={(e) => setStoryForm({ ...storyForm, thumbnail: e.target.value })}
                           placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#140C08] border border-[#3E2921] rounded-lg p-2 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
 
@@ -4495,7 +4495,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }
                           }}
                           disabled={!storyForm.thumbnail}
-                          className="px-3 py-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#4A3227] transition-colors cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
                         >
                           <Crop className="w-3.5 h-3.5" />
                           <span>Resize & Crop Studio</span>
@@ -4503,9 +4503,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                         <label
                           title="Upload thumbnail file from computer"
-                          className="px-3 py-1.5 bg-[#251812] hover:bg-[#34221A] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#3E2921] transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
                         >
-                          <Upload className="w-3.5 h-3.5 text-[#E08A68]" />
+                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
                           <span>Upload File & Crop</span>
                           <input
                             type="file"
@@ -4525,17 +4525,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Artisan / Master Craftsman Name</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan / Master Craftsman Name</label>
                   <input
                     value={storyForm.artisanName}
                     onChange={(e) => setStoryForm({ ...storyForm, artisanName: e.target.value })}
                     placeholder="e.g. Ustad Ramzan Ali"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Tags (Comma-separated)</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Tags (Comma-separated)</label>
                   <input
                     value={storyForm.tags ? storyForm.tags.join(', ') : ''}
                     onChange={(e) => {
@@ -4543,56 +4543,56 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       setStoryForm({ ...storyForm, tags: tagsArr });
                     }}
                     placeholder="Handloom, Raw Silk, Zari"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Artisan Quote / Philosophy</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan Quote / Philosophy</label>
                   <input
                     value={storyForm.artisanQuote}
                     onChange={(e) => setStoryForm({ ...storyForm, artisanQuote: e.target.value })}
                     placeholder="e.g. Every thread has a rhythm and a song."
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white italic focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] italic focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Craftsmanship Process Detail</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Craftsmanship Process Detail</label>
                   <input
                     value={storyForm.craftsmanshipDetail}
                     onChange={(e) => setStoryForm({ ...storyForm, craftsmanshipDetail: e.target.value })}
                     placeholder="e.g. Over 40 hours of hand-spun zari weaving on wooden looms."
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Story Narrative / Description</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Story Narrative / Description</label>
                   <textarea
                     rows={2}
                     value={storyForm.description}
                     onChange={(e) => setStoryForm({ ...storyForm, description: e.target.value })}
                     placeholder="Describe the artisan journey, cluster heritage, or cultural significance..."
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#38241C]">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddStoryOpen(false);
                     setEditingStory(null);
                   }}
-                  className="px-4 py-2 bg-[#34221A] hover:bg-[#4A3227] text-white text-xs rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-[#FCF4F6] hover:bg-[#F8E2E6] text-[#7A1526] border border-[#F0D5DA] text-xs font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Save className="w-4 h-4" />
                   <span>{editingStory ? 'Update Discovery Reel' : 'Save Discovery Reel'}</span>
@@ -4605,11 +4605,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       {/* MODAL: ADD / EDIT SHOP BY STYLE SILHOUETTE */}
       {isAddStyleOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#241712] border border-[#3E2921] rounded-2xl max-w-xl w-full p-6 text-xs text-stone-300 space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+        <div className="fixed inset-0 z-50 bg-[#20050A]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
               <div className="flex items-center gap-2">
-                <Layers className="w-5 h-5 text-[#E08A68]" />
+                <Layers className="w-5 h-5 text-[#7A1526]" />
                 <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
                   {editingStyle ? `EDIT STYLE SILHOUETTE: ${editingStyle.title}` : 'ADD NEW STYLE SILHOUETTE'}
                 </h3>
@@ -4620,7 +4620,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   setIsAddStyleOpen(false);
                   setEditingStyle(null);
                 }}
-                className="p-1.5 rounded-lg bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -4642,51 +4642,51 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1 font-semibold">Style Silhouette Title *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Style Silhouette Title *</label>
                   <input
                     required
                     value={styleForm.title}
                     onChange={(e) => setStyleForm({ ...styleForm, title: e.target.value })}
                     placeholder="e.g. Ethnic, Classic, Festive, Bridal"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Designs / Silhouette Count</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Designs / Silhouette Count</label>
                   <input
                     type="number"
                     required
                     value={styleForm.itemCount}
                     onChange={(e) => setStyleForm({ ...styleForm, itemCount: parseInt(e.target.value) || 0 })}
                     placeholder="24"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white font-mono focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] font-mono focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Accent Subtitle / Highlight</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Accent Subtitle / Highlight</label>
                   <input
                     value={styleForm.accentText || ''}
                     onChange={(e) => setStyleForm({ ...styleForm, accentText: e.target.value })}
                     placeholder="e.g. Pure Silks & Zari Weaves"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 {/* Style Arch Image & Cropper Studio */}
-                <div className="sm:col-span-2 bg-[#1A100B] p-4 rounded-xl border border-[#3E2921] space-y-3">
+                <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="block text-[#E08A68] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#E08A68]" />
+                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Crop className="w-4 h-4 text-[#7A1526]" />
                       <span>Style Silhouette Arch Image (3:4 Ratio) *</span>
                     </label>
-                    <span className="text-[10px] text-[#A89689] font-mono">Architectural Frame</span>
+                    <span className="text-[10px] text-[#7E4A53] font-mono">Architectural Frame</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#54382B] bg-black shadow-lg flex items-center justify-center">
+                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
                         {styleForm.image ? (
                           <img
                             src={styleForm.image}
@@ -4694,7 +4694,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="text-center p-2 text-[#7A6B61]">
+                          <div className="text-center p-2 text-[#8F6C72]">
                             <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
                             <span className="text-[10px]">No image</span>
                           </div>
@@ -4713,23 +4713,23 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }}
                             className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
                           >
-                            <Crop className="w-4 h-4 text-[#F5C7A9]" />
+                            <Crop className="w-4 h-4 text-[#7A1526]" />
                             <span>Resize & Crop</span>
                           </button>
                         )}
                       </div>
-                      <span className="text-[9px] text-[#A89689] mt-1 font-mono">3:4 Lookbook Frame</span>
+                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Lookbook Frame</span>
                     </div>
 
                     <div className="sm:col-span-8 space-y-2">
                       <div>
-                        <span className="text-[10px] text-[#A89689] block mb-1">Image URL</span>
+                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL</span>
                         <input
                           required
                           value={styleForm.image}
                           onChange={(e) => setStyleForm({ ...styleForm, image: e.target.value })}
                           placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#140C08] border border-[#3E2921] rounded-lg p-2 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
 
@@ -4747,7 +4747,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }
                           }}
                           disabled={!styleForm.image}
-                          className="px-3 py-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#4A3227] transition-colors cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
                         >
                           <Crop className="w-3.5 h-3.5" />
                           <span>Resize & Crop Studio</span>
@@ -4755,9 +4755,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                         <label
                           title="Upload image from computer"
-                          className="px-3 py-1.5 bg-[#251812] hover:bg-[#34221A] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#3E2921] transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
                         >
-                          <Upload className="w-3.5 h-3.5 text-[#E08A68]" />
+                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
                           <span>Upload File & Crop</span>
                           <input
                             type="file"
@@ -4777,31 +4777,31 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Description</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Description</label>
                   <textarea
                     rows={2}
                     value={styleForm.description || ''}
                     onChange={(e) => setStyleForm({ ...styleForm, description: e.target.value })}
                     placeholder="Bespoke tailoring handcrafted with pure heritage weaves..."
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#38241C]">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddStyleOpen(false);
                     setEditingStyle(null);
                   }}
-                  className="px-4 py-2 bg-[#34221A] hover:bg-[#4A3227] text-white text-xs rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-[#FCF4F6] hover:bg-[#F8E2E6] text-[#7A1526] border border-[#F0D5DA] text-xs font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Save className="w-4 h-4" />
                   <span>{editingStyle ? 'Update Style Silhouette' : 'Save Style Silhouette'}</span>
@@ -4814,11 +4814,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       {/* MODAL: ADD / EDIT SHOP BY COLLECTION CARD */}
       {isAddCategoryOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#241712] border border-[#3E2921] rounded-2xl max-w-xl w-full p-6 text-xs text-stone-300 space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#38241C]">
+        <div className="fixed inset-0 z-50 bg-[#20050A]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
               <div className="flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5 text-[#E08A68]" />
+                <ShoppingBag className="w-5 h-5 text-[#7A1526]" />
                 <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
                   {editingCategory ? `EDIT COLLECTION: ${editingCategory.title}` : 'ADD NEW COLLECTION CARD'}
                 </h3>
@@ -4829,7 +4829,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   setIsAddCategoryOpen(false);
                   setEditingCategory(null);
                 }}
-                className="p-1.5 rounded-lg bg-[#2A1B14] hover:bg-[#3E2921] text-[#A89689] hover:text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -4852,7 +4852,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1 font-semibold">Collection Name *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Collection Name *</label>
                   <input
                     required
                     value={categoryForm.title}
@@ -4862,45 +4862,45 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       setCategoryForm({ ...categoryForm, title: val, slug: categoryForm.slug ? categoryForm.slug : autoSlug });
                     }}
                     placeholder="e.g. Kurtas, Sarees, Dresses, Chanderi"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Ensembles / Items Count</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Ensembles / Items Count</label>
                   <input
                     type="number"
                     required
                     value={categoryForm.itemCount}
                     onChange={(e) => setCategoryForm({ ...categoryForm, itemCount: parseInt(e.target.value) || 0 })}
                     placeholder="18"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2.5 text-white font-mono focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] font-mono focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#C4A894] font-cinzel mb-1">Category Slug / Filter Key</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Category Slug / Filter Key</label>
                   <input
                     value={categoryForm.slug}
                     onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })}
                     placeholder="e.g. kurtas, sarees, festive-sets"
-                    className="w-full bg-[#1C120D] border border-[#3E2921] rounded-lg p-2 text-white font-mono focus:outline-none focus:border-[#9E472A]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] font-mono focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 {/* Collection Arch Image & Cropper Studio */}
-                <div className="sm:col-span-2 bg-[#1A100B] p-4 rounded-xl border border-[#3E2921] space-y-3">
+                <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="block text-[#E08A68] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#E08A68]" />
+                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Crop className="w-4 h-4 text-[#7A1526]" />
                       <span>Mughal Arch Card Image (3:4 Ratio) *</span>
                     </label>
-                    <span className="text-[10px] text-[#A89689] font-mono">Arch Card Frame</span>
+                    <span className="text-[10px] text-[#7E4A53] font-mono">Arch Card Frame</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#54382B] bg-black shadow-lg flex items-center justify-center">
+                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
                         {categoryForm.image ? (
                           <img
                             src={categoryForm.image}
@@ -4908,7 +4908,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="text-center p-2 text-[#7A6B61]">
+                          <div className="text-center p-2 text-[#8F6C72]">
                             <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
                             <span className="text-[10px]">No image</span>
                           </div>
@@ -4927,23 +4927,23 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }}
                             className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
                           >
-                            <Crop className="w-4 h-4 text-[#F5C7A9]" />
+                            <Crop className="w-4 h-4 text-[#7A1526]" />
                             <span>Resize & Crop</span>
                           </button>
                         )}
                       </div>
-                      <span className="text-[9px] text-[#A89689] mt-1 font-mono">3:4 Mughal Arch</span>
+                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Mughal Arch</span>
                     </div>
 
                     <div className="sm:col-span-8 space-y-2">
                       <div>
-                        <span className="text-[10px] text-[#A89689] block mb-1">Image URL</span>
+                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL</span>
                         <input
                           required
                           value={categoryForm.image}
                           onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
                           placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#140C08] border border-[#3E2921] rounded-lg p-2 text-white text-xs focus:outline-none focus:border-[#9E472A]"
+                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                         />
                       </div>
 
@@ -4961,7 +4961,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }
                           }}
                           disabled={!categoryForm.image}
-                          className="px-3 py-1.5 bg-[#34221A] hover:bg-[#9E472A] text-[#F5C7A9] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#4A3227] transition-colors cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
                         >
                           <Crop className="w-3.5 h-3.5" />
                           <span>Resize & Crop Studio</span>
@@ -4969,9 +4969,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                         <label
                           title="Upload image from computer"
-                          className="px-3 py-1.5 bg-[#251812] hover:bg-[#34221A] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#3E2921] transition-colors cursor-pointer"
+                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
                         >
-                          <Upload className="w-3.5 h-3.5 text-[#E08A68]" />
+                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
                           <span>Upload File & Crop</span>
                           <input
                             type="file"
@@ -4991,20 +4991,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#38241C]">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddCategoryOpen(false);
                     setEditingCategory(null);
                   }}
-                  className="px-4 py-2 bg-[#34221A] hover:bg-[#4A3227] text-white text-xs rounded-lg transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-[#FCF4F6] hover:bg-[#F8E2E6] text-[#7A1526] border border-[#F0D5DA] text-xs font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#9E472A] hover:bg-[#85371D] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Save className="w-4 h-4" />
                   <span>{editingCategory ? 'Update Collection Card' : 'Save Collection Card'}</span>
@@ -5018,11 +5018,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* MODAL: ORDER INVOICE RECEIPT */}
       {selectedOrderForInvoice && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white text-[#2C2420] rounded-xl max-w-xl w-full p-6 space-y-4 text-xs">
+          <div className="bg-white text-[#3B0A12] border border-[#F0D5DA] rounded-xl max-w-xl w-full p-6 space-y-4 text-xs shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-gray-200">
               <div className="flex items-center gap-2">
                 <BrandLogo size="sm" />
-                <span className="font-mono font-bold text-sm text-[#9E472A]">INVOICE #{selectedOrderForInvoice.orderNumber}</span>
+                <span className="font-mono font-bold text-sm text-[#7A1526]">INVOICE #{selectedOrderForInvoice.orderNumber}</span>
               </div>
               <button onClick={() => setSelectedOrderForInvoice(null)} className="p-1 hover:text-black">
                 <X className="w-5 h-5" />
@@ -5068,13 +5068,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
             <div className="flex justify-between items-center pt-2 font-bold text-sm">
               <span>Total Amount Paid</span>
-              <span className="font-mono text-[#9E472A]">₹{selectedOrderForInvoice.total.toLocaleString('en-IN')}</span>
+              <span className="font-mono text-[#7A1526]">₹{selectedOrderForInvoice.total.toLocaleString('en-IN')}</span>
             </div>
 
             <div className="pt-2 flex justify-end gap-2">
               <button
                 onClick={() => window.print()}
-                className="px-4 py-2 bg-[#9E472A] text-white font-cinzel rounded text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 bg-[#7A1526] text-white font-cinzel rounded text-xs font-semibold cursor-pointer"
               >
                 Print Official Tax Invoice
               </button>
