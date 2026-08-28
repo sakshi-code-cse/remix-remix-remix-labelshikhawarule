@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  :root {
+    --primary-rust: #9E472A;
+    --primary-rust-dark: #7E331B;
+    --primary-rust-light: #B8593A;
+    --bg-cream: #FDFBF8;
+    --bg-sand: #F7F1E8;
+    --bg-warm-card: #FFFFFF;
+    --border-warm: #EADDCF;
+    --text-dark: #2C2420;
+    --text-muted: #7A6F68;
+    --accent-gold: #C29342;
+  }
+
+  *, *::before, *::after {
+    font-family: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  html, body {
+    font-family: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-dark);
+    background-color: #FAF6F0;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6, button, input, select, textarea {
+    font-family: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Marove / Modern Sans-Serif Typography Stack for All Headings and Accents */
+.font-serif-luxury,
+.font-playfair,
+.font-marcellus,
+.font-cinzel,
+.font-italiana,
+.font-serif,
+.font-marove {
+  font-family: 'Marove', 'Maove', 'Manrope', 'Plus Jakarta Sans', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.font-script {
+  font-family: 'Marove', 'Maove', 'Manrope', 'Montserrat', sans-serif !important;
+  letter-spacing: 0.08em;
+}
+
+/* Custom Indian Architectural Scalloped Arch Clip Paths */
+.arch-jharokha {
+  clip-path: polygon(
+    0% 30%,
+    5% 25%,
+    10% 23%,
+    18% 22%,
+    25% 18%,
+    32% 12%,
+    40% 6%,
+    50% 0%,
+    60% 6%,
+    68% 12%,
+    75% 18%,
+    82% 22%,
+    90% 23%,
+    95% 25%,
+    100% 30%,
+    100% 100%,
+    0% 100%
+  );
+}
+
+.arch-dome {
+  border-radius: 140px 140px 0 0;
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F4ECE1;
+}
+::-webkit-scrollbar-thumb {
+  background: #C49F86;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9E472A;
+}
+
+/* Luxury card and button interactions */
+.luxury-shadow {
+  box-shadow: 0 10px 30px -10px rgba(158, 71, 42, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+.luxury-glow {
+  box-shadow: 0 14px 40px -12px rgba(158, 71, 42, 0.2);
+}

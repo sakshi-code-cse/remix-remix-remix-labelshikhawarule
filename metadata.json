@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Remix Label Shikha Warule",
+  "description": "Timeless handcrafted fashion, artisanal ethnic and contemporary couture, bespoke bridal and everyday luxury wear by Label Shikha Warule.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
