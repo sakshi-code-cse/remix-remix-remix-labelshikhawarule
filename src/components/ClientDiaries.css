@@ -1,0 +1,347 @@
+.client-diaries {
+  width: 100%;
+  min-height: 680px;
+  background: #f8f4ee;
+  overflow: hidden;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 50px 0 55px;
+}
+
+/* --------------------------------
+   HEADER
+-------------------------------- */
+
+.client-diaries-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.client-diaries-header p {
+  margin: 0;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 16px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+
+  color: #9a6c2d;
+}
+
+
+/* --------------------------------
+   CAROUSEL
+-------------------------------- */
+
+.client-carousel {
+  position: relative;
+
+  width: 100%;
+  height: 570px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* --------------------------------
+   CARD STAGE
+-------------------------------- */
+
+.client-stage {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* --------------------------------
+   CLIENT CARD - DEFAULT / BASE
+-------------------------------- */
+
+.client-card {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  border-radius: 20px;
+  overflow: hidden;
+  background: #eee;
+
+  box-shadow: 0 16px 36px rgba(70, 55, 40, 0.14);
+
+  transition:
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 600ms ease,
+    box-shadow 600ms ease;
+
+  user-select: none;
+  cursor: pointer;
+}
+
+/* --------------------------------
+   5-CARD VISIBLE STACK CONFIGURATION
+-------------------------------- */
+
+/* Far Away Cards (|pos| >= 3) - Hidden smoothly */
+.client-card {
+  width: 250px;
+  height: 330px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(calc(-50% + (var(--position) * 480px)), -50%) scale(0.7);
+}
+
+/* Position -2 & +2 (Outer Cards - Visible) */
+.client-card[style*="--position: 2"],
+.client-card[style*="--position: -2"] {
+  width: 290px;
+  height: 395px;
+  opacity: 0.85;
+  pointer-events: auto;
+  z-index: 2;
+  transform: translate(calc(-50% + (var(--position) * 390px)), -50%) scale(0.88);
+}
+
+/* Position -1 & +1 (Immediate Side Cards - Visible) */
+.client-card[style*="--position: 1"],
+.client-card[style*="--position: -1"] {
+  width: 360px;
+  height: 475px;
+  opacity: 0.96;
+  pointer-events: auto;
+  z-index: 6;
+  transform: translate(calc(-50% + (var(--position) * 260px)), -50%) scale(0.94);
+  box-shadow: 0 20px 45px rgba(70, 55, 40, 0.18);
+}
+
+/* Position 0 (Center Active Card - Largest & Forefront) */
+.client-card.active-card,
+.client-card[style*="--position: 0"] {
+  width: 415px;
+  height: 560px;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 12;
+  transform: translate(-50%, -50%) scale(1);
+  box-shadow: 0 26px 58px rgba(55, 42, 30, 0.22);
+}
+
+
+/* --------------------------------
+   IMAGE
+-------------------------------- */
+
+.client-card img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  object-fit: cover;
+
+  user-select: none;
+  -webkit-user-drag: none;
+
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.client-card.active-card img {
+  transform: scale(1.02);
+}
+
+
+/* --------------------------------
+   ARROWS
+-------------------------------- */
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+
+  width: 56px;
+  height: 56px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.94);
+  color: #39332d;
+
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 30;
+
+  transform: translateY(-50%);
+
+  box-shadow: 0 8px 25px rgba(50, 40, 30, 0.12);
+
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    background 250ms ease;
+}
+
+.carousel-arrow:hover {
+  transform: translateY(-50%) scale(1.08);
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(50, 40, 30, 0.18);
+}
+
+.arrow-left {
+  left: 36px;
+}
+
+.arrow-right {
+  right: 36px;
+}
+
+
+/* --------------------------------
+   ACTIVE CLIENT NAME
+-------------------------------- */
+
+.active-client-name {
+  margin-top: 20px;
+  text-align: center;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+
+  color: #b27b2d;
+  text-transform: uppercase;
+
+  transition:
+    opacity 300ms ease,
+    transform 400ms ease;
+}
+
+
+/* --------------------------------
+   TABLET & MEDIUM SCREENS (All 5 cards kept visible)
+-------------------------------- */
+
+@media (max-width: 1200px) {
+  .client-carousel {
+    height: 500px;
+  }
+
+  .client-card.active-card,
+  .client-card[style*="--position: 0"] {
+    width: 340px;
+    height: 460px;
+  }
+
+  .client-card[style*="--position: 1"],
+  .client-card[style*="--position: -1"] {
+    width: 290px;
+    height: 390px;
+    transform: translate(calc(-50% + (var(--position) * 210px)), -50%) scale(0.92);
+  }
+
+  .client-card[style*="--position: 2"],
+  .client-card[style*="--position: -2"] {
+    width: 230px;
+    height: 320px;
+    display: block;
+    opacity: 0.8;
+    transform: translate(calc(-50% + (var(--position) * 330px)), -50%) scale(0.85);
+  }
+
+  .arrow-left {
+    left: 18px;
+  }
+
+  .arrow-right {
+    right: 18px;
+  }
+}
+
+
+/* --------------------------------
+   MOBILE SCREENS (5 cards beautifully scaled)
+-------------------------------- */
+
+@media (max-width: 768px) {
+  .client-diaries {
+    min-height: 540px;
+    padding-top: 36px;
+    padding-bottom: 40px;
+  }
+
+  .client-diaries-header {
+    margin-bottom: 16px;
+  }
+
+  .client-diaries-header p {
+    font-size: 13px;
+    letter-spacing: 3px;
+  }
+
+  .client-carousel {
+    height: 420px;
+  }
+
+  .client-card.active-card,
+  .client-card[style*="--position: 0"] {
+    width: 240px;
+    height: 340px;
+  }
+
+  .client-card[style*="--position: 1"],
+  .client-card[style*="--position: -1"] {
+    width: 195px;
+    height: 275px;
+    transform: translate(calc(-50% + (var(--position) * 135px)), -50%) scale(0.9);
+  }
+
+  .client-card[style*="--position: 2"],
+  .client-card[style*="--position: -2"] {
+    width: 155px;
+    height: 215px;
+    display: block;
+    opacity: 0.75;
+    transform: translate(calc(-50% + (var(--position) * 215px)), -50%) scale(0.82);
+  }
+
+  .carousel-arrow {
+    width: 42px;
+    height: 42px;
+    font-size: 24px;
+  }
+
+  .arrow-left {
+    left: 8px;
+  }
+
+  .arrow-right {
+    right: 8px;
+  }
+
+  .active-client-name {
+    margin-top: 14px;
+    font-size: 16px;
+  }
+}
