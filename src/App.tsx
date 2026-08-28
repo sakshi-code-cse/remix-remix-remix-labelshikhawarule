@@ -743,7 +743,7 @@ export default function App() {
             {/* 4. Best Sellers / Catalog Section */}
             <BestSellers
               products={displayedProducts.length > 0 ? displayedProducts : products.slice(0, 4)}
-              onSelectProduct={(product) => setSelectedProduct(product)}
+              onSelectProduct={(product) => navigateToProduct(product)}
               onAddToCart={(product, size) => handleAddToCart(product, size || 'M', 1)}
               onToggleWishlist={handleToggleWishlist}
               isWishlisted={isWishlisted}
@@ -764,7 +764,7 @@ export default function App() {
 
             {/* 6. Discovery Product Carousel Section */}
             <DiscoverySection
-              onSelectProduct={(product) => setSelectedProduct(product)}
+              onSelectProduct={(product) => navigateToProduct(product)}
             />
 
             {/* 7. Client Diaries Section */}
@@ -843,7 +843,10 @@ export default function App() {
         onMoveToCart={(product) => {
           handleAddToCart(product, 'M', 1);
         }}
-        onSelectProduct={(product) => setSelectedProduct(product)}
+        onSelectProduct={(product) => {
+          setIsWishlistOpen(false);
+          navigateToProduct(product);
+        }}
       />
 
       {/* Customer Authentication Modal (Login / Register / OTP) */}
@@ -903,21 +906,6 @@ export default function App() {
         }}
       />
 
-      <ProductDetailModal
-        product={selectedProduct}
-        isOpen={Boolean(selectedProduct)}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={(product, size, qty) => handleAddToCart(product, size, qty)}
-        onToggleWishlist={handleToggleWishlist}
-        isWishlisted={selectedProduct ? isWishlisted(selectedProduct.id) : false}
-        onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
-        onOpenAppointment={() => setIsAppointmentOpen(true)}
-        onOpenFullProductPage={(product) => {
-          setSelectedProduct(null);
-          navigateToProduct(product);
-        }}
-      />
-
       <AppointmentModal
         isOpen={isAppointmentOpen}
         onClose={() => setIsAppointmentOpen(false)}
@@ -939,7 +927,10 @@ export default function App() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         products={products}
-        onSelectProduct={(product) => setSelectedProduct(product)}
+        onSelectProduct={(product) => {
+          setIsSearchOpen(false);
+          navigateToProduct(product);
+        }}
         onAddToCart={(product) => handleAddToCart(product, 'M', 1)}
       />
 
