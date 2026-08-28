@@ -752,10 +752,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF5F6] text-[#3B0A12] flex flex-col md:flex-row font-sans selection:bg-[#7A1526] selection:text-white">
+    <div className="h-screen w-full overflow-hidden bg-[#FAF5F6] text-[#3B0A12] flex flex-col md:flex-row font-sans selection:bg-[#7A1526] selection:text-white">
       
+      {/* Mobile Backdrop Overlay */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-30 bg-black/60 md:hidden backdrop-blur-xs transition-opacity"
+        />
+      )}
+
       {/* Mobile Top Header */}
-      <div className="md:hidden bg-[#380810] border-b border-[#4E0D17] px-4 py-3 flex items-center justify-between z-30 sticky top-0 text-white">
+      <div className="md:hidden bg-[#380810] border-b border-[#4E0D17] px-4 py-3 flex items-center justify-between z-30 sticky top-0 shrink-0 text-white">
         <div className="flex items-center gap-3">
           <div 
             onClick={onCloseAdminPortal}
@@ -778,13 +786,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
       </div>
 
-      {/* 1. VERTICAL SIDEBAR MENU (Pura Menu in Vertical Format) */}
-      <aside className={`fixed md:sticky top-0 z-40 h-screen w-72 bg-[#380810] border-r border-[#4E0D17] flex flex-col justify-between transition-transform duration-300 md:translate-x-0 ${
+      {/* 1. VERTICAL SIDEBAR MENU (Pura Menu in Vertical Format - Fixed & Intact) */}
+      <aside className={`fixed md:relative top-0 z-40 h-full w-72 shrink-0 bg-[#380810] border-r border-[#4E0D17] flex flex-col justify-between transition-transform duration-300 md:translate-x-0 select-none ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         
         {/* Sidebar Header: Brand & Status */}
-        <div className="p-4 border-b border-[#4E0D17]">
+        <div className="p-4 border-b border-[#4E0D17] shrink-0">
           <div 
             onClick={onCloseAdminPortal}
             title="Click to view live website homepage"
@@ -810,7 +818,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
 
         {/* Scrollable Vertical Menu List */}
-        <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6 no-scrollbar">
+        <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-6">
           {navSections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-1.5">
               <span className="px-3 text-[10px] font-cinzel font-bold tracking-[0.18em] text-[#E3BAC2] uppercase block">
@@ -871,7 +879,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
 
         {/* Sidebar Footer: Back to Storefront & Logout */}
-        <div className="p-4 border-t border-[#4E0D17] bg-[#2D060C] space-y-2">
+        <div className="p-4 border-t border-[#4E0D17] bg-[#2D060C] space-y-2 shrink-0">
           <button
             onClick={onCloseAdminPortal}
             className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-[#4E0D17] hover:bg-[#60121E] text-white text-xs font-cinzel font-semibold transition-all border border-[#7A1526] cursor-pointer shadow-2xs"
@@ -892,10 +900,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       </aside>
 
       {/* 2. MAIN CONTENT VIEW CANVAS */}
-      <main className="flex-1 min-h-screen overflow-y-auto bg-[#FAF5F6]">
+      <main className="flex-1 h-full overflow-y-auto overflow-x-hidden bg-[#FAF5F6] flex flex-col min-w-0">
         
         {/* Top Header Bar */}
-        <header className="bg-white border-b border-[#F0D5DA] px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-xs">
+        <header className="bg-white border-b border-[#F0D5DA] px-6 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shrink-0 shadow-xs">
           <div className="flex items-center gap-4">
             <div 
               onClick={onCloseAdminPortal}
