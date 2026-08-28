@@ -3489,17 +3489,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <div className="flex items-center gap-3">
                       <img src={diary.image} alt={diary.author} className="w-14 h-14 object-cover rounded-lg border border-[#F0D5DA]" />
                       <div>
-                        <h3 className="font-cinzel text-sm font-bold text-white">{diary.author}</h3>
-                        <div className="text-xs text-[#7A1526]">{diary.city} • {diary.date}</div>
-                        <div className="flex text-[#FFD700] text-xs mt-0.5">
-                          {[...Array(diary.rating)].map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-current stroke-none" />
-                          ))}
+                        <h3 className="font-cinzel text-sm font-bold text-[#3B0A12]">{diary.author}</h3>
+                        <div className="text-xs text-[#7A1526] font-medium">
+                          {diary.category || diary.occasion || 'Editorial'}
                         </div>
+                        <div className="text-[11px] text-[#7E4A53]">{diary.city} • {diary.date}</div>
                       </div>
                     </div>
 
-                    <blockquote className="text-xs text-[#4A1821] italic font-serif-luxury leading-relaxed bg-white p-3 rounded-lg border border-[#F0D5DA]">
+                    <blockquote className="text-xs text-[#4A1821] italic font-serif-luxury leading-relaxed bg-[#FAF5F6] p-3 rounded-lg border border-[#F0D5DA]">
                       "{diary.quote}"
                     </blockquote>
 
@@ -3510,7 +3508,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           const updated = clientDiaries.filter((d) => d.id !== diary.id);
                           onUpdateClientDiaries(updated);
                         }}
-                        className="text-[#FF7875] hover:underline"
+                        className="text-[#E53E3E] hover:underline cursor-pointer"
                       >
                         Remove
                       </button>
@@ -4332,14 +4330,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Outfit</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Category / Edit</label>
                   <input
-                    value={diaryForm.outfit}
-                    onChange={(e) => setDiaryForm({ ...diaryForm, outfit: e.target.value })}
-                    placeholder="e.g. Festive Kurta Set"
+                    value={diaryForm.category || ''}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, category: e.target.value })}
+                    placeholder="e.g. WEDDING EDIT"
                     className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-[#6B3740] font-cinzel mb-1">Outfit Ensemble Name</label>
+                <input
+                  value={diaryForm.outfit}
+                  onChange={(e) => setDiaryForm({ ...diaryForm, outfit: e.target.value })}
+                  placeholder="e.g. Antique Gold Jamdani Kurta Set"
+                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
+                />
               </div>
 
               <div>

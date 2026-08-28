@@ -67,6 +67,7 @@ export interface DiscoveryStory {
 export interface ClientDiary {
   id: string;
   author: string;
+  category?: string;
   city: string;
   quote: string;
   rating: number;
