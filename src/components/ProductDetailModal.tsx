@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { X, Heart, ShoppingBag, Star, ShieldCheck, Ruler, Sparkles, Check, Truck, RotateCcw, Award } from 'lucide-react';
 import { Product } from '../types';
-import { IndianArchCard } from './ArchShape';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -51,13 +50,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         />
 
         {/* Modal Window */}
-        <div className="relative inline-block w-full max-w-4xl p-0 my-8 overflow-hidden text-left align-middle bg-[#FAF6F0] rounded-lg shadow-2xl transform transition-all border border-[#DFCBB8]">
+        <div className="relative inline-block w-full max-w-4xl p-0 my-8 overflow-hidden text-left align-middle bg-[#FAF6F0] rounded-2xl shadow-2xl transform transition-all border border-[#DFCBB8]">
           
           {/* Close Button */}
           <button
             onClick={onClose}
             aria-label="Close product modal"
-            className="absolute top-4 right-4 z-20 p-2 text-[#2C2420] hover:text-[#9E472A] bg-white/80 hover:bg-white rounded-full shadow-md transition-colors"
+            className="absolute top-4 right-4 z-20 p-2 text-[#2C2420] hover:text-[#9E472A] bg-white/80 hover:bg-white rounded-full shadow-md transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -66,26 +65,23 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             
             {/* Left: Gallery & Zoom Preview */}
             <div className="md:col-span-6 bg-[#EFE5D8] p-4 sm:p-6 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-[#DFCBB8]">
-              {/* Main Image with Architectural Arch Frame */}
-              <div className="relative w-full max-w-[340px]">
-                <IndianArchCard
-                  id={`modal-preview-${product.id}`}
-                  image={selectedImage}
+              {/* Main Image with Clean Rectangular Frame */}
+              <div className="relative w-full max-w-[340px] aspect-[3/4] rounded-xl overflow-hidden bg-[#F0EBE1] border border-[#DFCBB8] shadow-md">
+                <img
+                  src={selectedImage}
                   alt={product.name}
-                  aspectRatio="aspect-[3/4]"
-                  borderColor="#9E472A"
-                  showDoubleBorder={true}
-                >
-                  {product.tags && product.tags.length > 0 && (
-                    <div className="absolute top-8 left-3 z-10 flex flex-col gap-1">
-                      {product.tags.map((t) => (
-                        <span key={t} className="bg-[#9E472A] text-white text-[10px] font-cinzel font-semibold px-2.5 py-1 tracking-wider uppercase rounded-xs shadow-xs">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </IndianArchCard>
+                  className="w-full h-full object-cover object-top"
+                />
+
+                {product.tags && product.tags.length > 0 && (
+                  <div className="absolute top-3 left-3 z-10 flex flex-col gap-1 pointer-events-none">
+                    {product.tags.map((t) => (
+                      <span key={t} className="bg-[#9E472A] text-white text-[10px] font-cinzel font-semibold px-2.5 py-1 tracking-wider uppercase rounded-xs shadow-xs">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Thumbnail Selector */}
@@ -94,11 +90,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(img)}
-                    className={`w-16 h-20 rounded border-2 overflow-hidden transition-all ${
+                    className={`w-16 h-20 rounded-lg border-2 overflow-hidden transition-all cursor-pointer ${
                       selectedImage === img ? 'border-[#9E472A] scale-105 shadow-sm' : 'border-transparent opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                    <img src={img} alt="thumbnail" className="w-full h-full object-cover object-top" />
                   </button>
                 ))}
               </div>

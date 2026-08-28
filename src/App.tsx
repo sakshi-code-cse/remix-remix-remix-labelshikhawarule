@@ -718,15 +718,15 @@ export default function App() {
               onSelectProduct={(product) => setSelectedProduct(product)}
             />
 
-            {/* 7. Experience Our Flagship Store Section (Nerul Only) */}
-            <FlagshipStore />
-
-            {/* 8. Client Diaries Section */}
+            {/* 7. Client Diaries Section */}
             <ClientDiaries
               diariesList={clientDiaries}
               onOpenReviewModal={() => setIsClientDiaryModalOpen(true)}
               onBookAppointment={() => setIsAppointmentOpen(true)}
             />
+
+            {/* 8. Experience Our Flagship Store Section (Nerul Only) */}
+            <FlagshipStore />
 
             {/* 9. Book An Appointment Banner */}
             <BookAppointment

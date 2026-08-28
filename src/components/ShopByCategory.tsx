@@ -2,7 +2,6 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { CATEGORIES_LIST } from '../data/mockData';
 import { CategoryItem } from '../types';
-import { IndianArchCard } from './ArchShape';
 
 interface ShopByCategoryProps {
   onSelectCategory: (categorySlug: string) => void;
@@ -36,7 +35,7 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Architectural Stepped Cusped Arch Category/Collection Cards matching Shop By Style size */}
+        {/* Clean Rectangular Category/Collection Cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 justify-items-center">
           {categories.map((cat) => {
             const isSelected = selectedCategory?.toLowerCase() === cat.title.toLowerCase();
@@ -48,20 +47,21 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
                 onClick={() => onSelectCategory(cat.title)}
                 className="group flex flex-col items-center w-full max-w-[280px] cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
               >
-                {/* Stepped Cusped Arch Frame matching Shop By Style proportions */}
-                <div className={`relative w-full transition-all duration-300 ${
-                  isSelected ? 'scale-105 drop-shadow-md' : 'group-hover:drop-shadow-sm'
-                }`}>
-                  <IndianArchCard
-                    id={`cat-${cat.id}`}
-                    image={cat.image}
+                {/* Clean Rectangle Frame */}
+                <div
+                  className={`relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#F0EBE1] border transition-all duration-500 shadow-sm ${
+                    isSelected
+                      ? 'border-[#9E472A] ring-2 ring-[#9E472A]/40 shadow-md scale-105'
+                      : 'border-[#E4D7C8] hover:border-[#9E472A]/60 hover:shadow-lg'
+                  }`}
+                >
+                  <img
+                    src={cat.image}
                     alt={`${cat.title} Collection`}
-                    aspectRatio="aspect-[3/4]"
-                    borderColor={isSelected ? '#9E472A' : '#C4A894'}
-                    strokeWidth={isSelected ? 2.5 : 1.8}
-                    showDoubleBorder={true}
-                    showInnerGoldInlay={isSelected}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300 pointer-events-none" />
                 </div>
 
                 {/* Category Title */}
@@ -71,7 +71,7 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
                   {cat.title}
                 </span>
 
-                <span className="text-[11px] sm:text-xs text-[#7A6F68] font-normal mt-0.5 opacity-80">
+                <span className="text-[11px] sm:text-xs text-[#7A6F68] font-normal mt-0.5 opacity-80 font-sans">
                   {cat.itemCount} Ensembles
                 </span>
               </div>
