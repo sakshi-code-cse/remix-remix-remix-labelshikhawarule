@@ -188,9 +188,19 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
   return (
     <section id="client-diaries-section" className="client-diaries">
       
-      {/* 1. HEADER */}
-      <div className="client-diaries-header">
-        <p>CLIENT DIARIES</p>
+      {/* 1. SECTION HEADER (Matching Watch Our Discovery) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex items-center justify-center gap-4 mb-8 md:mb-10">
+          <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
+            <h2 className="font-cinzel text-lg sm:text-2xl font-bold tracking-[0.2em] text-[#2C2420] uppercase text-center">
+              CLIENT DIARIES
+            </h2>
+            <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
+          </div>
+          <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
+        </div>
       </div>
 
       {/* 2. CAROUSEL */}
