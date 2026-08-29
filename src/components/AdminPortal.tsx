@@ -404,6 +404,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [isDraggingProductImage, setIsDraggingProductImage] = useState<boolean>(false);
   const [isDraggingHoverImage, setIsDraggingHoverImage] = useState<boolean>(false);
   const [isDraggingGallery, setIsDraggingGallery] = useState<boolean>(false);
+  const [isDraggingStyleModalImage, setIsDraggingStyleModalImage] = useState<boolean>(false);
+  const [isDraggingCategoryModalImage, setIsDraggingCategoryModalImage] = useState<boolean>(false);
   const [uploadProgressMsg, setUploadProgressMsg] = useState<string>('');
 
   const openImageResizer = (
@@ -524,39 +526,93 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   const handleStyleImageUpload = async (file: File) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing & loading style photo from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 800, maxHeight: 1000, quality: 0.84 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
       if (dataUrl) {
-        openImageResizer(
-          dataUrl,
-          'product',
-          'Style Silhouette Arch Image (3:4)',
-          (cropped) => {
-            setStyleForm((prev) => ({ ...prev, image: cropped }));
-          }
-        );
+        setStyleForm((prev) => ({ ...prev, image: dataUrl }));
       }
     } catch {
-      // Fallback
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) setStyleForm((prev) => ({ ...prev, image: dataUrl }));
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleInlineStyleImageUpload = async (styleIdx: number, file: File) => {
+    if (!file || !file.type.startsWith('image/') || styleIdx < 0 || styleIdx >= stylesList.length) return;
+    setUploadProgressMsg('Updating style photo directly from computer...');
+    try {
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      if (dataUrl) {
+        const updated = [...stylesList];
+        updated[styleIdx] = { ...updated[styleIdx], image: dataUrl };
+        onUpdateStylesList(updated);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) {
+          const updated = [...stylesList];
+          updated[styleIdx] = { ...updated[styleIdx], image: dataUrl };
+          onUpdateStylesList(updated);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
     }
   };
 
   const handleCategoryImageUpload = async (file: File) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing & loading collection photo from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 800, maxHeight: 1000, quality: 0.84 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
       if (dataUrl) {
-        openImageResizer(
-          dataUrl,
-          'product',
-          'Collection Mughal Arch Card Image (3:4)',
-          (cropped) => {
-            setCategoryForm((prev) => ({ ...prev, image: cropped }));
-          }
-        );
+        setCategoryForm((prev) => ({ ...prev, image: dataUrl }));
       }
     } catch {
-      // Fallback
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) setCategoryForm((prev) => ({ ...prev, image: dataUrl }));
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleInlineCategoryImageUpload = async (catIdx: number, file: File) => {
+    if (!file || !file.type.startsWith('image/') || catIdx < 0 || catIdx >= categoriesList.length) return;
+    setUploadProgressMsg('Updating collection photo directly from computer...');
+    try {
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      if (dataUrl) {
+        const updated = [...categoriesList];
+        updated[catIdx] = { ...updated[catIdx], image: dataUrl };
+        onUpdateCategoriesList(updated);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) {
+          const updated = [...categoriesList];
+          updated[catIdx] = { ...updated[catIdx], image: dataUrl };
+          onUpdateCategoriesList(updated);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
     }
   };
 
@@ -2998,46 +3054,76 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   {stylesList.map((style, idx) => (
                     <div key={style.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4 flex flex-col justify-between space-y-3 group hover:border-[#7A1526]/60 transition-all shadow-md">
                       
-                      {/* Image Thumbnail with Overlay Crop & Edit Trigger */}
-                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black">
-                        <img src={style.image} alt={style.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      {/* Image Thumbnail with Overlay Upload, Crop & Edit Trigger */}
+                      <div
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleInlineStyleImageUpload(idx, e.dataTransfer.files[0]);
+                          }
+                        }}
+                        className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black group/thumb"
+                      >
+                        <img src={style.image} alt={style.title} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" />
                         
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-opacity p-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setEditingStyle(style);
-                              setStyleForm({ ...style });
-                              setIsAddStyleOpen(true);
-                            }}
-                            className="px-3 py-1.5 bg-[#7A1526] text-white text-xs font-cinzel rounded flex items-center gap-1 hover:bg-[#991B30] cursor-pointer"
+                        <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-2">
+                          <label
+                            title="Upload new photo from computer"
+                            className="w-full max-w-[140px] px-2.5 py-1.5 bg-[#7A1526] hover:bg-[#991B30] text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
                           >
-                            <Edit3 className="w-3.5 h-3.5" />
-                            <span>Edit Style</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openImageResizer(
-                                style.image,
-                                'product',
-                                `Style Silhouette: ${style.title}`,
-                                (cropped) => {
-                                  const updated = [...stylesList];
-                                  updated[idx].image = cropped;
-                                  onUpdateStylesList(updated);
+                            <Upload className="w-3 h-3 text-white" />
+                            <span>Upload PC Photo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleInlineStyleImageUpload(idx, e.target.files[0]);
+                                  e.target.value = '';
                                 }
-                              );
-                            }}
-                            className="px-3 py-1.5 bg-[#FCF4F6] text-[#7A1526] text-xs font-cinzel rounded flex items-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
-                          >
-                            <Crop className="w-3.5 h-3.5" />
-                            <span>Resize 3:4</span>
-                          </button>
+                              }}
+                            />
+                          </label>
+
+                          <div className="flex items-center gap-1.5 w-full max-w-[140px]">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditingStyle(style);
+                                setStyleForm({ ...style });
+                                setIsAddStyleOpen(true);
+                              }}
+                              className="flex-1 px-2 py-1 bg-white/20 backdrop-blur-xs text-white text-[10px] font-cinzel rounded flex items-center justify-center gap-1 hover:bg-white/30 cursor-pointer"
+                            >
+                              <Edit3 className="w-3 h-3" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openImageResizer(
+                                  style.image,
+                                  'product',
+                                  `Style Silhouette: ${style.title}`,
+                                  (cropped) => {
+                                    const updated = [...stylesList];
+                                    updated[idx].image = cropped;
+                                    onUpdateStylesList(updated);
+                                  }
+                                );
+                              }}
+                              className="flex-1 px-2 py-1 bg-[#FCF4F6] text-[#7A1526] text-[10px] font-cinzel rounded flex items-center justify-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
+                            >
+                              <Crop className="w-3 h-3" />
+                              <span>Crop</span>
+                            </button>
+                          </div>
                         </div>
 
                         {/* Top badge */}
-                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-cinzel text-[#7A1526] font-bold border border-white/10">
+                        <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-cinzel text-[#7A1526] font-bold border border-white/10 pointer-events-none">
                           #{idx + 1}
                         </div>
                       </div>
@@ -3079,7 +3165,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           </button>
                         </div>
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
+                          {/* Quick direct upload button from PC */}
+                          <label
+                            title="Quick upload image from computer"
+                            className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          >
+                            <Upload className="w-3.5 h-3.5" />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleInlineStyleImageUpload(idx, e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
                           <button
                             type="button"
                             onClick={() => {
@@ -3174,11 +3278,39 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   {categoriesList.map((cat, idx) => (
                     <div key={cat.id} className="bg-white rounded-xl border border-[#F0D5DA] p-3 flex flex-col justify-between space-y-2.5 group hover:border-[#7A1526]/60 transition-all shadow-md">
                       
-                      {/* Image Thumbnail with Overlay Crop & Edit Trigger */}
-                      <div className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black">
-                        <img src={cat.image} alt={cat.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      {/* Image Thumbnail with Overlay Upload, Crop & Edit Trigger */}
+                      <div
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleInlineCategoryImageUpload(idx, e.dataTransfer.files[0]);
+                          }
+                        }}
+                        className="relative aspect-[3/4] rounded-lg overflow-hidden border border-[#F0D5DA] bg-black group/thumb"
+                      >
+                        <img src={cat.image} alt={cat.title} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500" />
                         
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-1.5">
+                        <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-1.5">
+                          <label
+                            title="Upload new photo from computer"
+                            className="w-full px-2 py-1 bg-[#7A1526] hover:bg-[#991B30] text-white text-[9px] font-cinzel rounded flex items-center justify-center gap-1 cursor-pointer shadow-md transition-transform active:scale-95"
+                          >
+                            <Upload className="w-2.5 h-2.5 text-white" />
+                            <span>Upload PC</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleInlineCategoryImageUpload(idx, e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
+
                           <button
                             type="button"
                             onClick={() => {
@@ -3186,9 +3318,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               setCategoryForm({ ...cat });
                               setIsAddCategoryOpen(true);
                             }}
-                            className="px-2 py-1 bg-[#7A1526] text-white text-[10px] font-cinzel rounded flex items-center gap-1 hover:bg-[#991B30] cursor-pointer"
+                            className="w-full px-2 py-1 bg-white/20 text-white text-[9px] font-cinzel rounded flex items-center justify-center gap-1 hover:bg-white/30 cursor-pointer"
                           >
-                            <Edit3 className="w-3 h-3" />
+                            <Edit3 className="w-2.5 h-2.5" />
                             <span>Edit</span>
                           </button>
                           <button
@@ -3205,9 +3337,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 }
                               );
                             }}
-                            className="px-2 py-1 bg-[#FCF4F6] text-[#7A1526] text-[10px] font-cinzel rounded flex items-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
+                            className="w-full px-2 py-1 bg-[#FCF4F6] text-[#7A1526] text-[9px] font-cinzel rounded flex items-center justify-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
                           >
-                            <Crop className="w-3 h-3" />
+                            <Crop className="w-2.5 h-2.5" />
                             <span>Crop</span>
                           </button>
                         </div>
@@ -3243,6 +3375,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
 
                         <div className="flex items-center gap-1">
+                          {/* Quick direct upload button from PC */}
+                          <label
+                            title="Quick upload photo from computer"
+                            className="p-1 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          >
+                            <Upload className="w-3 h-3" />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleInlineCategoryImageUpload(idx, e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
                           <button
                             type="button"
                             onClick={() => {
@@ -4901,103 +5051,131 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   />
                 </div>
 
-                {/* Style Arch Image & Cropper Studio */}
+                {/* Style Arch Image & PC Upload Studio */}
                 <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
                       <Crop className="w-4 h-4 text-[#7A1526]" />
-                      <span>Style Silhouette Arch Image (3:4 Ratio) *</span>
+                      <span>Style Silhouette Arch Photo (3:4 Lookbook Ratio) *</span>
                     </label>
                     <span className="text-[10px] text-[#7E4A53] font-mono">Architectural Frame</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                    <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
-                        {styleForm.image ? (
-                          <img
-                            src={styleForm.image}
-                            alt="Style Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center p-2 text-[#8F6C72]">
-                            <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                            <span className="text-[10px]">No image</span>
-                          </div>
-                        )}
+                  {/* Drag and Drop Zone + Computer Upload */}
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDraggingStyleModalImage(true);
+                    }}
+                    onDragLeave={(e) => {
+                      e.preventDefault();
+                      setIsDraggingStyleModalImage(false);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingStyleModalImage(false);
+                      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        handleStyleImageUpload(e.dataTransfer.files[0]);
+                      }
+                    }}
+                    className={`border-2 border-dashed rounded-xl p-4 transition-all duration-200 ${
+                      isDraggingStyleModalImage
+                        ? 'border-[#7A1526] bg-[#7A1526]/10 scale-[1.01]'
+                        : 'border-[#DFBAC2] bg-white/60 hover:bg-white'
+                    }`}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                      <div className="sm:col-span-4 flex flex-col items-center">
+                        <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
+                          {styleForm.image ? (
+                            <img
+                              src={styleForm.image}
+                              alt="Style Preview"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center p-2 text-[#8F6C72]">
+                              <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                              <span className="text-[10px]">No image</span>
+                            </div>
+                          )}
 
-                        {styleForm.image && (
+                          {styleForm.image && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openImageResizer(
+                                  styleForm.image,
+                                  'product',
+                                  `Style Image: ${styleForm.title || 'New Style'}`,
+                                  (cropped) => setStyleForm((prev) => ({ ...prev, image: cropped }))
+                                );
+                              }}
+                              className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
+                            >
+                              <Crop className="w-4 h-4 text-[#7A1526]" />
+                              <span>Resize & Crop</span>
+                            </button>
+                          )}
+                        </div>
+                        <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Lookbook Arch</span>
+                      </div>
+
+                      <div className="sm:col-span-8 space-y-2.5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <label
+                            title="Upload photo from computer / PC"
+                            className="px-3.5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-2 shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+                          >
+                            <Upload className="w-4 h-4 text-white" />
+                            <span>Upload from Computer</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleStyleImageUpload(e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
+
                           <button
                             type="button"
                             onClick={() => {
-                              openImageResizer(
-                                styleForm.image,
-                                'product',
-                                `Style Image: ${styleForm.title || 'New Style'}`,
-                                (cropped) => setStyleForm((prev) => ({ ...prev, image: cropped }))
-                              );
-                            }}
-                            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
-                          >
-                            <Crop className="w-4 h-4 text-[#7A1526]" />
-                            <span>Resize & Crop</span>
-                          </button>
-                        )}
-                      </div>
-                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Lookbook Frame</span>
-                    </div>
-
-                    <div className="sm:col-span-8 space-y-2">
-                      <div>
-                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL</span>
-                        <input
-                          required
-                          value={styleForm.image}
-                          onChange={(e) => setStyleForm({ ...styleForm, image: e.target.value })}
-                          placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
-                        />
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (styleForm.image) {
-                              openImageResizer(
-                                styleForm.image,
-                                'product',
-                                `Style Image: ${styleForm.title || 'New Style'}`,
-                                (cropped) => setStyleForm((prev) => ({ ...prev, image: cropped }))
-                              );
-                            }
-                          }}
-                          disabled={!styleForm.image}
-                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
-                        >
-                          <Crop className="w-3.5 h-3.5" />
-                          <span>Resize & Crop Studio</span>
-                        </button>
-
-                        <label
-                          title="Upload image from computer"
-                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
-                        >
-                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
-                          <span>Upload File & Crop</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                handleStyleImageUpload(e.target.files[0]);
-                                e.target.value = '';
+                              if (styleForm.image) {
+                                openImageResizer(
+                                  styleForm.image,
+                                  'product',
+                                  `Style Image: ${styleForm.title || 'New Style'}`,
+                                  (cropped) => setStyleForm((prev) => ({ ...prev, image: cropped }))
+                                );
                               }
                             }}
+                            disabled={!styleForm.image}
+                            className="px-3 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
+                          >
+                            <Crop className="w-3.5 h-3.5" />
+                            <span>Crop 3:4 Studio</span>
+                          </button>
+                        </div>
+
+                        <p className="text-[10px] text-[#7E4A53]">
+                          Drag and drop photo here or click <span className="font-semibold text-[#7A1526]">Upload from Computer</span>. JPG, PNG, WebP supported.
+                        </p>
+
+                        <div>
+                          <span className="text-[10px] text-[#7E4A53] block mb-1">Or Paste Web Image URL</span>
+                          <input
+                            required
+                            value={styleForm.image}
+                            onChange={(e) => setStyleForm({ ...styleForm, image: e.target.value })}
+                            placeholder="https://images.unsplash.com/..."
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                           />
-                        </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -5115,103 +5293,131 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   />
                 </div>
 
-                {/* Collection Arch Image & Cropper Studio */}
+                {/* Collection Arch Image & PC Upload Studio */}
                 <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
                       <Crop className="w-4 h-4 text-[#7A1526]" />
-                      <span>Mughal Arch Card Image (3:4 Ratio) *</span>
+                      <span>Mughal Arch Card Photo (3:4 Ratio) *</span>
                     </label>
                     <span className="text-[10px] text-[#7E4A53] font-mono">Arch Card Frame</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                    <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
-                        {categoryForm.image ? (
-                          <img
-                            src={categoryForm.image}
-                            alt="Category Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center p-2 text-[#8F6C72]">
-                            <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                            <span className="text-[10px]">No image</span>
-                          </div>
-                        )}
+                  {/* Drag and Drop Zone + Computer Upload */}
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDraggingCategoryModalImage(true);
+                    }}
+                    onDragLeave={(e) => {
+                      e.preventDefault();
+                      setIsDraggingCategoryModalImage(false);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingCategoryModalImage(false);
+                      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        handleCategoryImageUpload(e.dataTransfer.files[0]);
+                      }
+                    }}
+                    className={`border-2 border-dashed rounded-xl p-4 transition-all duration-200 ${
+                      isDraggingCategoryModalImage
+                        ? 'border-[#7A1526] bg-[#7A1526]/10 scale-[1.01]'
+                        : 'border-[#DFBAC2] bg-white/60 hover:bg-white'
+                    }`}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                      <div className="sm:col-span-4 flex flex-col items-center">
+                        <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
+                          {categoryForm.image ? (
+                            <img
+                              src={categoryForm.image}
+                              alt="Category Preview"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center p-2 text-[#8F6C72]">
+                              <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                              <span className="text-[10px]">No image</span>
+                            </div>
+                          )}
 
-                        {categoryForm.image && (
+                          {categoryForm.image && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openImageResizer(
+                                  categoryForm.image,
+                                  'product',
+                                  `Collection Arch: ${categoryForm.title || 'New Collection'}`,
+                                  (cropped) => setCategoryForm((prev) => ({ ...prev, image: cropped }))
+                                );
+                              }}
+                              className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
+                            >
+                              <Crop className="w-4 h-4 text-[#7A1526]" />
+                              <span>Resize & Crop</span>
+                            </button>
+                          )}
+                        </div>
+                        <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Mughal Arch</span>
+                      </div>
+
+                      <div className="sm:col-span-8 space-y-2.5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <label
+                            title="Upload photo from computer / PC"
+                            className="px-3.5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-2 shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+                          >
+                            <Upload className="w-4 h-4 text-white" />
+                            <span>Upload from Computer</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleCategoryImageUpload(e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
+
                           <button
                             type="button"
                             onClick={() => {
-                              openImageResizer(
-                                categoryForm.image,
-                                'product',
-                                `Collection Arch: ${categoryForm.title || 'New Collection'}`,
-                                (cropped) => setCategoryForm((prev) => ({ ...prev, image: cropped }))
-                              );
-                            }}
-                            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
-                          >
-                            <Crop className="w-4 h-4 text-[#7A1526]" />
-                            <span>Resize & Crop</span>
-                          </button>
-                        )}
-                      </div>
-                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">3:4 Mughal Arch</span>
-                    </div>
-
-                    <div className="sm:col-span-8 space-y-2">
-                      <div>
-                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL</span>
-                        <input
-                          required
-                          value={categoryForm.image}
-                          onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
-                          placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
-                        />
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (categoryForm.image) {
-                              openImageResizer(
-                                categoryForm.image,
-                                'product',
-                                `Collection Arch: ${categoryForm.title || 'New Collection'}`,
-                                (cropped) => setCategoryForm((prev) => ({ ...prev, image: cropped }))
-                              );
-                            }
-                          }}
-                          disabled={!categoryForm.image}
-                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
-                        >
-                          <Crop className="w-3.5 h-3.5" />
-                          <span>Resize & Crop Studio</span>
-                        </button>
-
-                        <label
-                          title="Upload image from computer"
-                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
-                        >
-                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
-                          <span>Upload File & Crop</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                handleCategoryImageUpload(e.target.files[0]);
-                                e.target.value = '';
+                              if (categoryForm.image) {
+                                openImageResizer(
+                                  categoryForm.image,
+                                  'product',
+                                  `Collection Arch: ${categoryForm.title || 'New Collection'}`,
+                                  (cropped) => setCategoryForm((prev) => ({ ...prev, image: cropped }))
+                                );
                               }
                             }}
+                            disabled={!categoryForm.image}
+                            className="px-3 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
+                          >
+                            <Crop className="w-3.5 h-3.5" />
+                            <span>Crop 3:4 Studio</span>
+                          </button>
+                        </div>
+
+                        <p className="text-[10px] text-[#7E4A53]">
+                          Drag and drop photo here or click <span className="font-semibold text-[#7A1526]">Upload from Computer</span>. JPG, PNG, WebP supported.
+                        </p>
+
+                        <div>
+                          <span className="text-[10px] text-[#7E4A53] block mb-1">Or Paste Web Image URL</span>
+                          <input
+                            required
+                            value={categoryForm.image}
+                            onChange={(e) => setCategoryForm({ ...categoryForm, image: e.target.value })}
+                            placeholder="https://images.unsplash.com/..."
+                            className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
                           />
-                        </label>
+                        </div>
                       </div>
                     </div>
                   </div>
