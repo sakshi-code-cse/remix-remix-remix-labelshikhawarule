@@ -8,6 +8,7 @@ export interface Product {
   gender: 'Women' | 'Men' | 'Kids' | 'Unisex';
   image: string;
   hoverImage?: string;
+  images?: string[];
   description: string;
   fabric: string;
   careInstructions: string[];

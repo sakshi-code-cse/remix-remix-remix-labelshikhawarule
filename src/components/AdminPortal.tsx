@@ -400,6 +400,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Product Form Specific Image State
   const [productFormImage, setProductFormImage] = useState<string>('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop');
   const [productFormHoverImage, setProductFormHoverImage] = useState<string>('');
+  const [productFormGallery, setProductFormGallery] = useState<string[]>([]);
+  const [isDraggingProductImage, setIsDraggingProductImage] = useState<boolean>(false);
+  const [isDraggingHoverImage, setIsDraggingHoverImage] = useState<boolean>(false);
+  const [isDraggingGallery, setIsDraggingGallery] = useState<boolean>(false);
+  const [uploadProgressMsg, setUploadProgressMsg] = useState<string>('');
 
   const openImageResizer = (
     imageSrc: string,
@@ -444,6 +449,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   const handleProductImageUploadFromFile = async (file: File, isHover: boolean = false) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing & loading photo from device...');
     try {
       const compressedDataUrl = await compressImageFile(file, { maxWidth: 1000, maxHeight: 1333, quality: 0.84 });
       if (compressedDataUrl) {
@@ -452,7 +458,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         } else {
           setProductFormImage(compressedDataUrl);
         }
-        handleOpenProductImageResizer(compressedDataUrl, isHover ? 'Garment Back / Hover View' : 'Garment Primary Image', isHover);
       }
     } catch {
       const reader = new FileReader();
@@ -464,11 +469,38 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           } else {
             setProductFormImage(dataUrl);
           }
-          handleOpenProductImageResizer(dataUrl, isHover ? 'Garment Back / Hover View' : 'Garment Primary Image', isHover);
         }
       };
       reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
     }
+  };
+
+  const handleProductGalleryUploadFromFiles = async (files: FileList | File[]) => {
+    if (!files || files.length === 0) return;
+    setUploadProgressMsg(`Uploading ${files.length} gallery photo(s)...`);
+    const newImgs: string[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file && file.type.startsWith('image/')) {
+        try {
+          const compressed = await compressImageFile(file, { maxWidth: 1000, maxHeight: 1333, quality: 0.84 });
+          if (compressed) newImgs.push(compressed);
+        } catch {
+          const dataUrl = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve((e.target?.result as string) || '');
+            reader.readAsDataURL(file);
+          });
+          if (dataUrl) newImgs.push(dataUrl);
+        }
+      }
+    }
+    if (newImgs.length > 0) {
+      setProductFormGallery((prev) => [...prev, ...newImgs]);
+    }
+    setUploadProgressMsg('');
   };
 
   const handleStoryImageUpload = async (file: File) => {
@@ -1204,6 +1236,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   onClick={() => {
                     setProductFormImage('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop');
                     setProductFormHoverImage('');
+                    setProductFormGallery([]);
                     setIsAddProductOpen(true);
                   }}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer"
@@ -1353,6 +1386,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               onClick={() => {
                                 setProductFormImage(prod.image || '');
                                 setProductFormHoverImage(prod.hoverImage || '');
+                                setProductFormGallery(prod.images || []);
                                 setEditingProduct(prod);
                               }}
                               className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-white transition-colors cursor-pointer"
@@ -3937,6 +3971,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   gender: formData.get('gender') as Product['gender'],
                   image: productFormImage || (formData.get('image') as string) || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop',
                   hoverImage: productFormHoverImage || undefined,
+                  images: productFormGallery.length > 0 ? productFormGallery : undefined,
                   fabric: formData.get('fabric') as string,
                   description: formData.get('description') as string,
                   artisanNote: formData.get('artisanNote') as string,
@@ -4049,186 +4084,340 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   />
                 </div>
 
-                {/* PRODUCT LOOKBOOK & GARMENT IMAGES STUDIO */}
-                <div className="col-span-2 space-y-3 bg-[#FCF4F6] p-3.5 rounded-xl border border-[#F0D5DA]">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#7A1526]" />
-                      <span>Primary Garment Lookbook Image *</span>
-                      <span className="text-[9px] font-sans font-normal px-1.5 py-0.2 rounded bg-[#7A1526]/30 text-[#7A1526] border border-[#7A1526]/40">
-                        3:4 / 4:5 Recommended
+                {/* PRODUCT LOOKBOOK & COMPUTER IMAGE UPLOAD STUDIO */}
+                <div className="col-span-2 space-y-4 bg-[#FCF4F6] p-4 rounded-xl border-2 border-[#E8C5CC]">
+                  <div className="flex items-center justify-between border-b border-[#F0D5DA] pb-2">
+                    <div>
+                      <span className="text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                        <Upload className="w-4 h-4 text-[#7A1526]" />
+                        <span>कंप्यूटर से प्रोडक्ट फोटो अपलोड करें (Upload Images from Computer)</span>
                       </span>
-                    </label>
+                      <p className="text-[10px] text-[#7E4A53] mt-0.5">
+                        Select high-resolution JPG, PNG, WEBP from your local PC or phone storage.
+                      </p>
+                    </div>
+                    {uploadProgressMsg && (
+                      <span className="text-[10px] font-medium bg-[#7A1526] text-white px-2 py-0.5 rounded-full animate-pulse">
+                        {uploadProgressMsg}
+                      </span>
+                    )}
                   </div>
 
-                  {/* Main Image Control Bar & Preview */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                    {/* Left: Interactive Preview Thumbnail */}
-                    <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-28 h-36 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
-                        {productFormImage ? (
-                          <img
-                            src={productFormImage}
-                            alt="Product Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center p-2 text-[#8F6C72]">
-                            <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                            <span className="text-[10px]">No image</span>
-                          </div>
-                        )}
-                        
-                        {/* Hover Overlay to Launch Resizer */}
-                        {productFormImage && (
-                          <button
-                            type="button"
-                            onClick={() => handleOpenProductImageResizer(productFormImage, editingProduct ? `Edit Image: ${editingProduct.name}` : 'New Garment Image')}
-                            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
-                          >
-                            <Crop className="w-4 h-4 text-[#7A1526]" />
-                            <span>Resize & Crop</span>
-                          </button>
-                        )}
-                      </div>
-                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">Catalog 3:4 Frame</span>
+                  {/* 1. PRIMARY LOOKBOOK IMAGE UPLOAD BOX */}
+                  <div className="bg-white p-3.5 rounded-xl border border-[#F0D5DA] space-y-3 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#3B0A12] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#7A1526]"></span>
+                        <span>1. Primary Garment Image * (मुख्य फोटो)</span>
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FAF2F4] text-[#7A1526] border border-[#F0D5DA]">
+                        3:4 Ratio Recommended
+                      </span>
                     </div>
 
-                    {/* Right: Inputs & Action Studio Buttons */}
-                    <div className="sm:col-span-8 space-y-2">
-                      <div>
-                        <span className="text-[10px] text-[#7E4A53] block mb-1">Image URL or Base64</span>
-                        <input
-                          name="image"
-                          required
-                          value={productFormImage}
-                          onChange={(e) => setProductFormImage(e.target.value)}
-                          placeholder="https://... or upload below"
-                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
-                        />
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
+                      {/* Left: Thumbnail Preview */}
+                      <div className="sm:col-span-4 flex flex-col items-center">
+                        <div className="relative group w-32 h-44 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-[#FAF2F4] shadow-md flex items-center justify-center">
+                          {productFormImage ? (
+                            <img
+                              src={productFormImage}
+                              alt="Product Preview"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center p-3 text-[#8F6C72]">
+                              <ImageIcon className="w-8 h-8 mx-auto mb-1 opacity-50 text-[#7A1526]" />
+                              <span className="text-[10px] block font-medium">कोई फोटो नहीं</span>
+                              <span className="text-[9px] text-[#A67882]">No photo selected</span>
+                            </div>
+                          )}
+
+                          {/* Hover Action Overlay */}
+                          {productFormImage && (
+                            <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 text-white text-xs font-cinzel transition-all p-2">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenProductImageResizer(productFormImage, editingProduct ? `Edit Image: ${editingProduct.name}` : 'New Garment Image')}
+                                className="w-full py-1.5 bg-[#7A1526] hover:bg-[#61101E] rounded text-[10px] flex items-center justify-center gap-1 cursor-pointer"
+                              >
+                                <Crop className="w-3.5 h-3.5" />
+                                <span>Crop / Frame (3:4)</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">Catalog 3:4 Frame</span>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 pt-1">
-                        {/* Direct File Upload (Instant) */}
-                        <label
-                          title="Upload new image from your device directly"
-                          className="px-3 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                      {/* Right: Drag & Drop + Computer Upload Controls */}
+                      <div className="sm:col-span-8 space-y-2.5">
+                        {/* Drag and Drop Zone */}
+                        <div
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            setIsDraggingProductImage(true);
+                          }}
+                          onDragLeave={(e) => {
+                            e.preventDefault();
+                            setIsDraggingProductImage(false);
+                          }}
+                          onDrop={async (e) => {
+                            e.preventDefault();
+                            setIsDraggingProductImage(false);
+                            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                              await handleProductImageUploadFromFile(e.dataTransfer.files[0], false);
+                            }
+                          }}
+                          className={`p-4 rounded-xl border-2 border-dashed transition-all text-center ${
+                            isDraggingProductImage
+                              ? 'border-[#7A1526] bg-[#7A1526]/10 scale-[1.01]'
+                              : 'border-[#DFBAC2] bg-[#FAF2F4]/60 hover:bg-[#FAF2F4]'
+                          }`}
                         >
-                          <Upload className="w-3.5 h-3.5 text-white" />
-                          <span>Upload Photo</span>
+                          <div className="flex flex-col items-center justify-center gap-2">
+                            <label className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-bold rounded-lg flex items-center gap-2 shadow-sm transition-transform active:scale-95 cursor-pointer">
+                              <Upload className="w-4 h-4 text-white" />
+                              <span>कंप्यूटर से फोटो चुनें (Upload from PC)</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  if (e.target.files && e.target.files[0]) {
+                                    await handleProductImageUploadFromFile(e.target.files[0], false);
+                                    e.target.value = '';
+                                  }
+                                }}
+                              />
+                            </label>
+                            <span className="text-[11px] text-[#6B3740]">
+                              या फोटो को यहाँ ड्रैग & ड्रॉप करें (or drag & drop file here)
+                            </span>
+                            <span className="text-[9px] text-[#8F6C72]">
+                              Supports JPG, PNG, WEBP, HEIC • Auto-compressed for lightning speed
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Image Actions Bar */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (productFormImage) {
+                                handleOpenProductImageResizer(productFormImage, editingProduct ? `Edit: ${editingProduct.name}` : 'Primary Image', false);
+                              }
+                            }}
+                            disabled={!productFormImage}
+                            className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-40"
+                          >
+                            <Crop className="w-3.5 h-3.5" />
+                            <span>Crop / Resize Studio (3:4)</span>
+                          </button>
+
+                          {productFormImage && (
+                            <button
+                              type="button"
+                              onClick={() => setProductFormImage('')}
+                              className="px-2.5 py-1.5 text-[#8F6C72] hover:text-[#7A1526] text-xs font-cinzel rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                              <span>Clear</span>
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Optional URL input */}
+                        <div>
+                          <input
+                            name="image"
+                            required
+                            value={productFormImage}
+                            onChange={(e) => setProductFormImage(e.target.value)}
+                            placeholder="Or paste direct image URL (https://...)"
+                            className="w-full bg-[#FAF2F4]/40 border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. SECONDARY / HOVER ANGLE IMAGE (BACK VIEW) */}
+                  <div className="bg-white p-3.5 rounded-xl border border-[#F0D5DA] space-y-2.5 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#3B0A12] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#C59B27]"></span>
+                        <span>2. Secondary / Back View Image (बैक व्यू या क्लोज-अप)</span>
+                      </span>
+                      <span className="text-[10px] text-[#7E4A53]">Optional Hover Angle</span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      {productFormHoverImage && (
+                        <div className="relative group w-16 h-20 rounded-md overflow-hidden border border-[#DFBAC2] shrink-0 bg-[#FAF2F4]">
+                          <img src={productFormHoverImage} alt="Hover angle" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setProductFormHoverImage('')}
+                            className="absolute top-1 right-1 p-0.5 bg-black/70 text-white rounded-full hover:bg-[#7A1526] cursor-pointer"
+                            title="Remove hover image"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+
+                      <div className="flex-1 w-full flex flex-wrap items-center gap-2">
+                        <label className="px-3 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer">
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>कंप्यूटर से बैक फोटो अपलोड करें (Upload Back View)</span>
                           <input
                             type="file"
                             accept="image/*"
                             className="hidden"
                             onChange={async (e) => {
                               if (e.target.files && e.target.files[0]) {
-                                const file = e.target.files[0];
-                                try {
-                                  const compressed = await compressImageFile(file, { maxWidth: 1000, maxHeight: 1333, quality: 0.84 });
-                                  if (compressed) {
-                                    setProductFormImage(compressed);
-                                  }
-                                } catch {
-                                  const reader = new FileReader();
-                                  reader.onload = (ev) => {
-                                    const dataUrl = (ev.target?.result as string) || '';
-                                    if (dataUrl) {
-                                      setProductFormImage(dataUrl);
-                                    }
-                                  };
-                                  reader.readAsDataURL(file);
-                                }
+                                await handleProductImageUploadFromFile(e.target.files[0], true);
                                 e.target.value = '';
                               }
                             }}
                           />
                         </label>
 
-                        {/* Interactive Resizer & Cropper Studio Button */}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (productFormImage) {
-                              handleOpenProductImageResizer(productFormImage, editingProduct ? `Edit Image: ${editingProduct.name}` : 'New Garment Image');
-                            }
-                          }}
-                          disabled={!productFormImage}
-                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] hover:border-[#851628] transition-colors cursor-pointer disabled:opacity-50"
-                        >
-                          <Crop className="w-3.5 h-3.5" />
-                          <span>Crop / Frame (3:4)</span>
-                        </button>
+                        {productFormHoverImage && (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenProductImageResizer(productFormHoverImage, 'Hover Angle Image', true)}
+                            className="px-3 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#DFBAC2] cursor-pointer"
+                          >
+                            <Crop className="w-3.5 h-3.5" />
+                            <span>Crop / Resize</span>
+                          </button>
+                        )}
+
+                        <input
+                          name="hoverImage"
+                          value={productFormHoverImage}
+                          onChange={(e) => setProductFormHoverImage(e.target.value)}
+                          placeholder="Or paste hover angle URL"
+                          className="flex-1 min-w-[180px] bg-[#FAF2F4]/40 border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* Secondary / Hover Angle Image (Optional) */}
-                  <div className="pt-2.5 border-t border-[#F0D5DA]">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] font-cinzel text-[#6B3740] flex items-center gap-1">
-                        <span>Secondary / Hover Angle Image</span>
-                        <span className="text-[9px] text-[#8F6C72]">(Back view or close-up detail)</span>
+                  {/* 3. MULTI-PHOTO GALLERY STUDIO (अतिरिक्त गैलरी फोटो) */}
+                  <div className="bg-white p-3.5 rounded-xl border border-[#F0D5DA] space-y-3 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#3B0A12] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#1A8A5A]"></span>
+                        <span>3. Multi-Photo Gallery (गैलरी के लिए अन्य फोटो - एक साथ कई चुनें)</span>
+                      </span>
+                      <span className="text-[10px] text-[#7E4A53] font-mono">
+                        {productFormGallery.length} Extra Photos
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <input
-                        name="hoverImage"
-                        value={productFormHoverImage}
-                        onChange={(e) => setProductFormHoverImage(e.target.value)}
-                        placeholder="Optional secondary hover image URL"
-                        className="flex-1 bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
-                      />
+                    {/* Multi-File Upload Button & Dropzone */}
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDraggingGallery(true);
+                      }}
+                      onDragLeave={(e) => {
+                        e.preventDefault();
+                        setIsDraggingGallery(false);
+                      }}
+                      onDrop={async (e) => {
+                        e.preventDefault();
+                        setIsDraggingGallery(false);
+                        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                          await handleProductGalleryUploadFromFiles(e.dataTransfer.files);
+                        }
+                      }}
+                      className={`p-3 rounded-xl border-2 border-dashed transition-all flex flex-col sm:flex-row items-center justify-between gap-2.5 ${
+                        isDraggingGallery
+                          ? 'border-[#7A1526] bg-[#7A1526]/10'
+                          : 'border-[#DFBAC2] bg-[#FAF2F4]/40'
+                      }`}
+                    >
+                      <div className="text-center sm:text-left">
+                        <div className="text-xs font-cinzel font-bold text-[#7A1526]">
+                          गैलरी में एक साथ कई फोटो जोड़ें (Select Multiple Photos)
+                        </div>
+                        <div className="text-[10px] text-[#7E4A53]">
+                          Choose embroidery details, drape flow, border shots from computer
+                        </div>
+                      </div>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (productFormHoverImage) {
-                            handleOpenProductImageResizer(productFormHoverImage, 'Hover Angle Image', true);
-                          }
-                        }}
-                        disabled={!productFormHoverImage}
-                        className="px-2.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#DFBAC2] disabled:opacity-50 cursor-pointer"
-                        title="Resize Hover Image"
-                      >
-                        <Crop className="w-3.5 h-3.5" />
-                        <span>Resize</span>
-                      </button>
-
-                      <label
-                        title="Upload hover image from computer"
-                        className="px-2.5 py-2 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 text-xs font-cinzel rounded-lg flex items-center gap-1 border border-[#F0D5DA] cursor-pointer"
-                      >
-                        <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
-                        <span>Upload</span>
+                      <label className="px-3.5 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer shrink-0">
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>कंप्यूटर से फोटो चुनें (Add Photos)</span>
                         <input
                           type="file"
                           accept="image/*"
+                          multiple
                           className="hidden"
                           onChange={async (e) => {
-                            if (e.target.files && e.target.files[0]) {
-                              const file = e.target.files[0];
-                              try {
-                                const compressed = await compressImageFile(file, { maxWidth: 1000, maxHeight: 1333, quality: 0.84 });
-                                if (compressed) {
-                                  setProductFormHoverImage(compressed);
-                                }
-                              } catch {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                  const dataUrl = (ev.target?.result as string) || '';
-                                  if (dataUrl) {
-                                    setProductFormHoverImage(dataUrl);
-                                  }
-                                };
-                                reader.readAsDataURL(file);
-                              }
+                            if (e.target.files && e.target.files.length > 0) {
+                              await handleProductGalleryUploadFromFiles(e.target.files);
                               e.target.value = '';
                             }
                           }}
                         />
                       </label>
                     </div>
+
+                    {/* Gallery Thumbnails Grid */}
+                    {productFormGallery.length > 0 && (
+                      <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5 pt-1">
+                        {productFormGallery.map((imgUrl, gIdx) => (
+                          <div
+                            key={gIdx}
+                            className="relative group aspect-3/4 rounded-lg overflow-hidden border border-[#DFBAC2] bg-[#FAF2F4] shadow-xs"
+                          >
+                            <img src={imgUrl} alt={`Gallery angle ${gIdx + 1}`} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-1 transition-opacity p-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  openImageResizer(
+                                    imgUrl,
+                                    'product',
+                                    `Gallery Photo #${gIdx + 1}`,
+                                    (croppedUrl) => {
+                                      setProductFormGallery((prev) => {
+                                        const copy = [...prev];
+                                        copy[gIdx] = croppedUrl;
+                                        return copy;
+                                      });
+                                    }
+                                  );
+                                }}
+                                className="p-1 bg-[#7A1526] text-white rounded hover:bg-[#61101E] cursor-pointer"
+                                title="Crop / Resize"
+                              >
+                                <Crop className="w-3 h-3" />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setProductFormGallery((prev) => prev.filter((_, idx) => idx !== gIdx));
+                                }}
+                                className="p-1 bg-[#FF4D4F] text-white rounded hover:bg-[#CF1322] cursor-pointer"
+                                title="Remove photo"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                            <span className="absolute bottom-1 left-1 px-1 py-0.2 bg-black/60 text-white rounded text-[8px] font-mono">
+                              #{gIdx + 1}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -4259,7 +4448,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     defaultChecked={editingProduct?.isBestSeller}
                     className="w-4 h-4 accent-[#7A1526]"
                   />
-                  <label htmlFor="isBestSeller" className="text-white cursor-pointer font-cinzel">
+                  <label htmlFor="isBestSeller" className="text-[#3B0A12] cursor-pointer font-cinzel">
                     Mark as Best Seller Collection Piece
                   </label>
                 </div>
@@ -4272,16 +4461,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     setIsAddProductOpen(false);
                     setEditingProduct(null);
                   }}
-                  className="px-4 py-2 bg-[#FAF2F4] text-white rounded-lg"
+                  className="px-4 py-2 bg-[#FAF2F4] text-[#7A1526] hover:bg-[#F0D5DA] rounded-lg font-cinzel text-xs cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold rounded-lg shadow-md cursor-pointer"
+                  className="px-5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg font-cinzel font-semibold text-xs shadow-md transition-colors cursor-pointer"
                 >
-                  {editingProduct ? 'Update Piece' : 'Publish Piece'}
+                  {editingProduct ? 'Save Changes' : 'Add Ensemble to Catalog'}
                 </button>
               </div>
             </form>
