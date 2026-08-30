@@ -555,20 +555,47 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   const handleStoryImageUpload = async (file: File) => {
     if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing & loading reel cover from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 800, maxHeight: 1000, quality: 0.84 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
-        openImageResizer(
-          dataUrl,
-          'product',
-          'Watch Discovery Reel Thumbnail (4:5)',
-          (cropped) => {
-            setStoryForm((prev) => ({ ...prev, thumbnail: cropped }));
-          }
-        );
+        setStoryForm((prev) => ({ ...prev, thumbnail: dataUrl }));
       }
     } catch {
-      // Fallback
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) setStoryForm((prev) => ({ ...prev, thumbnail: dataUrl }));
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleInlineStoryThumbnailUpload = async (storyIdx: number, file: File) => {
+    if (!file || !file.type.startsWith('image/') || storyIdx < 0 || storyIdx >= discoveryStories.length) return;
+    setUploadProgressMsg('Updating discovery reel cover directly from computer...');
+    try {
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
+      if (dataUrl) {
+        const updated = [...discoveryStories];
+        updated[storyIdx] = { ...updated[storyIdx], thumbnail: dataUrl };
+        onUpdateDiscoveryStories(updated);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) {
+          const updated = [...discoveryStories];
+          updated[storyIdx] = { ...updated[storyIdx], thumbnail: dataUrl };
+          onUpdateDiscoveryStories(updated);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
     }
   };
 
@@ -576,7 +603,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/')) return;
     setUploadProgressMsg('Optimizing & loading style photo from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         setStyleForm((prev) => ({ ...prev, image: dataUrl }));
       }
@@ -596,7 +623,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/') || styleIdx < 0 || styleIdx >= stylesList.length) return;
     setUploadProgressMsg('Updating style photo directly from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         const updated = [...stylesList];
         updated[styleIdx] = { ...updated[styleIdx], image: dataUrl };
@@ -622,7 +649,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/')) return;
     setUploadProgressMsg('Optimizing & loading collection photo from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         setCategoryForm((prev) => ({ ...prev, image: dataUrl }));
       }
@@ -642,7 +669,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/') || catIdx < 0 || catIdx >= categoriesList.length) return;
     setUploadProgressMsg('Updating collection photo directly from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         const updated = [...categoriesList];
         updated[catIdx] = { ...updated[catIdx], image: dataUrl };
@@ -695,7 +722,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/')) return;
     setUploadProgressMsg('Optimizing & loading patron photo from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         setDiaryForm((prev) => ({ ...prev, image: dataUrl }));
       }
@@ -715,7 +742,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     if (!file || !file.type.startsWith('image/') || diaryIdx < 0 || diaryIdx >= clientDiaries.length) return;
     setUploadProgressMsg('Updating patron photo directly from computer...');
     try {
-      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      const dataUrl = await compressImageFile(file, { maxWidth: 720, maxHeight: 960, quality: 0.82 });
       if (dataUrl) {
         const updated = [...clientDiaries];
         updated[diaryIdx] = { ...updated[diaryIdx], image: dataUrl };
@@ -4016,8 +4043,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div key={story.id} className="bg-white rounded-xl border border-[#F0D5DA] overflow-hidden p-4 flex flex-col justify-between space-y-3 group hover:border-[#7A1526]/60 transition-all shadow-md">
                     
                     {/* Video Thumbnail with Badges & Action Overlay */}
-                    <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#F0D5DA]">
-                      <img src={story.thumbnail} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95" />
+                    <div 
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          handleInlineStoryThumbnailUpload(idx, e.dataTransfer.files[0]);
+                        }
+                      }}
+                      className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#F0D5DA] group/thumb"
+                    >
+                      <img src={story.thumbnail} alt={story.title} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500 filter brightness-95" />
                       
                       {/* Terracotta Gradient Vignette */}
                       <div className="absolute inset-0 bg-gradient-to-t from-[#2C2420]/90 via-black/30 to-transparent" />
@@ -4045,38 +4081,59 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       {/* Action Overlay on Hover */}
-                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-opacity p-2 z-10">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setEditingStory(story);
-                            setStoryForm({ ...story });
-                            setIsAddStoryOpen(true);
-                          }}
-                          className="px-3.5 py-1.5 bg-[#7A1526] text-white text-xs font-cinzel rounded-md flex items-center gap-1.5 hover:bg-[#991B30] cursor-pointer"
+                      <div className="absolute inset-0 bg-black/75 opacity-0 group-hover/thumb:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-2 z-10">
+                        <label
+                          title="Upload new thumbnail from computer"
+                          className="w-full max-w-[140px] px-2.5 py-1.5 bg-[#7A1526] hover:bg-[#991B30] text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
                         >
-                          <Edit3 className="w-3.5 h-3.5" />
-                          <span>Edit Full Reel</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            openImageResizer(
-                              story.thumbnail,
-                              'product',
-                              `Discovery Reel: ${story.title}`,
-                              (cropped) => {
-                                const updated = [...discoveryStories];
-                                updated[idx].thumbnail = cropped;
-                                onUpdateDiscoveryStories(updated);
+                          <Upload className="w-3 h-3 text-white" />
+                          <span>Upload PC Cover</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleInlineStoryThumbnailUpload(idx, e.target.files[0]);
+                                e.target.value = '';
                               }
-                            );
-                          }}
-                          className="px-3.5 py-1.5 bg-[#FCF4F6] text-[#7A1526] text-xs font-cinzel rounded-md flex items-center gap-1.5 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
-                        >
-                          <Crop className="w-3.5 h-3.5" />
-                          <span>Resize 4:5</span>
-                        </button>
+                            }}
+                          />
+                        </label>
+
+                        <div className="flex items-center gap-1.5 w-full max-w-[140px]">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingStory(story);
+                              setStoryForm({ ...story });
+                              setIsAddStoryOpen(true);
+                            }}
+                            className="flex-1 px-2 py-1 bg-white/20 backdrop-blur-xs text-white text-[10px] font-cinzel rounded flex items-center justify-center gap-1 hover:bg-white/30 cursor-pointer"
+                          >
+                            <Edit3 className="w-3 h-3" />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              openImageResizer(
+                                story.thumbnail,
+                                'product',
+                                `Discovery Reel: ${story.title}`,
+                                (cropped) => {
+                                  const updated = [...discoveryStories];
+                                  updated[idx].thumbnail = cropped;
+                                  onUpdateDiscoveryStories(updated);
+                                }
+                              );
+                            }}
+                            className="flex-1 px-2 py-1 bg-[#FCF4F6] text-[#7A1526] text-[10px] font-cinzel rounded flex items-center justify-center gap-1 border border-[#DFBAC2] hover:bg-[#38241C] cursor-pointer"
+                          >
+                            <Crop className="w-3 h-3" />
+                            <span>Crop</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
 
@@ -4125,6 +4182,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-1.5">
+                        {/* Direct PC Upload */}
+                        <label
+                          title="Upload thumbnail cover from computer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleInlineStoryThumbnailUpload(idx, e.target.files[0]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                        </label>
                         <button
                           type="button"
                           onClick={() => {

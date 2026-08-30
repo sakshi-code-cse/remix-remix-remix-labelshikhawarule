@@ -35,6 +35,18 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface MediaAsset {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  fileType: 'image' | 'video';
+  mimeType?: string;
+  fileSize?: number;
+  uploadedAt: string;
+  tag?: string;
+  aspectRatio?: string;
+}
+
 export interface StyleCategory {
   id: string;
   title: string;
@@ -42,6 +54,9 @@ export interface StyleCategory {
   description: string;
   itemCount: number;
   accentText: string;
+  isActive?: boolean;
+  displayOrder?: number;
+  mediaId?: string;
 }
 
 export interface CategoryItem {
@@ -50,6 +65,10 @@ export interface CategoryItem {
   slug: string;
   image: string;
   itemCount: number;
+  description?: string;
+  isActive?: boolean;
+  displayOrder?: number;
+  mediaId?: string;
 }
 
 export interface DiscoveryStory {
@@ -63,6 +82,12 @@ export interface DiscoveryStory {
   artisanQuote: string;
   artisanName: string;
   tags: string[];
+  videoUrl?: string;
+  videoType?: 'mp4' | 'webm' | 'mov' | 'embed';
+  videoMediaId?: string;
+  thumbnailMediaId?: string;
+  isActive?: boolean;
+  displayOrder?: number;
 }
 
 export interface ClientDiary {
@@ -80,6 +105,9 @@ export interface ClientDiary {
   craftDetails?: string;
   tags?: string[];
   secondaryImages?: string[];
+  isActive?: boolean;
+  displayOrder?: number;
+  mediaId?: string;
 }
 
 export interface AppointmentForm {
