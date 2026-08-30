@@ -56,7 +56,10 @@ import {
   Crop,
   Play,
   Cloud,
-  Database
+  Database,
+  Zap,
+  CreditCard,
+  ShieldCheck
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { ImageResizerModal } from './ImageResizerModal';
@@ -1567,12 +1570,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <span className="text-xs text-[#7E4A53]">Placed on {ord.createdAt}</span>
                       </div>
 
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2.5 flex-wrap">
                         <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                           ord.paymentStatus === 'Paid' ? 'bg-[#52C41A]/20 text-[#73D13D]' : 'bg-[#FAAD14]/20 text-[#FFC53D]'
                         }`}>
                           {ord.paymentStatus} • {ord.paymentMethod}
                         </span>
+
+                        {ord.razorpayPaymentId && (
+                          <span className="px-2 py-0.5 rounded bg-[#E8F0FE] text-[#1A73E8] border border-[#D2E3FC] text-[10px] font-mono font-bold flex items-center gap-1" title="Verified Razorpay Transaction">
+                            <span>⚡ RZP: {ord.razorpayPaymentId}</span>
+                          </span>
+                        )}
 
                         <select
                           value={ord.orderStatus}
@@ -4103,6 +4112,137 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {/* TAB 9: SETTINGS */}
           {activeTab === 'settings' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              
+              {/* RAZORPAY PAYMENT GATEWAY INTEGRATION CARD */}
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] shadow-xs space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F0D5DA]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#0C2340] text-white flex items-center justify-center shadow-xs">
+                      <Zap className="w-5 h-5 text-[#00BAF2]" />
+                    </div>
+                    <div>
+                      <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                        <span>RAZORPAY PAYMENT GATEWAY SETTINGS</span>
+                        <span className="text-[10px] font-sans font-bold bg-[#E6F4EA] text-[#137333] px-2 py-0.5 rounded border border-[#CEEAD6]">
+                          Active & Ready
+                        </span>
+                      </h2>
+                      <p className="text-xs text-[#7E4A53]">
+                        Accept instant UPI (GPay, PhonePe, Paytm), Credit/Debit Cards, NetBanking & Wallets directly into your bank account.
+                      </p>
+                    </div>
+                  </div>
+
+                  <a 
+                    href="https://dashboard.razorpay.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#F0D5DA] text-[#7A1526] text-xs font-semibold rounded-lg border border-[#DFCBB8] transition-colors"
+                  >
+                    <span>Open Razorpay Dashboard</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
+                <form onSubmit={handleSaveStoreSettings} className="space-y-4 text-xs">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    {/* Razorpay Key ID */}
+                    <div className="md:col-span-2 space-y-1">
+                      <label className="block text-[#6B3740] font-cinzel font-semibold">
+                        Razorpay Key ID (Test or Live) *
+                      </label>
+                      <input
+                        type="text"
+                        value={storeSettingsForm.razorpayKeyId || ''}
+                        onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, razorpayKeyId: e.target.value.trim() })}
+                        placeholder="rzp_test_1DP5mmOlF5G5ag or rzp_live_..."
+                        className="w-full bg-[#FAF5F6] border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-[#3B0A12] font-mono text-xs focus:outline-none focus:border-[#7A1526]"
+                      />
+                      <p className="text-[11px] text-[#7E4A53]">
+                        Default test key: <code className="bg-white px-1.5 py-0.5 rounded border border-[#F0D5DA] text-[#7A1526]">rzp_test_1DP5mmOlF5G5ag</code> (Instant live simulations supported). Replace with your Live API Key from your Razorpay Dashboard.
+                      </p>
+                    </div>
+
+                    {/* Merchant Name */}
+                    <div className="space-y-1">
+                      <label className="block text-[#6B3740] font-cinzel font-semibold">
+                        Merchant / Brand Name on Checkout
+                      </label>
+                      <input
+                        type="text"
+                        value={storeSettingsForm.razorpayMerchantName || 'LABEL SHIKHA WARULE'}
+                        onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, razorpayMerchantName: e.target.value })}
+                        placeholder="LABEL SHIKHA WARULE"
+                        className="w-full bg-[#FAF5F6] border border-[#F0D5DA] rounded-lg px-3.5 py-2.5 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                      />
+                    </div>
+
+                    {/* Theme Color */}
+                    <div className="space-y-1">
+                      <label className="block text-[#6B3740] font-cinzel font-semibold">
+                        Gateway Brand Accent Color
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={storeSettingsForm.razorpayThemeColor || '#7A1526'}
+                          onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, razorpayThemeColor: e.target.value })}
+                          className="w-10 h-9 p-0.5 rounded border border-[#F0D5DA] cursor-pointer bg-white"
+                        />
+                        <input
+                          type="text"
+                          value={storeSettingsForm.razorpayThemeColor || '#7A1526'}
+                          onChange={(e) => setStoreSettingsForm({ ...storeSettingsForm, razorpayThemeColor: e.target.value })}
+                          className="flex-1 bg-[#FAF5F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-[#3B0A12] font-mono text-xs focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Feature highlights badge box */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="p-3 bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg">
+                      <p className="font-bold text-[#7A1526] flex items-center gap-1.5">
+                        <Zap className="w-3.5 h-3.5" /> Instant Settlement
+                      </p>
+                      <p className="text-[10px] text-[#7E4A53] mt-0.5">
+                        Supports instant QR codes, Google Pay, PhonePe, Paytm, and BHIM apps.
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg">
+                      <p className="font-bold text-[#7A1526] flex items-center gap-1.5">
+                        <CreditCard className="w-3.5 h-3.5" /> International Cards
+                      </p>
+                      <p className="text-[10px] text-[#7E4A53] mt-0.5">
+                        Accepts Visa, Mastercard, RuPay, and American Express with 3D Secure OTP.
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg">
+                      <p className="font-bold text-[#7A1526] flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5" /> PCI-DSS Level 1
+                      </p>
+                      <p className="text-[10px] text-[#7E4A53] mt-0.5">
+                        Bank-grade 256-bit encryption with auto-verification and instant digital receipts.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <button
+                      type="submit"
+                      className="px-6 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold text-xs tracking-wider rounded-lg shadow-md uppercase cursor-pointer"
+                    >
+                      Save Razorpay Gateway Configuration
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* GENERAL ATELIER SYSTEM CONFIGURATION */}
               <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] space-y-4">
                 <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
                   GENERAL ATELIER SYSTEM CONFIGURATION
@@ -4111,17 +4251,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
                     <span className="text-[#7E4A53] block mb-1">Base Currency</span>
-                    <strong className="text-white text-base font-mono">INR (₹ - Indian Rupee)</strong>
+                    <strong className="text-[#3B0A12] text-base font-mono">INR (₹ - Indian Rupee)</strong>
                   </div>
 
                   <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
                     <span className="text-[#7E4A53] block mb-1">Standard GST Rate</span>
-                    <strong className="text-white text-base font-mono">12% (Apparel / Handloom)</strong>
+                    <strong className="text-[#3B0A12] text-base font-mono">12% (Apparel / Handloom)</strong>
                   </div>
 
                   <div className="bg-white p-4 rounded-lg border border-[#F0D5DA]">
                     <span className="text-[#7E4A53] block mb-1">Insured Logistics Partners</span>
-                    <strong className="text-white text-sm">BlueDart / Delhivery / DHL</strong>
+                    <strong className="text-[#3B0A12] text-sm">BlueDart / Delhivery / DHL</strong>
                   </div>
                 </div>
               </div>

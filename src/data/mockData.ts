@@ -987,6 +987,10 @@ export const INITIAL_STORE_SETTINGS_CMS: import('../types').StoreSettingsCMSCont
   announcementTicker: 'COMPLIMENTARY WORLDWIDE COUTURE SHIPPING ON ORDERS ABOVE ₹2,999 • USE CODE: WELCOME10 FOR 10% OFF',
   shippingPolicyText: 'All handcrafted orders are dispatched within 4-7 business days via insured express couriers (BlueDart / Delhivery / DHL Express). Complimentary shipping applies across India on orders above ₹2,999.',
   returnsPolicyText: 'We offer hassle-free 15-day exchanges and store credits. Custom fit bespoke orders are altered complimenatarily until your silhouette is perfect.',
+  razorpayEnabled: true,
+  razorpayKeyId: 'rzp_test_1DP5mmOlF5G5ag',
+  razorpayMerchantName: 'LABEL SHIKHA WARULE',
+  razorpayThemeColor: '#7A1526',
 };
 
 export const INITIAL_LOGO_CMS: import('../types').LogoCMSContent = {

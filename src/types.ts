@@ -122,11 +122,14 @@ export interface AdminOrder {
   subtotal: number;
   discount: number;
   total: number;
-  paymentMethod: 'Prepaid (UPI / Card)' | 'Cash on Delivery' | string;
+  paymentMethod: 'Prepaid (UPI / Card)' | 'Cash on Delivery' | 'Razorpay (Instant Online)' | string;
   paymentStatus: 'Paid' | 'Pending' | 'Refunded';
   orderStatus: 'Processing' | 'Handcrafting' | 'Dispatched' | 'Delivered' | 'Cancelled';
   createdAt: string;
   trackingNumber?: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
+  razorpaySignature?: string;
 }
 
 export interface AdminAppointment extends AppointmentForm {
@@ -207,6 +210,10 @@ export interface StoreSettingsCMSContent {
   announcementTicker: string;
   shippingPolicyText: string;
   returnsPolicyText: string;
+  razorpayKeyId?: string;
+  razorpayEnabled?: boolean;
+  razorpayMerchantName?: string;
+  razorpayThemeColor?: string;
 }
 
 export interface LogoCMSContent {

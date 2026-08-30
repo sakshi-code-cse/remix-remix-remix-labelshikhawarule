@@ -1028,6 +1028,8 @@ export default function App() {
         isGiftWrap={checkoutData.isGiftWrap}
         orderNotes={checkoutData.orderNotes}
         currentUser={currentCustomer}
+        storeSettingsCMS={storeSettingsCMS}
+        logoCMS={logoCMS}
         onOrderPlaced={handlePlaceOrder}
         onClearCart={handleClearCart}
       />
