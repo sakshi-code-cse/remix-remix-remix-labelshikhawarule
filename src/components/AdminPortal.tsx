@@ -2501,6 +2501,410 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
                 )}
 
+                {/* 5. LOGO BACKGROUND BLUR & FROSTED GLASS STUDIO */}
+                <div className="p-5 bg-white rounded-xl border border-[#F0D5DA] space-y-5 animate-in fade-in">
+                  
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#F0D5DA]">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 rounded-lg bg-[#7A1526]/10 text-[#7A1526]">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="font-cinzel font-bold text-sm text-[#3B0A12] flex items-center gap-2">
+                          <span>Logo Background Blur & Glassmorphism Studio</span>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full font-sans font-semibold bg-[#7A1526]/10 text-[#7A1526]">
+                            {logoForm.enableBackgroundBlur ? 'Active • ऑन' : 'Disabled • ऑफ'}
+                          </span>
+                        </h3>
+                        <p className="text-[11px] text-[#7E4A53]">
+                          लोगो के पीछे बैकग्राउंड ब्लर, फ्रॉस्टेड ग्लास और प्रीमियम बॉर्डर इफ़ेक्ट जोड़ें ताकि लोगो हर बैनर पर साफ़ और शानदार दिखे।
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Master Switch Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setLogoForm({
+                        ...logoForm,
+                        enableBackgroundBlur: !logoForm.enableBackgroundBlur,
+                      })}
+                      className={`px-4 py-2 rounded-lg text-xs font-cinzel font-bold transition-all cursor-pointer flex items-center gap-2 self-start sm:self-auto ${
+                        logoForm.enableBackgroundBlur
+                          ? 'bg-[#7A1526] text-white shadow-md'
+                          : 'bg-white hover:bg-[#FAF2F4] text-[#6B3740] border border-[#F0D5DA]'
+                      }`}
+                    >
+                      <div className={`w-3.5 h-3.5 rounded-full transition-colors ${logoForm.enableBackgroundBlur ? 'bg-[#73D13D]' : 'bg-[#7E4A53]'}`} />
+                      <span>{logoForm.enableBackgroundBlur ? 'Background Blur: ENABLED' : 'Enable Background Blur'}</span>
+                    </button>
+                  </div>
+
+                  {/* 1-Click Blur & Glass Presets */}
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-cinzel font-bold text-[#6B3740] uppercase tracking-wider block">
+                      1-Click Blur & Glass Presets (एक-क्लिक में प्रीसेट लागू करें):
+                    </span>
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setLogoForm({
+                          ...logoForm,
+                          enableBackgroundBlur: true,
+                          blurIntensity: 'md',
+                          bgBlurColor: '#FFFFFF',
+                          bgBlurOpacity: 65,
+                          bgBlurBorder: true,
+                          bgBlurBorderColor: '#DFCBB8',
+                          bgBlurShape: 'rounded',
+                          bgBlurPadding: 'standard',
+                          bgBlurShadow: true,
+                        })}
+                        className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-[#3B0A12] transition-all cursor-pointer"
+                      >
+                        <span className="block font-cinzel font-semibold text-[11px]">🧊 Frosted Silk</span>
+                        <span className="text-[10px] text-[#7E4A53]">65% Glass • Gold Border</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setLogoForm({
+                          ...logoForm,
+                          enableBackgroundBlur: true,
+                          blurIntensity: 'lg',
+                          bgBlurColor: '#FFFFFF',
+                          bgBlurOpacity: 45,
+                          bgBlurBorder: true,
+                          bgBlurBorderColor: '#FFFFFF',
+                          bgBlurShape: 'pill',
+                          bgBlurPadding: 'generous',
+                          bgBlurShadow: true,
+                        })}
+                        className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-[#3B0A12] transition-all cursor-pointer"
+                      >
+                        <span className="block font-cinzel font-semibold text-[11px]">🌫️ Heavy Mist Pill</span>
+                        <span className="text-[10px] text-[#7E4A53]">Deep Blur • Pill Shape</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setLogoForm({
+                          ...logoForm,
+                          enableBackgroundBlur: true,
+                          blurIntensity: 'md',
+                          bgBlurColor: '#FAF6F0',
+                          bgBlurOpacity: 75,
+                          bgBlurBorder: true,
+                          bgBlurBorderColor: '#A59173',
+                          bgBlurShape: 'arch',
+                          bgBlurPadding: 'standard',
+                          bgBlurShadow: true,
+                        })}
+                        className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-[#3B0A12] transition-all cursor-pointer"
+                      >
+                        <span className="block font-cinzel font-semibold text-[11px]">👑 Champagne Arch</span>
+                        <span className="text-[10px] text-[#7E4A53]">Warm Tint • Mughal Arc</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setLogoForm({
+                          ...logoForm,
+                          enableBackgroundBlur: true,
+                          blurIntensity: 'md',
+                          bgBlurColor: '#2C2420',
+                          bgBlurOpacity: 55,
+                          bgBlurBorder: true,
+                          bgBlurBorderColor: '#A59173',
+                          bgBlurShape: 'rounded',
+                          bgBlurPadding: 'standard',
+                          bgBlurShadow: true,
+                        })}
+                        className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-[#3B0A12] transition-all cursor-pointer"
+                      >
+                        <span className="block font-cinzel font-semibold text-[11px]">🌙 Smoky Noir</span>
+                        <span className="text-[10px] text-[#7E4A53]">Dark Luxury Tint</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setLogoForm({
+                          ...logoForm,
+                          enableBackgroundBlur: false,
+                        })}
+                        className="p-2 rounded-lg bg-white hover:bg-[#FAF2F4] border border-[#F0D5DA] text-left text-xs text-[#3B0A12] transition-all cursor-pointer"
+                      >
+                        <span className="block font-cinzel font-semibold text-[11px]">🚫 No Blur</span>
+                        <span className="text-[10px] text-[#7E4A53]">Transparent Plain</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Detailed Blur Controls Grid */}
+                  <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1 transition-opacity ${logoForm.enableBackgroundBlur ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+                    
+                    {/* Control 1: Blur Intensity Slider & Presets */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <label className="font-cinzel font-semibold text-[#6B3740]">
+                          Background Blur Intensity (ब्लर तीव्रता)
+                        </label>
+                        <span className="font-mono text-[#7A1526] font-bold text-xs bg-[#7A1526]/10 px-2 py-0.5 rounded">
+                          {logoForm.blurAmount !== undefined ? `${logoForm.blurAmount}px` : (
+                            logoForm.blurIntensity === 'xs' ? '3px' :
+                            logoForm.blurIntensity === 'sm' ? '5px' :
+                            logoForm.blurIntensity === 'md' ? '12px' :
+                            logoForm.blurIntensity === 'lg' ? '20px' :
+                            logoForm.blurIntensity === 'xl' ? '30px' : '0px'
+                          )}
+                        </span>
+                      </div>
+
+                      {/* Continuous Intensity Slider (0px - 40px) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="range"
+                            min="0"
+                            max="40"
+                            step="1"
+                            value={logoForm.blurAmount !== undefined ? logoForm.blurAmount : (
+                              logoForm.blurIntensity === 'xs' ? 3 :
+                              logoForm.blurIntensity === 'sm' ? 5 :
+                              logoForm.blurIntensity === 'md' ? 12 :
+                              logoForm.blurIntensity === 'lg' ? 20 :
+                              logoForm.blurIntensity === 'xl' ? 30 : 0
+                            )}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10);
+                              let mappedIntensity: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'none';
+                              if (val > 25) mappedIntensity = 'xl';
+                              else if (val > 15) mappedIntensity = 'lg';
+                              else if (val > 8) mappedIntensity = 'md';
+                              else if (val > 4) mappedIntensity = 'sm';
+                              else if (val > 0) mappedIntensity = 'xs';
+
+                              setLogoForm({
+                                ...logoForm,
+                                blurAmount: val,
+                                blurIntensity: mappedIntensity,
+                              });
+                            }}
+                            className="w-full accent-[#7A1526] cursor-pointer"
+                          />
+                          <span className="text-[11px] font-mono text-[#7E4A53] w-10 text-right font-semibold shrink-0">
+                            {logoForm.blurAmount !== undefined ? `${logoForm.blurAmount}px` : '12px'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-[9px] text-[#7E4A53] font-mono px-0.5">
+                          <span>0px (Crisp)</span>
+                          <span>12px (Standard)</span>
+                          <span>40px (Deep Blur)</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-1.5 pt-1">
+                        {[
+                          { id: 'xs', px: 3, label: 'Soft (3px)' },
+                          { id: 'sm', px: 6, label: 'Light (6px)' },
+                          { id: 'md', px: 12, label: 'Medium (12px)' },
+                          { id: 'lg', px: 20, label: 'Heavy (20px)' },
+                          { id: 'xl', px: 30, label: 'Ultra (30px)' },
+                          { id: 'none', px: 0, label: 'None (0px)' },
+                        ].map((b) => (
+                          <button
+                            key={b.id}
+                            type="button"
+                            onClick={() => setLogoForm({ 
+                              ...logoForm, 
+                              blurIntensity: b.id as any,
+                              blurAmount: b.px,
+                            })}
+                            className={`py-1.5 px-2 rounded text-[10px] font-cinzel font-semibold transition-all cursor-pointer truncate ${
+                              (logoForm.blurAmount === b.px || (!logoForm.blurAmount && (logoForm.blurIntensity || 'md') === b.id))
+                                ? 'bg-[#7A1526] text-white'
+                                : 'bg-white hover:bg-[#FAF2F4] text-[#7E4A53] border border-[#F0D5DA]'
+                            }`}
+                          >
+                            {b.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Control 2: Tint Background Color & Opacity */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <label className="font-cinzel font-semibold text-[#6B3740]">
+                          Glass Tint & Opacity (रंग और पारदर्शिता)
+                        </label>
+                        <span className="font-mono text-[#7A1526] font-bold text-[10px]">
+                          {logoForm.bgBlurOpacity !== undefined ? logoForm.bgBlurOpacity : 65}%
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={logoForm.bgBlurColor || '#FFFFFF'}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurColor: e.target.value })}
+                          className="w-8 h-8 rounded border border-[#F0D5DA] bg-transparent cursor-pointer shrink-0"
+                        />
+                        <input
+                          type="range"
+                          min="5"
+                          max="95"
+                          step="5"
+                          value={logoForm.bgBlurOpacity !== undefined ? logoForm.bgBlurOpacity : 65}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurOpacity: parseInt(e.target.value) })}
+                          className="w-full accent-[#7A1526] cursor-pointer"
+                        />
+                      </div>
+
+                      {/* Color swatches */}
+                      <div className="flex items-center gap-1.5 pt-0.5">
+                        {[
+                          { label: 'Pure White Glass', hex: '#FFFFFF' },
+                          { label: 'Champagne Warm', hex: '#FAF6F0' },
+                          { label: 'Royal Terracotta', hex: '#7A1526' },
+                          { label: 'Espresso Noir', hex: '#2C2420' },
+                          { label: 'Khaki Gold', hex: '#A59173' },
+                        ].map((sw) => (
+                          <button
+                            key={sw.hex}
+                            type="button"
+                            onClick={() => setLogoForm({ ...logoForm, bgBlurColor: sw.hex })}
+                            className="w-5 h-5 rounded-full border border-white/30 hover:scale-110 transition-transform cursor-pointer"
+                            style={{ backgroundColor: sw.hex }}
+                            title={sw.label}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Control 3: Backdrop Geometry / Shape */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
+                        Backdrop Shape (बैकग्राउंड का आकार)
+                      </label>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'rounded', label: '✨ Luxury Card', desc: 'Rounded 2XL' },
+                          { id: 'pill', label: '💊 Oval Pill', desc: 'Full Rounded' },
+                          { id: 'arch', label: '🏛️ Mughal Arch', desc: 'Curved Dome' },
+                          { id: 'soft-rect', label: '📐 Clean Rect', desc: 'Subtle Corner' },
+                        ].map((sh) => (
+                          <button
+                            key={sh.id}
+                            type="button"
+                            onClick={() => setLogoForm({ ...logoForm, bgBlurShape: sh.id as any })}
+                            className={`p-1.5 rounded text-left transition-all cursor-pointer ${
+                              (logoForm.bgBlurShape || 'rounded') === sh.id
+                                ? 'bg-[#7A1526] text-white shadow-sm'
+                                : 'bg-white hover:bg-[#FAF2F4] text-[#7E4A53] border border-[#F0D5DA]'
+                            }`}
+                          >
+                            <span className="block font-cinzel font-bold text-[10px] truncate">{sh.label}</span>
+                            <span className="text-[9px] opacity-75 block truncate">{sh.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Control 4: Inner Padding Spacing */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <label className="block text-xs font-cinzel font-semibold text-[#6B3740]">
+                        Inner Spacing (अंदरूनी पैडिंग)
+                      </label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { id: 'compact', label: 'Compact' },
+                          { id: 'standard', label: 'Standard' },
+                          { id: 'generous', label: 'Generous' },
+                        ].map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setLogoForm({ ...logoForm, bgBlurPadding: p.id as any })}
+                            className={`py-1.5 px-2 rounded text-[10px] font-cinzel font-semibold transition-all cursor-pointer text-center ${
+                              (logoForm.bgBlurPadding || 'standard') === p.id
+                                ? 'bg-[#7A1526] text-white'
+                                : 'bg-white hover:bg-[#FAF2F4] text-[#7E4A53] border border-[#F0D5DA]'
+                            }`}
+                          >
+                            {p.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Control 5: Hairline Frosted Border */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <label className="font-cinzel font-semibold text-[#6B3740]">
+                          Hairline Glass Border (बॉर्डर)
+                        </label>
+                        <input
+                          type="checkbox"
+                          checked={logoForm.bgBlurBorder !== false}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurBorder: e.target.checked })}
+                          className="rounded accent-[#7A1526] cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={logoForm.bgBlurBorderColor || '#DFCBB8'}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurBorderColor: e.target.value })}
+                          className="w-7 h-7 rounded border border-[#F0D5DA] bg-transparent cursor-pointer"
+                        />
+                        <input
+                          type="text"
+                          value={logoForm.bgBlurBorderColor || '#DFCBB8'}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurBorderColor: e.target.value })}
+                          placeholder="#DFCBB8"
+                          className="w-full bg-white border border-[#F0D5DA] rounded px-2 py-1 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Control 6: Ambient Glow & Image Blend Filter */}
+                    <div className="p-3.5 bg-white rounded-lg border border-[#F0D5DA] space-y-2.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <label className="font-cinzel font-semibold text-[#6B3740]">
+                          Soft Ambient Shadow (सॉफ्ट शैडो)
+                        </label>
+                        <input
+                          type="checkbox"
+                          checked={logoForm.bgBlurShadow !== false}
+                          onChange={(e) => setLogoForm({ ...logoForm, bgBlurShadow: e.target.checked })}
+                          className="rounded accent-[#7A1526] cursor-pointer"
+                        />
+                      </div>
+
+                      {logoForm.logoType === 'custom-image' && (
+                        <div className="pt-1 border-t border-[#F0D5DA]">
+                          <label className="block text-[10px] font-cinzel font-semibold text-[#6B3740] mb-1">
+                            White Background Remover (Blend Mode):
+                          </label>
+                          <select
+                            value={logoForm.removeImageBgMode || 'none'}
+                            onChange={(e) => setLogoForm({ ...logoForm, removeImageBgMode: e.target.value as any })}
+                            className="w-full bg-white border border-[#F0D5DA] rounded px-2 py-1 text-xs text-white"
+                          >
+                            <option value="none">Standard PNG / SVG</option>
+                            <option value="multiply">Multiply (Remove White Box)</option>
+                            <option value="screen">Screen (Light on Dark)</option>
+                          </select>
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
+
+                </div>
+
                 {/* Bottom Publish Bar */}
                 <div className="pt-3 flex items-center justify-between border-t border-[#F0D5DA]">
                   <span className="text-xs text-[#7E4A53]">

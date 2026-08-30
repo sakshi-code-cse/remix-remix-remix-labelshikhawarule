@@ -9,6 +9,24 @@ interface BrandLogoProps {
   logoCMS?: LogoCMSContent;
 }
 
+// Helper to convert hex to rgba with alpha opacity
+const hexToRgba = (hex: string, alpha: number) => {
+  if (!hex) return `rgba(255, 255, 255, ${alpha})`;
+  let c = hex.replace('#', '').trim();
+  if (c.length === 3) {
+    c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+  }
+  if (c.length === 6) {
+    const r = parseInt(c.substring(0, 2), 16);
+    const g = parseInt(c.substring(2, 4), 16);
+    const b = parseInt(c.substring(4, 6), 16);
+    if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+  }
+  return `rgba(255, 255, 255, ${alpha})`;
+};
+
 export const BrandLogo: React.FC<BrandLogoProps> = ({
   variant = 'gold',
   className = '',
@@ -53,9 +71,74 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     ? (logoCMS.heightScale > 10 ? logoCMS.heightScale / 100 : logoCMS.heightScale)
     : 1;
 
-  const heightScaleStyle = normalizedScale !== 1
+  const heightScaleStyle: React.CSSProperties | undefined = normalizedScale !== 1
     ? { transform: `scale(${normalizedScale})`, transformOrigin: 'center center' }
     : undefined;
+
+  // Background Blur & Frosted Glass Styling
+  const isBlurEnabled = Boolean(logoCMS?.enableBackgroundBlur);
+
+  const blurClassMap: Record<string, string> = {
+    none: 'backdrop-blur-none',
+    xs: 'backdrop-blur-[3px]',
+    sm: 'backdrop-blur-xs',
+    md: 'backdrop-blur-md',
+    lg: 'backdrop-blur-lg',
+    xl: 'backdrop-blur-xl',
+  };
+  const blurIntensity = logoCMS?.blurIntensity || 'md';
+  const blurClass = isBlurEnabled ? (blurClassMap[blurIntensity] || 'backdrop-blur-md') : '';
+
+  const blurPx = typeof logoCMS?.blurAmount === 'number' 
+    ? logoCMS.blurAmount 
+    : (logoCMS?.blurIntensity === 'xs' ? 3 
+      : logoCMS?.blurIntensity === 'sm' ? 5 
+      : logoCMS?.blurIntensity === 'md' ? 12 
+      : logoCMS?.blurIntensity === 'lg' ? 20 
+      : logoCMS?.blurIntensity === 'xl' ? 30 
+      : logoCMS?.blurIntensity === 'none' ? 0 
+      : 12);
+
+  const shapeMap: Record<string, string> = {
+    pill: 'rounded-full',
+    rounded: 'rounded-2xl',
+    arch: 'rounded-t-full rounded-b-xl',
+    'soft-rect': 'rounded-lg',
+  };
+  const shapeClass = isBlurEnabled ? (shapeMap[logoCMS?.bgBlurShape || 'rounded'] || 'rounded-2xl') : '';
+
+  const paddingMap: Record<string, string> = {
+    none: 'p-0',
+    compact: 'px-3 py-1.5',
+    standard: 'px-4.5 py-2.5',
+    generous: 'px-6 py-3.5',
+  };
+  const paddingClass = isBlurEnabled ? (paddingMap[logoCMS?.bgBlurPadding || 'standard'] || 'px-4.5 py-2.5') : '';
+
+  const shadowClass = isBlurEnabled && logoCMS?.bgBlurShadow ? 'shadow-md shadow-black/10' : '';
+
+  const bgOpacity = (logoCMS?.bgBlurOpacity !== undefined ? logoCMS.bgBlurOpacity : 65) / 100;
+  const rawBgColor = logoCMS?.bgBlurColor || (variant === 'light' ? '#241712' : '#FFFFFF');
+  const computedBgColor = isBlurEnabled ? hexToRgba(rawBgColor, bgOpacity) : undefined;
+
+  const hasBorder = isBlurEnabled && (logoCMS?.bgBlurBorder !== false);
+  const borderColor = hasBorder 
+    ? (logoCMS?.bgBlurBorderColor || (variant === 'light' ? 'rgba(255,255,255,0.18)' : '#DFCBB8')) 
+    : undefined;
+
+  const blurContainerStyle: React.CSSProperties = isBlurEnabled ? {
+    backgroundColor: computedBgColor,
+    borderWidth: hasBorder ? '1px' : '0px',
+    borderStyle: hasBorder ? 'solid' : 'none',
+    borderColor: borderColor,
+    backdropFilter: `blur(${blurPx}px)`,
+    WebkitBackdropFilter: `blur(${blurPx}px)`,
+    ...heightScaleStyle,
+  } : (heightScaleStyle || {});
+
+  const blendModeClass = logoCMS?.removeImageBgMode === 'multiply' 
+    ? 'mix-blend-multiply' 
+    : (logoCMS?.removeImageBgMode === 'screen' ? 'mix-blend-screen' : '');
 
   // 1. CUSTOM IMAGE LOGO MODE
   if (logoType === 'custom-image' && (logoCMS?.customImageUrl || logoCMS?.customImageDarkUrl)) {
@@ -67,13 +150,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       <div
         id="brand-logo-container"
         onClick={onClick}
-        style={heightScaleStyle}
-        className={`inline-flex items-center justify-center cursor-pointer select-none transition-transform duration-300 hover:opacity-95 ${className}`}
+        style={blurContainerStyle}
+        className={`inline-flex items-center justify-center cursor-pointer select-none transition-all duration-300 hover:opacity-95 ${blurClass} ${shapeClass} ${paddingClass} ${shadowClass} ${className}`}
       >
         <img
           src={imgSrc}
           alt={brandName}
-          className={`${heightMap[size]} w-auto object-contain max-w-[280px] sm:max-w-[340px] drop-shadow-sm`}
+          className={`${heightMap[size]} w-auto object-contain max-w-[280px] sm:max-w-[340px] drop-shadow-sm ${blendModeClass}`}
           referrerPolicy="no-referrer"
         />
       </div>
@@ -86,8 +169,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       <div
         id="brand-logo-container"
         onClick={onClick}
-        style={heightScaleStyle}
-        className={`inline-flex flex-col items-center justify-center cursor-pointer select-none transition-transform duration-300 hover:opacity-95 text-center ${className}`}
+        style={blurContainerStyle}
+        className={`inline-flex flex-col items-center justify-center cursor-pointer select-none transition-all duration-300 hover:opacity-95 text-center ${blurClass} ${shapeClass} ${paddingClass} ${shadowClass} ${className}`}
       >
         <span 
           style={{ color: primaryColor }}
@@ -116,8 +199,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     <div
       id="brand-logo-container"
       onClick={onClick}
-      style={heightScaleStyle}
-      className={`inline-flex items-center justify-center cursor-pointer select-none transition-transform duration-300 hover:opacity-95 ${className}`}
+      style={blurContainerStyle}
+      className={`inline-flex items-center justify-center cursor-pointer select-none transition-all duration-300 hover:opacity-95 ${blurClass} ${shapeClass} ${paddingClass} ${shadowClass} ${className}`}
     >
       <svg
         viewBox="0 0 520 440"

@@ -231,4 +231,16 @@ export interface LogoCMSContent {
   primaryColorHex?: string;
   footerColorHex?: string;
   heightScale?: number; // 80 - 150
+  // LOGO BACKGROUND BLUR & FROSTED GLASS OPTIONS
+  enableBackgroundBlur?: boolean;
+  blurAmount?: number; // 0 to 40 (px blur intensity)
+  blurIntensity?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  bgBlurColor?: string;
+  bgBlurOpacity?: number; // 0 - 100%
+  bgBlurBorder?: boolean;
+  bgBlurBorderColor?: string;
+  bgBlurPadding?: 'none' | 'compact' | 'standard' | 'generous';
+  bgBlurShape?: 'pill' | 'rounded' | 'arch' | 'soft-rect';
+  bgBlurShadow?: boolean;
+  removeImageBgMode?: 'none' | 'multiply' | 'screen';
 }

@@ -241,7 +241,10 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Brand Logo (Prominently Centered Above Menu) */}
-        <div className="flex-1 flex justify-center text-center lg:w-1/3">
+        <div 
+          id="header-logo-container" 
+          className="flex-1 flex justify-center text-center lg:w-1/3 transition-all"
+        >
           <BrandLogo 
             size="md" 
             logoCMS={logoCMS}
