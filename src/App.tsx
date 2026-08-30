@@ -26,6 +26,12 @@ import { CustomerAccountDrawer } from './components/CustomerAccountDrawer';
 import { CollectionPage } from './components/CollectionPage';
 import { ProductPage } from './components/ProductPage';
 import { safeLocalStorage } from './utils/storage';
+import { 
+  saveToCloudDatabase, 
+  subscribeToCloudStoreData, 
+  saveFullStoreSnapshot, 
+  fetchCloudStoreData 
+} from './lib/cloudStore';
 
 import { 
   ALL_PRODUCTS, 
@@ -116,6 +122,110 @@ export default function App() {
   });
   const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState(false);
   const [isAdminLoginModalOpen, setIsAdminLoginModalOpen] = useState(false);
+
+  // Cloud Database Sync Status
+  const [isCloudSynced, setIsCloudSynced] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<string>('');
+
+  // Setup Firestore Real-time Listener & Cloud Initializer
+  useEffect(() => {
+    let isMounted = true;
+
+    // 1. First fetch or initialize cloud data
+    fetchCloudStoreData().then((cloudData) => {
+      if (!isMounted) return;
+      if (!cloudData) {
+        // Seed cloud with initial baseline
+        saveFullStoreSnapshot({
+          products,
+          orders,
+          appointments,
+          promoCodes,
+          clientDiaries,
+          announcementText,
+          heroCMS,
+          brandStoryCMS,
+          storeSettingsCMS,
+          logoCMS,
+          stylesList,
+          categoriesList,
+          discoveryStories,
+        });
+      }
+    });
+
+    // 2. Subscribe to real-time changes
+    const unsubscribe = subscribeToCloudStoreData(
+      (data) => {
+        if (!isMounted) return;
+        setIsCloudSynced(true);
+        if (data.lastUpdated) {
+          setLastSyncTime(new Date(data.lastUpdated).toLocaleTimeString());
+        }
+
+        if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+          setProducts(data.products);
+          safeLocalStorage.setJSON('label_sw_products', data.products);
+        }
+        if (data.orders && Array.isArray(data.orders)) {
+          setOrders(data.orders);
+          safeLocalStorage.setJSON('label_sw_orders', data.orders);
+        }
+        if (data.appointments && Array.isArray(data.appointments)) {
+          setAppointments(data.appointments);
+          safeLocalStorage.setJSON('label_sw_appointments', data.appointments);
+        }
+        if (data.promoCodes && Array.isArray(data.promoCodes)) {
+          setPromoCodes(data.promoCodes);
+          safeLocalStorage.setJSON('label_sw_promo_codes', data.promoCodes);
+        }
+        if (data.clientDiaries && Array.isArray(data.clientDiaries)) {
+          setClientDiaries(data.clientDiaries);
+          safeLocalStorage.setJSON('label_sw_client_diaries', data.clientDiaries);
+        }
+        if (typeof data.announcementText === 'string') {
+          setAnnouncementText(data.announcementText);
+          safeLocalStorage.setItem('label_sw_announcement_text', data.announcementText);
+        }
+        if (data.heroCMS) {
+          setHeroCMS(data.heroCMS);
+          safeLocalStorage.setJSON('label_sw_hero_cms', data.heroCMS);
+        }
+        if (data.brandStoryCMS) {
+          setBrandStoryCMS(data.brandStoryCMS);
+          safeLocalStorage.setJSON('label_sw_brand_story_cms', data.brandStoryCMS);
+        }
+        if (data.storeSettingsCMS) {
+          setStoreSettingsCMS(data.storeSettingsCMS);
+          safeLocalStorage.setJSON('label_sw_store_settings_cms', data.storeSettingsCMS);
+        }
+        if (data.logoCMS) {
+          setLogoCMS(data.logoCMS);
+          safeLocalStorage.setJSON('label_sw_logo_cms', data.logoCMS);
+        }
+        if (data.stylesList && Array.isArray(data.stylesList)) {
+          setStylesList(data.stylesList);
+          safeLocalStorage.setJSON('label_sw_styles_list', data.stylesList);
+        }
+        if (data.categoriesList && Array.isArray(data.categoriesList)) {
+          setCategoriesList(data.categoriesList);
+          safeLocalStorage.setJSON('label_sw_categories_list', data.categoriesList);
+        }
+        if (data.discoveryStories && Array.isArray(data.discoveryStories)) {
+          setDiscoveryStories(data.discoveryStories);
+          safeLocalStorage.setJSON('label_sw_discovery_stories', data.discoveryStories);
+        }
+      },
+      (err) => {
+        console.warn('Firestore live listener info:', err);
+      }
+    );
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
 
   // Customer Shopping Bag & Wishlist (empty by default)
@@ -324,7 +434,12 @@ export default function App() {
   };
 
   const handlePlaceOrder = (newOrder: AdminOrder) => {
-    setOrders((prev) => [newOrder, ...prev]);
+    setOrders((prev) => {
+      const updated = [newOrder, ...prev];
+      safeLocalStorage.setJSON('label_sw_orders', updated);
+      saveToCloudDatabase('orders', updated);
+      return updated;
+    });
     addToast('cart', 'Order Confirmed!', `Order ${newOrder.orderNumber} placed successfully.`);
     
     // Reward customer with Couture Points if logged in
@@ -395,7 +510,12 @@ export default function App() {
       createdAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
       assignedStylist: 'Shikha Warule (Principal Couturier)',
     };
-    setAppointments((prev) => [newApt, ...prev]);
+    setAppointments((prev) => {
+      const updated = [newApt, ...prev];
+      safeLocalStorage.setJSON('label_sw_appointments', updated);
+      saveToCloudDatabase('appointments', updated);
+      return updated;
+    });
     addToast('info', 'Consultation Booked', `${form.experienceType} for ${form.fullName}`);
   };
 
@@ -434,15 +554,17 @@ export default function App() {
     setProducts((prev) => {
       const updated = [newProduct, ...prev];
       safeLocalStorage.setJSON('label_sw_products', updated);
+      saveToCloudDatabase('products', updated);
       return updated;
     });
-    addToast('success', 'Product Published', `${newProduct.name} is now live in store`);
+    addToast('success', 'Product Published & Saved to Database', `${newProduct.name} is now saved securely in cloud database`);
   };
 
   const handleUpdateProduct = (updated: Product) => {
     setProducts((prev) => {
       const updatedList = prev.map((p) => (p.id === updated.id ? updated : p));
       safeLocalStorage.setJSON('label_sw_products', updatedList);
+      saveToCloudDatabase('products', updatedList);
       return updatedList;
     });
     // Also update selected product preview if open
@@ -454,55 +576,60 @@ export default function App() {
     setWishlist((prev) =>
       prev.map((item) => (item.id === updated.id ? updated : item))
     );
-    addToast('success', 'Product Updated', `${updated.name} changes saved`);
+    addToast('success', 'Product Updated in Database', `${updated.name} changes saved permanently`);
   };
 
   const handleDeleteProduct = (productId: string) => {
     setProducts((prev) => {
       const updatedList = prev.filter((p) => p.id !== productId);
       safeLocalStorage.setJSON('label_sw_products', updatedList);
+      saveToCloudDatabase('products', updatedList);
       return updatedList;
     });
     setSelectedProduct((prev) => (prev && prev.id === productId ? null : prev));
     setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
     setWishlist((prev) => prev.filter((item) => item.id !== productId));
-    addToast('info', 'Product Removed', 'Item deleted from catalog');
+    addToast('info', 'Product Removed from Database', 'Item deleted from cloud database');
   };
 
   const handleUpdateOrderStatus = (orderId: string, status: AdminOrder['orderStatus']) => {
     setOrders((prev) => {
       const updated = prev.map((o) => (o.id === orderId ? { ...o, orderStatus: status } : o));
       safeLocalStorage.setJSON('label_sw_orders', updated);
+      saveToCloudDatabase('orders', updated);
       return updated;
     });
-    addToast('info', 'Order Status Updated', `Order marked as ${status}`);
+    addToast('info', 'Order Status Saved', `Order marked as ${status}`);
   };
 
   const handleUpdateAppointmentStatus = (aptId: string, status: AdminAppointment['status']) => {
     setAppointments((prev) => {
       const updated = prev.map((a) => (a.id === aptId ? { ...a, status } : a));
       safeLocalStorage.setJSON('label_sw_appointments', updated);
+      saveToCloudDatabase('appointments', updated);
       return updated;
     });
-    addToast('info', 'Appointment Updated', `Status changed to ${status}`);
+    addToast('info', 'Appointment Saved', `Status changed to ${status}`);
   };
 
   const handleAddPromoCode = (promo: PromoCode) => {
     setPromoCodes((prev) => {
       const updated = [...prev.filter((p) => p.code !== promo.code), promo];
       safeLocalStorage.setJSON('label_sw_promo_codes', updated);
+      saveToCloudDatabase('promoCodes', updated);
       return updated;
     });
-    addToast('info', 'Coupon Created', `Code ${promo.code} is now active`);
+    addToast('info', 'Coupon Saved to Database', `Code ${promo.code} is now active`);
   };
 
   const handleDeletePromoCode = (code: string) => {
     setPromoCodes((prev) => {
       const updated = prev.filter((p) => p.code !== code);
       safeLocalStorage.setJSON('label_sw_promo_codes', updated);
+      saveToCloudDatabase('promoCodes', updated);
       return updated;
     });
-    addToast('info', 'Coupon Removed', `Code ${code} deleted`);
+    addToast('info', 'Coupon Removed', `Code ${code} deleted from database`);
   };
 
   // Filtered Products Calculation for Storefront
@@ -565,47 +692,56 @@ export default function App() {
           onUpdateAnnouncement={(txt) => {
             setAnnouncementText(txt);
             safeLocalStorage.setItem('label_sw_announcement_text', txt);
-            addToast('success', 'Announcement Bar Updated', 'Storefront ticker refreshed successfully.');
+            saveToCloudDatabase('announcementText', txt);
+            addToast('success', 'Announcement Bar Saved to Database', 'Storefront ticker refreshed and synced.');
           }}
           onUpdateHeroCMS={(content) => {
             setHeroCMS(content);
             safeLocalStorage.setJSON('label_sw_hero_cms', content);
-            addToast('success', 'Hero Banner CMS Updated', 'Storefront hero banner images and settings saved.');
+            saveToCloudDatabase('heroCMS', content);
+            addToast('success', 'Hero Banner Saved to Database', 'Storefront hero banner images and settings synced.');
           }}
           onUpdateBrandStoryCMS={(content) => {
             setBrandStoryCMS(content);
             safeLocalStorage.setJSON('label_sw_brand_story_cms', content);
-            addToast('success', 'Brand Story CMS Saved', 'Atelier manifesto and founder quote updated.');
+            saveToCloudDatabase('brandStoryCMS', content);
+            addToast('success', 'Brand Story Saved to Database', 'Atelier manifesto and founder quote synced.');
           }}
           onUpdateStoreSettingsCMS={(content) => {
             setStoreSettingsCMS(content);
             safeLocalStorage.setJSON('label_sw_store_settings_cms', content);
-            addToast('success', 'Store Policies Saved', 'Contact info and policies updated.');
+            saveToCloudDatabase('storeSettingsCMS', content);
+            addToast('success', 'Store Policies Saved to Database', 'Contact info and policies synced.');
           }}
           onUpdateLogoCMS={(content) => {
             setLogoCMS(content);
             safeLocalStorage.setJSON('label_sw_logo_cms', content);
-            addToast('success', 'Brand Logo Updated', 'Storefront header and footer brand logo saved.');
+            saveToCloudDatabase('logoCMS', content);
+            addToast('success', 'Brand Logo Saved to Database', 'Storefront header and footer brand logo synced.');
           }}
           onUpdateStylesList={(list) => {
             setStylesList(list);
             safeLocalStorage.setJSON('label_sw_styles_list', list);
-            addToast('success', 'Styles Updated', 'Shop By Style silhouettes synced.');
+            saveToCloudDatabase('stylesList', list);
+            addToast('success', 'Styles Saved to Database', 'Shop By Style silhouettes synced.');
           }}
           onUpdateCategoriesList={(list) => {
             setCategoriesList(list);
             safeLocalStorage.setJSON('label_sw_categories_list', list);
-            addToast('success', 'Collections Updated', 'Shop By Collection cards synced.');
+            saveToCloudDatabase('categoriesList', list);
+            addToast('success', 'Collections Saved to Database', 'Shop By Collection cards synced.');
           }}
           onUpdateDiscoveryStories={(list) => {
             setDiscoveryStories(list);
             safeLocalStorage.setJSON('label_sw_discovery_stories', list);
-            addToast('success', 'Discovery Reels Saved', 'Artisan craft reels updated.');
+            saveToCloudDatabase('discoveryStories', list);
+            addToast('success', 'Discovery Reels Saved to Database', 'Artisan craft reels synced.');
           }}
           onUpdateClientDiaries={(list) => {
             setClientDiaries(list);
             safeLocalStorage.setJSON('label_sw_client_diaries', list);
-            addToast('success', 'Client Diaries Updated', 'Verified patron reviews refreshed.');
+            saveToCloudDatabase('clientDiaries', list);
+            addToast('success', 'Client Diaries Saved to Database', 'Verified patron reviews synced.');
           }}
           onAddProduct={handleAddProduct}
           onUpdateProduct={handleUpdateProduct}

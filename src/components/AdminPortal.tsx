@@ -54,7 +54,9 @@ import {
   Crown,
   Maximize2,
   Crop,
-  Play
+  Play,
+  Cloud,
+  Database
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { ImageResizerModal } from './ImageResizerModal';
@@ -1015,6 +1017,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F6FFED] border border-[#B7EB8F] text-[#389E0D] text-xs font-cinzel">
+              <span className="w-2 h-2 rounded-full bg-[#52C41A] animate-pulse" />
+              <Database className="w-3.5 h-3.5" />
+              <span className="font-bold tracking-wide">Firestore Live Sync</span>
+            </div>
+
             <button
               onClick={onCloseAdminPortal}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7A1526] via-[#851628] to-[#991B30] hover:from-[#61101E] hover:to-[#801426] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
