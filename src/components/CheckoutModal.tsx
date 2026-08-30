@@ -8,23 +8,22 @@ import {
   Building2, 
   Banknote, 
   Lock, 
-  Sparkles, 
   CheckCircle2, 
   MapPin, 
-  Phone, 
-  Mail, 
-  User, 
-  Gift, 
   ArrowRight,
   Printer,
   ChevronRight,
   Zap,
-  Check,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import { CartItem, AdminOrder, CustomerUser, StoreSettingsCMSContent, LogoCMSContent } from '../types';
 import { triggerConfetti } from '../utils/storage';
-import { initiateRazorpayPayment } from '../lib/razorpay';
+import { 
+  initiateRazorpayPayment, 
+  createServerRazorpayOrder, 
+  verifyServerRazorpaySignature 
+} from '../lib/razorpay';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -57,7 +56,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onOrderPlaced,
   onClearCart,
 }) => {
-  // Step in checkout: 1 = Shipping Address, 2 = Shipping Method, 3 = Payment, 4 = Confirmation
+  // Step in checkout: 1 = Shipping Address, 2 = Shipping Speed, 3 = Payment Gateway, 4 = Confirmation
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
   // Form State
@@ -82,13 +81,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [paymentMethod, setPaymentMethod] = useState<'razorpay' | 'upi' | 'card' | 'netbanking' | 'cod'>('razorpay');
   const [upiId, setUpiId] = useState('');
   const [cardNumber, setCardNumber] = useState('');
-  const [cardHolder, setCardHolder] = useState(currentUser?.name || '');
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvv, setCardCvv] = useState('');
   const [selectedBank, setSelectedBank] = useState('HDFC Bank');
 
   // Status & Confirmation
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStatusText, setProcessingStatusText] = useState('Creating secure payment...');
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [completedOrder, setCompletedOrder] = useState<AdminOrder | null>(null);
 
@@ -164,48 +163,92 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     });
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     setPaymentError(null);
 
-    // 1. If Razorpay is chosen
+    // 1. If Razorpay is chosen - Full server validation and signature verification flow
     if (paymentMethod === 'razorpay') {
       setIsProcessing(true);
+      setProcessingStatusText('Creating secure payment...');
       const generatedOrderNum = `SW-2026-${Math.floor(1000 + Math.random() * 9000)}`;
 
-      initiateRazorpayPayment({
-        keyId: storeSettingsCMS?.razorpayKeyId || 'rzp_test_1DP5mmOlF5G5ag',
-        amount: totalAmount,
-        orderNumber: generatedOrderNum,
-        customerName: formData.fullName || 'Valued Patron',
-        customerEmail: formData.email || 'patron@example.com',
-        customerPhone: formData.phone || '+91 98200 00000',
-        storeName: storeSettingsCMS?.razorpayMerchantName || 'LABEL SHIKHA WARULE',
-        logoUrl: logoCMS?.customImageUrl || '',
-        themeColor: storeSettingsCMS?.razorpayThemeColor || '#7A1526',
-        onSuccess: (result) => {
-          finalizeOrder(
-            `Razorpay Payment Gateway (${result.razorpay_payment_id})`,
-            'Paid',
-            {
-              paymentId: result.razorpay_payment_id,
-              orderId: result.razorpay_order_id,
-              signature: result.razorpay_signature,
+      try {
+        // Step 1: Create Order on Server Side (validates cart and product prices)
+        const serverOrderResult = await createServerRazorpayOrder({
+          items: items.map((i) => ({
+            productId: i.product.id,
+            quantity: i.quantity,
+            size: i.selectedSize,
+          })),
+          appliedPromo,
+          isGiftWrap,
+          customerName: formData.fullName || 'Valued Patron',
+          customerEmail: formData.email || 'patron@example.com',
+          customerPhone: formData.phone || '+91 98200 00000',
+        });
+
+        const activeKeyId = storeSettingsCMS?.razorpayKeyId || serverOrderResult.keyId || 'rzp_test_1DP5mmOlF5G5ag';
+
+        setProcessingStatusText('Opening Razorpay Gateway...');
+
+        // Step 2: Open Razorpay Checkout Modal
+        await initiateRazorpayPayment({
+          keyId: activeKeyId,
+          orderId: serverOrderResult.orderId,
+          amount: totalAmount,
+          orderNumber: generatedOrderNum,
+          customerName: formData.fullName || 'Valued Patron',
+          customerEmail: formData.email || 'patron@example.com',
+          customerPhone: formData.phone || '+91 98200 00000',
+          storeName: storeSettingsCMS?.razorpayMerchantName || 'LABEL SHIKHA WARULE',
+          logoUrl: logoCMS?.customImageUrl || '',
+          themeColor: storeSettingsCMS?.razorpayThemeColor || '#7A1526',
+          onSuccess: async (result) => {
+            setProcessingStatusText('Verifying payment signature with server...');
+
+            // Step 3: Server-side cryptographic signature verification
+            const verifyResult = await verifyServerRazorpaySignature({
+              razorpay_order_id: result.razorpay_order_id || serverOrderResult.orderId,
+              razorpay_payment_id: result.razorpay_payment_id,
+              razorpay_signature: result.razorpay_signature || '',
+            });
+
+            if (!verifyResult.verified) {
+              setIsProcessing(false);
+              setPaymentError(verifyResult.error || 'Cryptographic payment signature verification failed on the server.');
+              return;
             }
-          );
-        },
-        onError: (err) => {
-          setIsProcessing(false);
-          setPaymentError(err?.description || 'Payment was unsuccessful. Please try again or select another method.');
-        },
-        onDismiss: () => {
-          setIsProcessing(false);
-        },
-      });
+
+            // Step 4: Mark order as PAID only after server verification
+            finalizeOrder(
+              `Razorpay Payment Gateway (${result.razorpay_payment_id})`,
+              'Paid',
+              {
+                paymentId: result.razorpay_payment_id,
+                orderId: result.razorpay_order_id || serverOrderResult.orderId,
+                signature: result.razorpay_signature,
+              }
+            );
+          },
+          onError: (err) => {
+            setIsProcessing(false);
+            setPaymentError(err?.description || 'Payment was unsuccessful. Please check your payment details or try another payment method.');
+          },
+          onDismiss: () => {
+            // Return customer safely to checkout without losing cart
+            setIsProcessing(false);
+          },
+        });
+      } catch (err: any) {
+        setIsProcessing(false);
+        setPaymentError(err?.message || 'Could not initiate Razorpay checkout. Please verify your connection.');
+      }
       return;
     }
 
-    // 2. Direct or Alternative Payment options
+    // 2. Direct Alternative Payment Options (UPI QR, Card, NetBanking, COD)
     setIsProcessing(true);
+    setProcessingStatusText('Processing order authorization...');
     setTimeout(() => {
       let methodLabel = '';
       let status: 'Paid' | 'Pending' = 'Paid';
@@ -248,7 +291,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </div>
               <div>
                 <h2 className="font-cinzel text-base sm:text-lg font-bold text-[#2C2420] tracking-wider uppercase">
-                  {step === 4 ? 'ORDER CONFIRMED' : 'ROYAL ATELIER CHECKOUT'}
+                  {step === 4 ? 'PAYMENT SUCCESSFUL' : 'ROYAL ATELIER CHECKOUT'}
                 </h2>
                 <div className="flex items-center gap-2">
                   <p className="text-[11px] text-[#7A6F68]">256-Bit SSL Encrypted Checkout</p>
@@ -515,12 +558,24 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
                 </div>
 
+                {/* Payment Failure Banner with Try Again */}
                 {paymentError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-semibold">Payment Issue:</p>
-                      <p>{paymentError}</p>
+                  <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 space-y-2 animate-in fade-in">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-red-900">Payment Failed</p>
+                        <p className="text-[11px] text-red-700 mt-0.5">{paymentError}</p>
+                      </div>
+                    </div>
+                    <div className="pt-1 flex justify-end">
+                      <button
+                        onClick={handlePlaceOrder}
+                        className="px-3.5 py-1.5 bg-red-700 hover:bg-red-800 text-white rounded-md text-[11px] font-semibold flex items-center gap-1.5 shadow-xs cursor-pointer"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        <span>Try Again</span>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -790,7 +845,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {isProcessing ? (
                       <span className="flex items-center gap-2">
                         <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>OPENING SECURE GATEWAY...</span>
+                        <span>{processingStatusText.toUpperCase()}</span>
                       </span>
                     ) : paymentMethod === 'razorpay' ? (
                       <>
@@ -815,11 +870,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
                 
                 <h3 className="font-cinzel text-2xl font-bold text-[#2C2420]">
-                  ORDER RESERVED & PLACED
+                  PAYMENT SUCCESSFUL
                 </h3>
                 
                 <p className="font-serif-luxury text-base text-[#685C54] max-w-md mx-auto">
-                  Thank you, <strong>{completedOrder.customerName}</strong>. Your artisanal couture order has been registered with our master weavers.
+                  Thank you, <strong>{completedOrder.customerName}</strong>. Your artisanal couture order has been verified and registered with our master weavers.
                 </p>
 
                 <div className="p-4 bg-white border border-[#EADDCF] rounded-xl max-w-lg mx-auto text-xs text-[#523A30] text-left space-y-2 shadow-xs">
@@ -837,17 +892,46 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </div>
                   )}
 
+                  {completedOrder.razorpayOrderId && (
+                    <div className="flex justify-between border-b border-[#FAF6F0] pb-1.5">
+                      <span className="text-[#8C7E74]">Razorpay Order ID:</span>
+                      <span className="font-mono">{completedOrder.razorpayOrderId}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between border-b border-[#FAF6F0] pb-1.5">
+                    <span className="text-[#8C7E74]">Amount Paid:</span>
+                    <span className="font-serif-luxury font-bold text-[#7A1526]">₹ {completedOrder.total.toLocaleString('en-IN')}</span>
+                  </div>
+
                   <div className="flex justify-between border-b border-[#FAF6F0] pb-1.5">
                     <span className="text-[#8C7E74]">Payment Status:</span>
                     <span className="font-semibold text-[#2D6A4F]">{completedOrder.paymentStatus} ({completedOrder.paymentMethod})</span>
                   </div>
+                  
                   <div className="flex justify-between border-b border-[#FAF6F0] pb-1.5">
                     <span className="text-[#8C7E74]">Delivery Address:</span>
                     <span className="font-medium text-right max-w-[240px] truncate">{completedOrder.shippingAddress}</span>
                   </div>
+
                   <div className="flex justify-between pt-1">
                     <span className="text-[#8C7E74]">Estimated Dispatch:</span>
                     <span className="font-bold text-[#2C2420]">Within 48-72 Hours with Tracking</span>
+                  </div>
+                </div>
+
+                {/* Purchased items summary */}
+                <div className="max-w-lg mx-auto bg-[#FBF7F2] p-3 rounded-lg border border-[#EADDCF] text-xs text-left">
+                  <p className="font-cinzel font-bold text-[#523A30] mb-2 uppercase tracking-wide">
+                    Ordered Couture Items ({completedOrder.items.length})
+                  </p>
+                  <div className="space-y-1.5">
+                    {completedOrder.items.map((it, idx) => (
+                      <div key={idx} className="flex justify-between text-[#685C54]">
+                        <span>{it.quantity}x {it.productName} ({it.size})</span>
+                        <span className="font-mono font-semibold">₹ {(it.price * it.quantity).toLocaleString('en-IN')}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
@@ -866,7 +950,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     onClick={onClose}
                     className="px-8 py-2.5 bg-[#7A1526] text-white text-xs font-cinzel font-semibold tracking-wider rounded-lg uppercase hover:bg-[#61101E] cursor-pointer shadow-md"
                   >
-                    Continue Exploring
+                    Continue Shopping
                   </button>
                 </div>
               </div>

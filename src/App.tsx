@@ -1102,7 +1102,8 @@ export default function App() {
           const updated = [newDiary, ...clientDiaries];
           setClientDiaries(updated);
           safeLocalStorage.setJSON('label_sw_client_diaries', updated);
-          addToast('success', 'Thank You!', 'Your client diary story has been submitted & featured.');
+          saveToCloudDatabase('clientDiaries', updated);
+          addToast('success', 'Thank You!', 'Your client diary story has been submitted & featured in our lookbook.');
         }}
       />
 

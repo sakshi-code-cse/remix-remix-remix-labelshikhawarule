@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, MapPin, Phone, Mail, Clock, Ruler, RotateCcw, ShieldCheck, Sparkles, Star, CheckCircle2, Upload } from 'lucide-react';
+import { X, MapPin, Phone, Mail, Clock, Ruler, RotateCcw, ShieldCheck, Sparkles, Star, CheckCircle2, Upload, ImageIcon } from 'lucide-react';
 import { triggerConfetti } from '../utils/storage';
+import { compressImageFile } from '../utils/imageCompressor';
 import { ClientDiary } from '../types';
 
 interface ModalProps {
@@ -331,14 +332,62 @@ export const ClientDiaryModal: React.FC<ClientDiaryModalProps> = ({ isOpen, onCl
               </div>
 
               <div>
-                <label className="block text-xs font-cinzel font-medium text-[#2C2420] mb-1">Photo Image URL (Optional)</label>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full p-2.5 bg-white border border-[#DFCBB8] rounded text-xs"
-                />
+                <label className="block text-xs font-cinzel font-medium text-[#2C2420] mb-1">Your Look / Garment Photo</label>
+                <div className="flex items-center gap-3">
+                  {imageUrl ? (
+                    <div className="relative w-16 h-20 rounded border border-[#DFCBB8] overflow-hidden shrink-0 bg-white">
+                      <img src={imageUrl} alt="Uploaded look" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl('')}
+                        className="absolute top-1 right-1 p-0.5 bg-black/70 text-white rounded-full hover:bg-red-600 cursor-pointer"
+                        title="Remove photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-16 h-20 rounded border border-dashed border-[#DFCBB8] bg-[#F4E9DC]/40 flex flex-col items-center justify-center text-[#9E472A] shrink-0">
+                      <ImageIcon className="w-5 h-5 opacity-60" />
+                      <span className="text-[9px] mt-0.5">3:4 Photo</span>
+                    </div>
+                  )}
+
+                  <div className="flex-1 space-y-2">
+                    <label className="w-full py-2 px-3 bg-white hover:bg-[#F3E8DB] border border-[#DFCBB8] text-[#9E472A] rounded flex items-center justify-center gap-2 cursor-pointer transition-colors font-cinzel text-xs font-semibold shadow-xs">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Upload from Device</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            try {
+                              const compressed = await compressImageFile(e.target.files[0], {
+                                maxWidth: 1000,
+                                maxHeight: 1333,
+                                quality: 0.85,
+                              });
+                              setImageUrl(compressed);
+                            } catch (err) {
+                              console.error('Error reading image:', err);
+                            }
+                            e.target.value = '';
+                          }
+                        }}
+                      />
+                    </label>
+
+                    <input
+                      type="url"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="Or paste image URL (https://...)"
+                      className="w-full p-2 bg-white border border-[#DFCBB8] rounded text-[11px]"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>

@@ -279,6 +279,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   });
 
   // Client Diary Form State
+  const [editingDiary, setEditingDiary] = useState<ClientDiary | null>(null);
   const [isAddDiaryOpen, setIsAddDiaryOpen] = useState(false);
   const [diaryForm, setDiaryForm] = useState<ClientDiary>({
     id: `diary-${Date.now()}`,
@@ -288,7 +289,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     rating: 5,
     image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop',
     outfit: 'Festive Raw Silk Ensemble',
-    date: 'August 2025',
+    date: 'January 2026',
+    category: 'WEDDING EDIT',
+    venue: 'The Taj Mahal Palace, Mumbai',
+    craftDetails: 'Woven on vintage pit looms in Maheshwar with pure gold zari threads.',
   });
 
   // Calculate Metrics
@@ -449,6 +453,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [isDraggingGallery, setIsDraggingGallery] = useState<boolean>(false);
   const [isDraggingStyleModalImage, setIsDraggingStyleModalImage] = useState<boolean>(false);
   const [isDraggingCategoryModalImage, setIsDraggingCategoryModalImage] = useState<boolean>(false);
+  const [isDraggingDiaryModalImage, setIsDraggingDiaryModalImage] = useState<boolean>(false);
   const [uploadProgressMsg, setUploadProgressMsg] = useState<string>('');
 
   const openImageResizer = (
@@ -684,6 +689,61 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     const [moved] = list.splice(idx, 1);
     list.splice(targetIdx, 0, moved);
     onUpdateCategoriesList(list);
+  };
+
+  const handleDiaryImageUpload = async (file: File) => {
+    if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing & loading patron photo from computer...');
+    try {
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      if (dataUrl) {
+        setDiaryForm((prev) => ({ ...prev, image: dataUrl }));
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) setDiaryForm((prev) => ({ ...prev, image: dataUrl }));
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleInlineDiaryImageUpload = async (diaryIdx: number, file: File) => {
+    if (!file || !file.type.startsWith('image/') || diaryIdx < 0 || diaryIdx >= clientDiaries.length) return;
+    setUploadProgressMsg('Updating patron photo directly from computer...');
+    try {
+      const dataUrl = await compressImageFile(file, { maxWidth: 900, maxHeight: 1200, quality: 0.86 });
+      if (dataUrl) {
+        const updated = [...clientDiaries];
+        updated[diaryIdx] = { ...updated[diaryIdx], image: dataUrl };
+        onUpdateClientDiaries(updated);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = (e.target?.result as string) || '';
+        if (dataUrl) {
+          const updated = [...clientDiaries];
+          updated[diaryIdx] = { ...updated[diaryIdx], image: dataUrl };
+          onUpdateClientDiaries(updated);
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const moveClientDiary = (idx: number, direction: 'up' | 'down') => {
+    const targetIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= clientDiaries.length) return;
+    const list = [...clientDiaries];
+    const [moved] = list.splice(idx, 1);
+    list.splice(targetIdx, 0, moved);
+    onUpdateClientDiaries(list);
   };
 
   const handleSaveResizedImage = (croppedDataUrl: string) => {
@@ -3085,6 +3145,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {stylesList.length} Silhouettes
                     </span>
                     <button
+                      type="button"
+                      onClick={() => onUpdateStylesList([...stylesList])}
+                      className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white border border-[#DFBAC2] text-xs font-cinzel font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer transition-all"
+                      title="Save & Sync Shop by Style Silhouettes"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Save Styles</span>
+                    </button>
+                    <button
                       onClick={() => {
                         setEditingStyle(null);
                         setStyleForm({
@@ -3309,6 +3378,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
                       {categoriesList.length} Collections
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => onUpdateCategoriesList([...categoriesList])}
+                      className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white border border-[#DFBAC2] text-xs font-cinzel font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer transition-all"
+                      title="Save & Sync Collections"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Save Collections</span>
+                    </button>
                     <button
                       onClick={() => {
                         setEditingCategory(null);
@@ -3703,55 +3781,258 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'cms-diaries' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-white p-4 rounded-xl border border-[#F0D5DA] flex items-center justify-between">
+              <div className="bg-white p-5 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
-                    CLIENT DIARIES & VERIFIED REVIEWS CMS
+                  <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-[#7A1526]" />
+                    <span>CLIENT DIARIES & ATELIER PATRON REVIEWS CMS</span>
                   </h2>
-                  <p className="text-xs text-[#7E4A53]">
-                    Add, edit, or remove testimonials from esteemed patrons.
+                  <p className="text-xs text-[#7E4A53] mt-0.5">
+                    Curate bride portraits, wedding diaries, reviews, and styling testimonials featured across the storefront lookbook.
                   </p>
                 </div>
 
-                <button
-                  onClick={() => setIsAddDiaryOpen(true)}
-                  className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Add Patron Story</span>
-                </button>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
+                    {clientDiaries.length} Stories
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => onUpdateClientDiaries([...clientDiaries])}
+                    className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white border border-[#DFBAC2] text-xs font-cinzel font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer transition-all"
+                    title="Save & Sync Client Diaries to cloud database"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save Diaries</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditingDiary(null);
+                      setDiaryForm({
+                        id: `diary-${Date.now()}`,
+                        author: '',
+                        city: 'Mumbai',
+                        quote: '',
+                        rating: 5,
+                        image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop',
+                        outfit: 'Festive Raw Silk Ensemble',
+                        date: 'January 2026',
+                        category: 'WEDDING EDIT',
+                        venue: 'The Taj Mahal Palace, Mumbai',
+                        craftDetails: 'Woven on vintage pit looms in Maheshwar with pure gold zari threads.',
+                      });
+                      setIsAddDiaryOpen(true);
+                    }}
+                    className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Patron Story</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {clientDiaries.map((diary, idx) => (
-                  <div key={diary.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4.5 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <img src={diary.image} alt={diary.author} className="w-14 h-14 object-cover rounded-lg border border-[#F0D5DA]" />
-                      <div>
-                        <h3 className="font-cinzel text-sm font-bold text-[#3B0A12]">{diary.author}</h3>
-                        <div className="text-xs text-[#7A1526] font-medium">
-                          {diary.category || diary.occasion || 'Editorial'}
+                  <div key={diary.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4.5 flex flex-col justify-between space-y-4 group hover:border-[#7A1526]/60 transition-all shadow-md">
+                    
+                    {/* Top Row: Thumbnail + Author Intro */}
+                    <div className="flex gap-4">
+                      {/* Image Thumbnail with Overlay Upload, Crop & Edit */}
+                      <div
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleInlineDiaryImageUpload(idx, e.dataTransfer.files[0]);
+                          }
+                        }}
+                        className="relative w-24 h-32 aspect-[3/4] shrink-0 rounded-lg overflow-hidden border border-[#F0D5DA] bg-black group/thumb"
+                      >
+                        <img
+                          src={diary.image}
+                          alt={diary.author}
+                          className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500"
+                        />
+
+                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover/thumb:opacity-100 flex flex-col items-center justify-center gap-1 transition-opacity p-1">
+                          <label
+                            title="Upload new photo from computer"
+                            className="w-full px-1.5 py-1 bg-[#7A1526] hover:bg-[#991B30] text-white text-[9px] font-cinzel rounded flex items-center justify-center gap-1 cursor-pointer shadow-md"
+                          >
+                            <Upload className="w-2.5 h-2.5" />
+                            <span>PC Photo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleInlineDiaryImageUpload(idx, e.target.files[0]);
+                                  e.target.value = '';
+                                }
+                              }}
+                            />
+                          </label>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              openImageResizer(
+                                diary.image,
+                                'product',
+                                `Patron Portrait: ${diary.author}`,
+                                (cropped) => {
+                                  const updated = [...clientDiaries];
+                                  updated[idx] = { ...updated[idx], image: cropped };
+                                  onUpdateClientDiaries(updated);
+                                }
+                              );
+                            }}
+                            className="w-full px-1.5 py-1 bg-[#FCF4F6] text-[#7A1526] text-[9px] font-cinzel rounded flex items-center justify-center gap-1 border border-[#DFBAC2] hover:bg-[#FAF2F4] cursor-pointer"
+                          >
+                            <Crop className="w-2.5 h-2.5" />
+                            <span>Crop 3:4</span>
+                          </button>
                         </div>
-                        <div className="text-[11px] text-[#7E4A53]">{diary.city} • {diary.date}</div>
+
+                        <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-black/75 text-[9px] font-cinzel text-[#7A1526] font-bold">
+                          #{idx + 1}
+                        </div>
+                      </div>
+
+                      {/* Author & Event Info */}
+                      <div className="flex-1 min-w-0 space-y-1">
+                        <div className="flex items-center justify-between gap-1">
+                          <h3 className="font-cinzel text-sm font-bold text-[#3B0A12] truncate">{diary.author}</h3>
+                          <div className="flex text-amber-500 text-xs">
+                            {Array.from({ length: diary.rating || 5 }).map((_, i) => (
+                              <span key={i}>★</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="inline-block text-[10px] font-cinzel font-semibold text-[#7A1526] bg-[#FAF2F4] px-2 py-0.5 rounded border border-[#DFBAC2]">
+                          {diary.category || diary.occasion || 'WEDDING EDIT'}
+                        </div>
+
+                        <div className="text-[11px] text-[#7E4A53] pt-0.5">
+                          📍 {diary.city} {diary.date ? `• ${diary.date}` : ''}
+                        </div>
+
+                        {diary.venue && (
+                          <div className="text-[10px] text-[#8F6C72] truncate">
+                            🏛️ {diary.venue}
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    <blockquote className="text-xs text-[#4A1821] italic font-serif-luxury leading-relaxed bg-[#FAF5F6] p-3 rounded-lg border border-[#F0D5DA]">
+                    {/* Outfit & Craftsmanship */}
+                    <div className="space-y-1 text-xs">
+                      <div className="text-[#3B0A12] font-medium flex items-center gap-1">
+                        <span className="text-[#7A1526] font-cinzel text-[11px]">Ensemble:</span>
+                        <span className="truncate">{diary.outfit}</span>
+                      </div>
+                      {diary.craftDetails && (
+                        <div className="text-[10px] text-[#8F6C72] line-clamp-1 italic">
+                          ✨ {diary.craftDetails}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Quote Box */}
+                    <blockquote className="text-xs text-[#4A1821] italic font-serif leading-relaxed bg-[#FAF5F6] p-3 rounded-lg border border-[#F0D5DA] line-clamp-3">
                       "{diary.quote}"
                     </blockquote>
 
-                    <div className="flex items-center justify-between pt-1 text-[11px] text-[#7E4A53]">
-                      <span>Outfit: {diary.outfit}</span>
-                      <button
-                        onClick={() => {
-                          const updated = clientDiaries.filter((d) => d.id !== diary.id);
-                          onUpdateClientDiaries(updated);
-                        }}
-                        className="text-[#E53E3E] hover:underline cursor-pointer"
-                      >
-                        Remove
-                      </button>
+                    {/* Bottom Actions Bar */}
+                    <div className="pt-2 border-t border-[#F0D5DA] flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          disabled={idx === 0}
+                          onClick={() => moveClientDiary(idx, 'up')}
+                          className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-[#3B0A12] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                          title="Move Earlier"
+                        >
+                          <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={idx === clientDiaries.length - 1}
+                          onClick={() => moveClientDiary(idx, 'down')}
+                          className="p-1.5 rounded bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-[#3B0A12] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                          title="Move Later"
+                        >
+                          <ArrowDown className="w-3.5 h-3.5 -rotate-90" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <label
+                          title="Upload replacement photo"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                        >
+                          <Upload className="w-3.5 h-3.5" />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleInlineDiaryImageUpload(idx, e.target.files[0]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingDiary(diary);
+                            setDiaryForm({ ...diary });
+                            setIsAddDiaryOpen(true);
+                          }}
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          title="Edit Patron Details"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openImageResizer(
+                              diary.image,
+                              'product',
+                              `Patron Portrait: ${diary.author}`,
+                              (cropped) => {
+                                const updated = [...clientDiaries];
+                                updated[idx] = { ...updated[idx], image: cropped };
+                                onUpdateClientDiaries(updated);
+                              }
+                            );
+                          }}
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          title="Crop & Resize Image (3:4)"
+                        >
+                          <Crop className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm(`Remove testimonial from "${diary.author}"?`)) {
+                              const updated = clientDiaries.filter((d) => d.id !== diary.id);
+                              onUpdateClientDiaries(updated);
+                            }
+                          }}
+                          className="p-1.5 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors cursor-pointer"
+                          title="Delete Patron Story"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
+
                   </div>
                 ))}
               </div>
@@ -4814,13 +5095,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
       )}
 
-      {/* MODAL: ADD PATRON STORY */}
+      {/* MODAL: ADD / EDIT PATRON STORY */}
       {isAddDiaryOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-[#DFBAC2] rounded-2xl max-w-lg w-full p-6 space-y-4 text-xs text-[#3B0A12]">
+        <div className="fixed inset-0 z-50 bg-[#20050A]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-2xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
-              <h2 className="font-cinzel text-base font-bold text-white">Add Verified Patron Testimonial</h2>
-              <button onClick={() => setIsAddDiaryOpen(false)} className="text-[#7E4A53] hover:text-white">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-[#7A1526]" />
+                <h3 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
+                  {editingDiary ? `EDIT PATRON STORY: ${editingDiary.author}` : 'ADD NEW PATRON TESTIMONIAL & STORY'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsAddDiaryOpen(false);
+                  setEditingDiary(null);
+                }}
+                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-[#3B0A12] cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -4828,87 +5121,250 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                onUpdateClientDiaries([diaryForm, ...clientDiaries]);
+                if (editingDiary) {
+                  const updated = clientDiaries.map((d) => (d.id === editingDiary.id ? diaryForm : d));
+                  onUpdateClientDiaries(updated);
+                } else {
+                  onUpdateClientDiaries([diaryForm, ...clientDiaries]);
+                }
                 setIsAddDiaryOpen(false);
+                setEditingDiary(null);
               }}
-              className="space-y-3"
+              className="space-y-4"
             >
-              <div>
-                <label className="block text-[#6B3740] font-cinzel mb-1">Patron Name *</label>
-                <input
-                  required
-                  value={diaryForm.author}
-                  onChange={(e) => setDiaryForm({ ...diaryForm, author: e.target.value })}
-                  placeholder="e.g. Priyanka Singhania"
-                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
-                />
+              {/* IMAGE UPLOAD & CROP STUDIO */}
+              <div className="space-y-2 bg-[#FAF5F6] p-4 rounded-xl border border-[#F0D5DA]">
+                <div className="flex items-center justify-between">
+                  <label className="block text-[#6B3740] font-cinzel font-semibold text-xs flex items-center gap-1.5">
+                    <ImageIcon className="w-4 h-4 text-[#7A1526]" />
+                    <span>Patron Portrait Photo (Lookbook 3:4 Ratio) *</span>
+                  </label>
+                  {diaryForm.image && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        openImageResizer(
+                          diaryForm.image,
+                          'product',
+                          'Patron Portrait (3:4 Lookbook Ratio)',
+                          (cropped) => {
+                            setDiaryForm((prev) => ({ ...prev, image: cropped }));
+                          }
+                        );
+                      }}
+                      className="px-2 py-1 bg-white hover:bg-[#FCF4F6] text-[#7A1526] text-[11px] font-cinzel font-semibold rounded border border-[#DFBAC2] flex items-center gap-1 cursor-pointer shadow-xs transition-colors"
+                    >
+                      <Crop className="w-3 h-3" />
+                      <span>Crop / Resize (3:4)</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                  {/* Image Preview */}
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setIsDraggingDiaryModalImage(true);
+                    }}
+                    onDragLeave={() => setIsDraggingDiaryModalImage(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingDiaryModalImage(false);
+                      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        handleDiaryImageUpload(e.dataTransfer.files[0]);
+                      }
+                    }}
+                    className={`relative aspect-[3/4] rounded-lg overflow-hidden border-2 border-dashed ${
+                      isDraggingDiaryModalImage ? 'border-[#7A1526] bg-[#7A1526]/10' : 'border-[#DFBAC2] bg-white'
+                    } flex items-center justify-center group`}
+                  >
+                    {diaryForm.image ? (
+                      <>
+                        <img src={diaryForm.image} alt="Patron preview" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 transition-opacity p-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              openImageResizer(
+                                diaryForm.image,
+                                'product',
+                                'Patron Portrait (3:4 Lookbook Ratio)',
+                                (cropped) => {
+                                  setDiaryForm((prev) => ({ ...prev, image: cropped }));
+                                }
+                              );
+                            }}
+                            className="px-2.5 py-1.5 bg-[#7A1526] text-white text-[10px] font-cinzel rounded flex items-center gap-1 cursor-pointer"
+                          >
+                            <Crop className="w-3 h-3" />
+                            <span>Crop 3:4</span>
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-center p-3 text-[#7E4A53]">
+                        <Upload className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                        <span className="text-[10px]">Drag & Drop Photo Here</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Actions & URL input */}
+                  <div className="sm:col-span-2 space-y-3">
+                    <div>
+                      <label className="block text-[11px] text-[#7E4A53] mb-1 font-medium">
+                        Upload High-Resolution Photo from Computer / Phone:
+                      </label>
+                      <label className="w-full py-2.5 px-3 bg-white hover:bg-[#FAF2F4] border border-[#DFBAC2] hover:border-[#7A1526] text-[#7A1526] rounded-lg flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-colors font-cinzel font-semibold text-xs">
+                        <Upload className="w-4 h-4" />
+                        <span>Choose Image File from PC</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              handleDiaryImageUpload(e.target.files[0]);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-[#7E4A53] mb-1 font-medium">
+                        Or Paste Web Image URL:
+                      </label>
+                      <input
+                        type="url"
+                        value={diaryForm.image}
+                        onChange={(e) => setDiaryForm({ ...diaryForm, image: e.target.value })}
+                        placeholder="https://images.unsplash.com/..."
+                        className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              {/* PATRON INFORMATION */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">City</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Patron Name *</label>
                   <input
-                    value={diaryForm.city}
-                    onChange={(e) => setDiaryForm({ ...diaryForm, city: e.target.value })}
-                    placeholder="e.g. Mumbai"
-                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
+                    required
+                    value={diaryForm.author}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, author: e.target.value })}
+                    placeholder="e.g. Radhika Merchant & Anant Ambani"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Category / Edit</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Category / Occasion Tag</label>
                   <input
                     value={diaryForm.category || ''}
                     onChange={(e) => setDiaryForm({ ...diaryForm, category: e.target.value })}
-                    placeholder="e.g. WEDDING EDIT"
-                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
+                    placeholder="e.g. WEDDING EDIT, ROYAL SANGEET, CELEBRATION"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">City / Region</label>
+                  <input
+                    value={diaryForm.city}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, city: e.target.value })}
+                    placeholder="e.g. Mumbai / London"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Venue / Setting</label>
+                  <input
+                    value={diaryForm.venue || ''}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, venue: e.target.value })}
+                    placeholder="e.g. The Taj Mahal Palace, Mumbai"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Outfit Ensemble Name</label>
+                  <input
+                    value={diaryForm.outfit}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, outfit: e.target.value })}
+                    placeholder="e.g. Antique Gold Jamdani Silk Kurta & Zari Stole Set"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan / Craftsmanship Process</label>
+                  <input
+                    value={diaryForm.craftDetails || ''}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, craftDetails: e.target.value })}
+                    placeholder="e.g. Handwoven on traditional pit looms in Maheshwar with pure gold zari threads"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Patron Review & Styling Testimonial *</label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={diaryForm.quote}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, quote: e.target.value })}
+                    placeholder="The bespoke fit was extraordinary, and the richness of the pure heritage silk weave drew endless compliments..."
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Date / Season</label>
+                  <input
+                    value={diaryForm.date}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, date: e.target.value })}
+                    placeholder="e.g. January 2026"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[#6B3740] font-cinzel mb-1">Star Rating</label>
+                  <select
+                    value={diaryForm.rating || 5}
+                    onChange={(e) => setDiaryForm({ ...diaryForm, rating: Number(e.target.value) })}
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                  >
+                    <option value={5}>★★★★★ (5 Stars - Exceptional)</option>
+                    <option value={4}>★★★★☆ (4 Stars - Highly Satisfied)</option>
+                    <option value={3}>★★★☆☆ (3 Stars - Good)</option>
+                  </select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[#6B3740] font-cinzel mb-1">Outfit Ensemble Name</label>
-                <input
-                  value={diaryForm.outfit}
-                  onChange={(e) => setDiaryForm({ ...diaryForm, outfit: e.target.value })}
-                  placeholder="e.g. Antique Gold Jamdani Kurta Set"
-                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#6B3740] font-cinzel mb-1">Quote / Review *</label>
-                <textarea
-                  rows={3}
-                  required
-                  value={diaryForm.quote}
-                  onChange={(e) => setDiaryForm({ ...diaryForm, quote: e.target.value })}
-                  placeholder="The craftsmanship was sublime..."
-                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#6B3740] font-cinzel mb-1">Customer / Garment Photo URL</label>
-                <input
-                  value={diaryForm.image}
-                  onChange={(e) => setDiaryForm({ ...diaryForm, image: e.target.value })}
-                  className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12]"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
                 <button
                   type="button"
-                  onClick={() => setIsAddDiaryOpen(false)}
-                  className="px-4 py-2 bg-[#FAF2F4] text-white rounded"
+                  onClick={() => {
+                    setIsAddDiaryOpen(false);
+                    setEditingDiary(null);
+                  }}
+                  className="px-4 py-2 bg-[#FAF2F4] text-[#7A1526] hover:bg-[#F0D5DA] rounded-lg font-cinzel text-xs cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-[#7A1526] text-white font-cinzel font-semibold rounded"
+                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white font-cinzel font-semibold rounded-lg shadow-md transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  Save Review
+                  <Save className="w-4 h-4" />
+                  <span>{editingDiary ? 'Update Patron Story' : 'Save Patron Story'}</span>
                 </button>
               </div>
             </form>
