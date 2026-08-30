@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Package, 
@@ -189,6 +189,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [brandStoryForm, setBrandStoryForm] = useState<BrandStoryCMSContent>(brandStoryCMS);
   const [storeSettingsForm, setStoreSettingsForm] = useState<StoreSettingsCMSContent>(storeSettingsCMS);
   const [logoForm, setLogoForm] = useState<LogoCMSContent>(logoCMS || INITIAL_LOGO_CMS);
+
+  // Sync draft states when cloud props update in real-time
+  useEffect(() => {
+    if (logoCMS) setLogoForm(logoCMS);
+  }, [logoCMS]);
+
+  useEffect(() => {
+    if (heroCMS) setHeroForm(heroCMS);
+  }, [heroCMS]);
+
+  useEffect(() => {
+    if (announcementText) setAnnouncementDraft(announcementText);
+  }, [announcementText]);
+
+  useEffect(() => {
+    if (brandStoryCMS) setBrandStoryForm(brandStoryCMS);
+  }, [brandStoryCMS]);
+
+  useEffect(() => {
+    if (storeSettingsCMS) setStoreSettingsForm(storeSettingsCMS);
+  }, [storeSettingsCMS]);
   
   // Product Filters & Modals
   const [productSearch, setProductSearch] = useState('');
@@ -366,9 +387,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   // Handle Custom Logo Image File Upload
-  const handleLogoImageUpload = (e: React.ChangeEvent<HTMLInputElement>, isDarkVariant = false) => {
+  const handleLogoImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isDarkVariant = false) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    setUploadProgressMsg('Optimizing brand logo for cloud database...');
+    try {
+      const compressedDataUrl = await compressImageFile(file, { maxWidth: 800, maxHeight: 400, quality: 0.9 });
+      if (compressedDataUrl) {
+        if (isDarkVariant) {
+          setLogoForm((prev) => ({ ...prev, customImageDarkUrl: compressedDataUrl }));
+        } else {
+          setLogoForm((prev) => ({
+            ...prev,
+            logoType: 'custom-image',
+            customImageUrl: compressedDataUrl,
+          }));
+        }
+      }
+    } catch {
       const reader = new FileReader();
       reader.onload = (event) => {
         const result = event.target?.result as string;
@@ -385,6 +421,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         }
       };
       reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
     }
   };
 
