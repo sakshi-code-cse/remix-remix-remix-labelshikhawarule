@@ -103,7 +103,11 @@ export default function App() {
     return safeLocalStorage.getJSON<LogoCMSContent>('label_sw_logo_cms', INITIAL_LOGO_CMS);
   });
   const [stylesList, setStylesList] = useState<StyleCategory[]>(() => {
-    return safeLocalStorage.getJSON<StyleCategory[]>('label_sw_styles_list', STYLE_CATEGORIES);
+    const saved = safeLocalStorage.getJSON<StyleCategory[]>('label_sw_styles_list', STYLE_CATEGORIES);
+    if (Array.isArray(saved) && saved.some(s => s.id === 'kurtas' || s.title?.toLowerCase() === 'kurtas')) {
+      return saved;
+    }
+    return STYLE_CATEGORIES;
   });
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>(() => {
     return safeLocalStorage.getJSON<CategoryItem[]>('label_sw_categories_list', CATEGORIES_LIST);
@@ -642,7 +646,23 @@ export default function App() {
       return products.filter((p) => p.category.toLowerCase() === activeFilter.value.toLowerCase());
     }
     if (activeFilter.type === 'style') {
-      return products.filter((p) => p.style.toLowerCase() === activeFilter.value.toLowerCase());
+      const target = activeFilter.value.toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+      return products.filter((p) => {
+        const styleNorm = (p.style || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const catNorm = (p.category || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const nameNorm = (p.name || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const tagsNorm = (p.tags || []).map((t) => t.toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, ''));
+        return (
+          styleNorm === target ||
+          styleNorm.includes(target) ||
+          target.includes(styleNorm) ||
+          catNorm === target ||
+          catNorm.includes(target) ||
+          target.includes(catNorm) ||
+          nameNorm.includes(target) ||
+          tagsNorm.some((t) => t.includes(target) || target.includes(t))
+        );
+      });
     }
     if (activeFilter.type === 'sale') {
       return products.filter((p) => Boolean(p.originalPrice));

@@ -37,14 +37,22 @@ export interface CartItem {
 
 export interface MediaAsset {
   id: string;
-  fileName: string;
-  fileUrl: string;
-  fileType: 'image' | 'video';
+  fileName?: string;
+  fileUrl?: string;
+  fileType?: 'image' | 'video';
+  name?: string;
+  url?: string;
+  type?: 'image' | 'video';
   mimeType?: string;
   fileSize?: number;
-  uploadedAt: string;
+  size?: number;
+  uploadedAt?: string;
+  createdAt?: string;
   tag?: string;
+  folder?: string;
+  tags?: string[];
   aspectRatio?: string;
+  dimensions?: { width: number; height: number };
 }
 
 export interface StyleCategory {

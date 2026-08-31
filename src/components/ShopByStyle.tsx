@@ -28,8 +28,8 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* 4 Clean Rectangular Style Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {/* Clean Rectangular Style Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
           {styles.map((style) => {
             const isSelected = selectedStyle?.toLowerCase() === style.title.toLowerCase();
 
@@ -50,7 +50,7 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
                 >
                   <img
                     src={style.image}
-                    alt={`${style.title} Style Fabric`}
+                    alt={`${style.title} Style Silhouette`}
                     loading="lazy"
                     className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108"
                   />
