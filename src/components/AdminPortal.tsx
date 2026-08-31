@@ -59,10 +59,18 @@ import {
   Database,
   Zap,
   CreditCard,
-  ShieldCheck
+  ShieldCheck,
+  Video,
+  Film,
+  PlayCircle,
+  Volume2,
+  RotateCcw,
+  FileVideo,
+  CheckCircle2
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { ImageResizerModal } from './ImageResizerModal';
+import { StoryModal } from './StoryModal';
 import { 
   Product, 
   AdminOrder, 
@@ -242,12 +250,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Story Form State
   const [editingStory, setEditingStory] = useState<DiscoveryStory | null>(null);
   const [isAddStoryOpen, setIsAddStoryOpen] = useState(false);
+  const [previewStoryModal, setPreviewStoryModal] = useState<DiscoveryStory | null>(null);
+  const [isDraggingStoryVideo, setIsDraggingStoryVideo] = useState(false);
+  const [isDraggingStoryThumbnail, setIsDraggingStoryThumbnail] = useState(false);
   const [storyForm, setStoryForm] = useState<DiscoveryStory>({
     id: `story-${Date.now()}`,
     title: '',
     subtitle: '',
     thumbnail: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600&auto=format&fit=crop',
     videoDuration: '02:45',
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    videoType: 'mp4',
     description: '',
     craftsmanshipDetail: '',
     artisanQuote: '',
@@ -594,6 +607,94 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         }
       };
       reader.readAsDataURL(file);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleStoryVideoUpload = async (file: File) => {
+    if (!file || (!file.type.startsWith('video/') && !file.name.match(/\.(mp4|webm|mov|m4v|ogg)$/i))) {
+      alert('Please select a valid video file (.mp4, .webm, .mov)');
+      return;
+    }
+    setUploadProgressMsg('Processing video and calculating duration...');
+    try {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const videoDataUrl = (e.target?.result as string) || '';
+        if (videoDataUrl) {
+          // Offscreen video to extract duration and auto-thumbnail
+          const tempVideo = document.createElement('video');
+          tempVideo.src = videoDataUrl;
+          tempVideo.preload = 'metadata';
+          tempVideo.onloadedmetadata = () => {
+            const sec = Math.round(tempVideo.duration || 0);
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            const durationStr = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            setStoryForm((prev) => ({
+              ...prev,
+              videoUrl: videoDataUrl,
+              videoDuration: durationStr !== '00:00' ? durationStr : prev.videoDuration,
+              videoType: 'mp4',
+            }));
+          };
+          tempVideo.onerror = () => {
+            setStoryForm((prev) => ({
+              ...prev,
+              videoUrl: videoDataUrl,
+              videoType: 'mp4',
+            }));
+          };
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Error uploading video:', err);
+    } finally {
+      setUploadProgressMsg('');
+    }
+  };
+
+  const handleInlineStoryVideoUpload = async (storyIdx: number, file: File) => {
+    if (!file || storyIdx < 0 || storyIdx >= discoveryStories.length) return;
+    setUploadProgressMsg('Uploading video directly to discovery reel...');
+    try {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const videoDataUrl = (e.target?.result as string) || '';
+        if (videoDataUrl) {
+          const tempVideo = document.createElement('video');
+          tempVideo.src = videoDataUrl;
+          tempVideo.preload = 'metadata';
+          tempVideo.onloadedmetadata = () => {
+            const sec = Math.round(tempVideo.duration || 0);
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            const durationStr = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            const updated = [...discoveryStories];
+            updated[storyIdx] = {
+              ...updated[storyIdx],
+              videoUrl: videoDataUrl,
+              videoDuration: durationStr !== '00:00' ? durationStr : updated[storyIdx].videoDuration,
+              videoType: 'mp4',
+            };
+            onUpdateDiscoveryStories(updated);
+          };
+          tempVideo.onerror = () => {
+            const updated = [...discoveryStories];
+            updated[storyIdx] = {
+              ...updated[storyIdx],
+              videoUrl: videoDataUrl,
+              videoType: 'mp4',
+            };
+            onUpdateDiscoveryStories(updated);
+          };
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Error uploading video:', err);
     } finally {
       setUploadProgressMsg('');
     }
@@ -4005,14 +4106,41 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <span>WATCH OUR DISCOVERY (CRAFT & WEAVE VIDEO REELS)</span>
                   </h2>
                   <p className="text-xs text-[#7E4A53] mt-0.5">
-                    Add, edit, crop thumbnails, and organize the artisan documentary reels shown in the storefront carousel.
+                    Add, edit, upload videos (.mp4/embeds), crop thumbnails, and organize the artisan documentary reels.
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1 rounded border border-[#DFBAC2]">
-                    {discoveryStories.length} Active Reels
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="text-xs text-[#7A1526] font-cinzel font-semibold bg-[#FAF2F4] px-2.5 py-1.5 rounded-lg border border-[#DFBAC2] flex items-center gap-1.5">
+                    <Video className="w-3.5 h-3.5 text-[#7A1526]" />
+                    <span>{discoveryStories.length} Active Reels</span>
                   </span>
+
+                  {discoveryStories.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewStoryModal(discoveryStories[0])}
+                      className="px-3.5 py-2 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7A1526] text-xs font-cinzel font-semibold rounded-lg border border-[#DFBAC2] flex items-center gap-1.5 cursor-pointer transition-colors"
+                      title="Preview how customers experience the full-screen video reel player"
+                    >
+                      <PlayCircle className="w-4 h-4 text-[#7A1526]" />
+                      <span>Test Reel Player</span>
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onUpdateDiscoveryStories([...discoveryStories]);
+                      alert('Discovery reels and video configurations saved & synced to cloud database!');
+                    }}
+                    className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel font-semibold rounded-lg border border-[#DFBAC2] flex items-center gap-1.5 cursor-pointer transition-all shadow-xs"
+                    title="Force save all reels to persistent database"
+                  >
+                    <Database className="w-4 h-4" />
+                    <span>Save to Database</span>
+                  </button>
+
                   <button
                     onClick={() => {
                       setEditingStory(null);
@@ -4022,6 +4150,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         subtitle: '',
                         thumbnail: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600&auto=format&fit=crop',
                         videoDuration: '02:45',
+                        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                        videoType: 'mp4',
                         description: '',
                         craftsmanshipDetail: '',
                         artisanQuote: '',
@@ -4048,10 +4178,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       onDrop={(e) => {
                         e.preventDefault();
                         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                          handleInlineStoryThumbnailUpload(idx, e.dataTransfer.files[0]);
+                          const f = e.dataTransfer.files[0];
+                          if (f.type.startsWith('video/')) {
+                            handleInlineStoryVideoUpload(idx, f);
+                          } else {
+                            handleInlineStoryThumbnailUpload(idx, f);
+                          }
                         }
                       }}
-                      className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#F0D5DA] group/thumb"
+                      className="relative aspect-[4/5] rounded-lg overflow-hidden bg-black border border-[#F0D5DA] group/thumb cursor-pointer"
+                      onClick={() => setPreviewStoryModal(story)}
                     >
                       <img src={story.thumbnail} alt={story.title} className="w-full h-full object-cover group-hover/thumb:scale-105 transition-transform duration-500 filter brightness-95" />
                       
@@ -4060,8 +4196,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                       {/* Center Play Icon */}
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs border border-white/60 flex items-center justify-center text-white shadow-md">
-                          <Play className="w-4 h-4 fill-white ml-0.5" />
+                        <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-xs border border-white/60 flex items-center justify-center text-white shadow-lg group-hover/thumb:scale-110 transition-transform">
+                          <Play className="w-5 h-5 fill-white ml-0.5" />
                         </div>
                       </div>
 
@@ -4071,20 +4207,65 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[9px] font-mono text-white font-bold border border-white/10">
-                        {story.videoDuration}
+                        {story.videoDuration || '02:45'}
+                      </div>
+
+                      {/* Video Format Badge */}
+                      <div className="absolute top-8 right-2">
+                        {story.videoUrl ? (
+                          <span className="px-1.5 py-0.5 rounded bg-emerald-950/80 backdrop-blur-xs text-[8px] font-mono text-emerald-400 font-semibold border border-emerald-500/30 flex items-center gap-1">
+                            <Video className="w-2.5 h-2.5" />
+                            <span>{story.videoUrl.includes('youtu') || story.videoUrl.includes('vimeo') ? 'EMBED' : 'MP4 VIDEO'}</span>
+                          </span>
+                        ) : (
+                          <span className="px-1.5 py-0.5 rounded bg-amber-950/80 backdrop-blur-xs text-[8px] font-mono text-amber-400 font-semibold border border-amber-500/30">
+                            COVER ONLY
+                          </span>
+                        )}
                       </div>
 
                       {/* Bottom Title inside Thumbnail */}
-                      <div className="absolute inset-x-0 bottom-0 p-2.5 text-center">
+                      <div className="absolute inset-x-0 bottom-0 p-2.5 text-center pointer-events-none">
                         <div className="font-cinzel text-xs font-bold text-white drop-shadow-md leading-tight">{story.title}</div>
                         <div className="text-[10px] text-[#7A1526] font-light mt-0.5">{story.subtitle}</div>
                       </div>
 
                       {/* Action Overlay on Hover */}
-                      <div className="absolute inset-0 bg-black/75 opacity-0 group-hover/thumb:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-2 z-10">
+                      <div 
+                        onClick={(e) => e.stopPropagation()} 
+                        className="absolute inset-0 bg-black/80 opacity-0 group-hover/thumb:opacity-100 flex flex-col items-center justify-center gap-1.5 transition-opacity p-2 z-10"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setPreviewStoryModal(story)}
+                          className="w-full max-w-[140px] px-2.5 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                        >
+                          <Play className="w-3 h-3 fill-white" />
+                          <span>Play Full Reel</span>
+                        </button>
+
                         <label
-                          title="Upload new thumbnail from computer"
-                          className="w-full max-w-[140px] px-2.5 py-1.5 bg-[#7A1526] hover:bg-[#991B30] text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
+                          title="Upload new video (.mp4, .webm) from computer"
+                          className="w-full max-w-[140px] px-2.5 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
+                        >
+                          <Video className="w-3 h-3 text-white" />
+                          <span>Upload PC Video</span>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleInlineStoryVideoUpload(idx, e.target.files[0]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                        </label>
+
+                        <label
+                          title="Upload new thumbnail cover from computer"
+                          className="w-full max-w-[140px] px-2.5 py-1 bg-white/20 hover:bg-white/30 text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
                         >
                           <Upload className="w-3 h-3 text-white" />
                           <span>Upload PC Cover</span>
@@ -4146,6 +4327,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <span>Artisan: <strong className="text-white font-medium">{story.artisanName}</strong></span>
                       </div>
 
+                      {/* Video URL display */}
+                      {story.videoUrl && (
+                        <div className="text-[9px] text-[#8F6C72] truncate font-mono bg-[#FCF4F6] px-1.5 py-0.5 rounded border border-[#F0D5DA] flex items-center gap-1">
+                          <Film className="w-2.5 h-2.5 text-[#7A1526] shrink-0" />
+                          <span className="truncate">{story.videoUrl}</span>
+                        </div>
+                      )}
+
                       {/* Tags */}
                       {story.tags && story.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 pt-1">
@@ -4182,7 +4371,26 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        {/* Direct PC Upload */}
+                        {/* Direct PC Video Upload */}
+                        <label
+                          title="Upload video (.mp4) directly to this reel"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-emerald-700 text-emerald-400 hover:text-white rounded transition-colors cursor-pointer"
+                        >
+                          <Video className="w-3.5 h-3.5" />
+                          <input
+                            type="file"
+                            accept="video/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleInlineStoryVideoUpload(idx, e.target.files[0]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                        </label>
+
+                        {/* Direct PC Thumbnail Upload */}
                         <label
                           title="Upload thumbnail cover from computer"
                           className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
@@ -4200,6 +4408,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }}
                           />
                         </label>
+
                         <button
                           type="button"
                           onClick={() => {
@@ -5854,13 +6063,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* MODAL: ADD / EDIT WATCH DISCOVERY REEL */}
       {isAddStoryOpen && (
         <div className="fixed inset-0 z-50 bg-[#20050A]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-2xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
+          <div className="bg-white border border-[#F0D5DA] rounded-2xl max-w-3xl w-full p-6 text-xs text-[#3B0A12] space-y-5 my-8 shadow-2xl animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA] sticky top-0 bg-white z-20">
               <div className="flex items-center gap-2">
-                <Tv className="w-5 h-5 text-[#7A1526]" />
-                <h3 className="font-cinzel text-base font-bold text-white tracking-wider">
-                  {editingStory ? `EDIT DISCOVERY REEL: ${editingStory.title}` : 'ADD NEW WATCH DISCOVERY REEL'}
-                </h3>
+                <div className="p-2 rounded-lg bg-[#FAF2F4] border border-[#DFBAC2]">
+                  <Tv className="w-5 h-5 text-[#7A1526]" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider">
+                    {editingStory ? `EDIT DISCOVERY REEL: ${editingStory.title}` : 'ADD NEW WATCH DISCOVERY REEL'}
+                  </h3>
+                  <p className="text-[11px] text-[#7E4A53]">
+                    Upload or link video footage (.mp4 / embed), crop cover thumbnail, and configure artisan storytelling.
+                  </p>
+                </div>
               </div>
               <button
                 type="button"
@@ -5868,7 +6084,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   setIsAddStoryOpen(false);
                   setEditingStory(null);
                 }}
-                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-[#FCF4F6] hover:bg-[#FAF2F4] text-[#7E4A53] hover:text-[#3B0A12] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -5886,8 +6102,253 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 setIsAddStoryOpen(false);
                 setEditingStory(null);
               }}
-              className="space-y-4"
+              className="space-y-5"
             >
+              {/* SECTION 1: VIDEO SOURCE STUDIO */}
+              <div className="bg-[#FCF4F6] p-4 rounded-xl border border-[#DFBAC2] space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                    <Video className="w-4 h-4 text-[#7A1526]" />
+                    <span>Reel Video Footage (.MP4 / WebM / Embed URL)</span>
+                  </label>
+                  <span className="text-[10px] text-emerald-800 font-mono font-semibold bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                    {storyForm.videoUrl ? 'Video Configured' : 'No Video'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                  {/* Left Column: Live Video Player Preview */}
+                  <div className="md:col-span-5 flex flex-col items-center">
+                    <div className="relative w-full aspect-[4/5] max-w-[200px] rounded-xl overflow-hidden bg-black border-2 border-[#DFBAC2] shadow-md flex items-center justify-center group">
+                      {storyForm.videoUrl ? (
+                        storyForm.videoUrl.includes('youtube.com') || storyForm.videoUrl.includes('youtu.be') || storyForm.videoUrl.includes('vimeo.com') ? (
+                          <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center text-white bg-stone-900">
+                            <Film className="w-8 h-8 text-[#7A1526] mb-2" />
+                            <span className="text-[11px] font-semibold text-white font-cinzel">Web Video Embed</span>
+                            <span className="text-[9px] text-[#8F6C72] truncate max-w-[160px] mt-1">{storyForm.videoUrl}</span>
+                          </div>
+                        ) : (
+                          <video
+                            src={storyForm.videoUrl}
+                            poster={storyForm.thumbnail}
+                            controls
+                            className="w-full h-full object-cover"
+                          />
+                        )
+                      ) : (
+                        <div className="text-center p-3 text-[#8F6C72] flex flex-col items-center justify-center">
+                          <Video className="w-8 h-8 text-[#DFBAC2] mb-1.5 opacity-60" />
+                          <span className="text-[11px] text-[#6B3740] font-cinzel font-medium">No video uploaded</span>
+                          <span className="text-[9px] text-[#8F6C72] mt-0.5">Upload .mp4 below or paste URL</span>
+                        </div>
+                      )}
+
+                      {storyForm.videoUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setStoryForm((prev) => ({ ...prev, videoUrl: '' }))}
+                          className="absolute top-2 right-2 p-1 rounded-full bg-black/70 text-white hover:text-rose-400 hover:bg-black/90 cursor-pointer shadow-md"
+                          title="Remove video source"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                    <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">Live Video Player Preview</span>
+                  </div>
+
+                  {/* Right Column: Video Upload & URL Input */}
+                  <div className="md:col-span-7 space-y-3">
+                    {/* Video File Upload Drag & Drop Zone */}
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setIsDraggingStoryVideo(true);
+                      }}
+                      onDragLeave={() => setIsDraggingStoryVideo(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsDraggingStoryVideo(false);
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          handleStoryVideoUpload(e.dataTransfer.files[0]);
+                        }
+                      }}
+                      className={`p-3.5 rounded-xl border-2 border-dashed text-center transition-all ${
+                        isDraggingStoryVideo
+                          ? 'border-[#7A1526] bg-[#FAF2F4]'
+                          : 'border-[#DFBAC2] bg-white hover:border-[#7A1526]/60'
+                      }`}
+                    >
+                      <Video className="w-6 h-6 text-[#7A1526] mx-auto mb-1" />
+                      <p className="text-[11px] font-semibold text-[#3B0A12]">
+                        Drag & Drop Reel Video (.MP4, .WebM, .MOV)
+                      </p>
+                      <p className="text-[10px] text-[#7E4A53] mt-0.5">
+                        Duration and playback will be calculated automatically
+                      </p>
+
+                      <div className="mt-2.5 flex items-center justify-center gap-2">
+                        <label className="px-3.5 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg cursor-pointer shadow-xs flex items-center gap-1.5 transition-all">
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>Choose Video File</span>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                handleStoryVideoUpload(e.target.files[0]);
+                                e.target.value = '';
+                              }
+                            }}
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Direct Video URL / Embed */}
+                    <div>
+                      <span className="text-[10px] text-[#6B3740] font-cinzel font-semibold block mb-1">
+                        Or Paste Direct Video URL (.MP4 / WebM / YouTube / Vimeo)
+                      </span>
+                      <input
+                        value={storyForm.videoUrl || ''}
+                        onChange={(e) => setStoryForm({ ...storyForm, videoUrl: e.target.value })}
+                        placeholder="https://example.com/craft-documentary.mp4 or https://youtu.be/..."
+                        className="w-full bg-white border border-[#DFBAC2] rounded-lg p-2 text-[#3B0A12] text-xs font-mono focus:outline-none focus:border-[#7A1526]"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <span className="text-[10px] text-[#6B3740] font-cinzel block mb-1">Duration Badge (MM:SS)</span>
+                        <input
+                          value={storyForm.videoDuration}
+                          onChange={(e) => setStoryForm({ ...storyForm, videoDuration: e.target.value })}
+                          placeholder="02:45"
+                          className="w-full bg-white border border-[#DFBAC2] rounded-lg p-2 text-[#3B0A12] font-mono text-xs focus:outline-none focus:border-[#7A1526]"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-[10px] text-[#6B3740] font-cinzel block mb-1">Video Stream Type</span>
+                        <select
+                          value={storyForm.videoType || 'mp4'}
+                          onChange={(e) => setStoryForm({ ...storyForm, videoType: e.target.value as 'mp4' | 'youtube' | 'vimeo' })}
+                          className="w-full bg-white border border-[#DFBAC2] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                        >
+                          <option value="mp4">Native MP4 / WebM</option>
+                          <option value="youtube">YouTube Embed</option>
+                          <option value="vimeo">Vimeo Embed</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: THUMBNAIL & COVER CROP STUDIO */}
+              <div className="bg-[#FCF4F6] p-4 rounded-xl border border-[#DFBAC2] space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                    <Crop className="w-4 h-4 text-[#7A1526]" />
+                    <span>Reel Cover Thumbnail (4:5 Ratio) *</span>
+                  </label>
+                  <span className="text-[10px] text-[#7E4A53] font-mono">Vertical 4:5 Poster</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                  <div className="md:col-span-4 flex flex-col items-center">
+                    <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-md flex items-center justify-center">
+                      {storyForm.thumbnail ? (
+                        <img
+                          src={storyForm.thumbnail}
+                          alt="Story Preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-center p-2 text-[#8F6C72]">
+                          <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                          <span className="text-[10px]">No cover</span>
+                        </div>
+                      )}
+
+                      {storyForm.thumbnail && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openImageResizer(
+                              storyForm.thumbnail,
+                              'product',
+                              `Reel Thumbnail: ${storyForm.title || 'New Reel'}`,
+                              (cropped) => setStoryForm((prev) => ({ ...prev, thumbnail: cropped }))
+                            );
+                          }}
+                          className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
+                        >
+                          <Crop className="w-4 h-4 text-[#7A1526]" />
+                          <span>Resize & Crop</span>
+                        </button>
+                      )}
+                    </div>
+                    <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">4:5 Reel Poster</span>
+                  </div>
+
+                  <div className="md:col-span-8 space-y-2">
+                    <div>
+                      <span className="text-[10px] text-[#6B3740] font-cinzel font-semibold block mb-1">Thumbnail Image URL</span>
+                      <input
+                        required
+                        value={storyForm.thumbnail}
+                        onChange={(e) => setStoryForm({ ...storyForm, thumbnail: e.target.value })}
+                        placeholder="https://images.unsplash.com/..."
+                        className="w-full bg-white border border-[#DFBAC2] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <label
+                        title="Upload thumbnail file from computer"
+                        className="px-3 py-1.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      >
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Upload Cover from Computer</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              handleStoryImageUpload(e.target.files[0]);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                      </label>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (storyForm.thumbnail) {
+                            openImageResizer(
+                              storyForm.thumbnail,
+                              'product',
+                              `Reel Thumbnail: ${storyForm.title || 'New Reel'}`,
+                              (cropped) => setStoryForm((prev) => ({ ...prev, thumbnail: cropped }))
+                            );
+                          }
+                        }}
+                        disabled={!storyForm.thumbnail}
+                        className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        <Crop className="w-3.5 h-3.5" />
+                        <span>Crop & Resize Studio</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 3: STORY & ARTISAN DETAILS */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Story / Reel Title *</label>
@@ -5896,12 +6357,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     value={storyForm.title}
                     onChange={(e) => setStoryForm({ ...storyForm, title: e.target.value })}
                     placeholder="e.g. The Weaves of Maheshwar"
-                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] text-sm font-semibold focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Subtitle / Theme</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Subtitle / Theme</label>
                   <input
                     value={storyForm.subtitle}
                     onChange={(e) => setStoryForm({ ...storyForm, subtitle: e.target.value })}
@@ -5911,119 +6372,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Duration Badge (MM:SS)</label>
-                  <input
-                    value={storyForm.videoDuration}
-                    onChange={(e) => setStoryForm({ ...storyForm, videoDuration: e.target.value })}
-                    placeholder="e.g. 02:45"
-                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] font-mono focus:outline-none focus:border-[#7A1526]"
-                  />
-                </div>
-
-                {/* Thumbnail & Cropper Studio */}
-                <div className="sm:col-span-2 bg-[#FCF4F6] p-4 rounded-xl border border-[#F0D5DA] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-[#7A1526] font-cinzel font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
-                      <Crop className="w-4 h-4 text-[#7A1526]" />
-                      <span>Reel Video Thumbnail (4:5 Ratio) *</span>
-                    </label>
-                    <span className="text-[10px] text-[#7E4A53] font-mono">Vertical Video Aspect</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                    <div className="sm:col-span-4 flex flex-col items-center">
-                      <div className="relative group w-24 h-32 rounded-lg overflow-hidden border-2 border-[#DFBAC2] bg-black shadow-lg flex items-center justify-center">
-                        {storyForm.thumbnail ? (
-                          <img
-                            src={storyForm.thumbnail}
-                            alt="Story Preview"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center p-2 text-[#8F6C72]">
-                            <ImageIcon className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                            <span className="text-[10px]">No image</span>
-                          </div>
-                        )}
-
-                        {storyForm.thumbnail && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openImageResizer(
-                                storyForm.thumbnail,
-                                'product',
-                                `Reel Thumbnail: ${storyForm.title || 'New Reel'}`,
-                                (cropped) => setStoryForm((prev) => ({ ...prev, thumbnail: cropped }))
-                              );
-                            }}
-                            className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white text-[10px] font-cinzel transition-all cursor-pointer"
-                          >
-                            <Crop className="w-4 h-4 text-[#7A1526]" />
-                            <span>Resize & Crop</span>
-                          </button>
-                        )}
-                      </div>
-                      <span className="text-[9px] text-[#7E4A53] mt-1 font-mono">4:5 Reel Frame</span>
-                    </div>
-
-                    <div className="sm:col-span-8 space-y-2">
-                      <div>
-                        <span className="text-[10px] text-[#7E4A53] block mb-1">Thumbnail Image URL</span>
-                        <input
-                          required
-                          value={storyForm.thumbnail}
-                          onChange={(e) => setStoryForm({ ...storyForm, thumbnail: e.target.value })}
-                          placeholder="https://images.unsplash.com/..."
-                          className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] text-xs focus:outline-none focus:border-[#7A1526]"
-                        />
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (storyForm.thumbnail) {
-                              openImageResizer(
-                                storyForm.thumbnail,
-                                'product',
-                                `Reel Thumbnail: ${storyForm.title || 'New Reel'}`,
-                                (cropped) => setStoryForm((prev) => ({ ...prev, thumbnail: cropped }))
-                              );
-                            }
-                          }}
-                          disabled={!storyForm.thumbnail}
-                          className="px-3 py-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#DFBAC2] transition-colors cursor-pointer disabled:opacity-50"
-                        >
-                          <Crop className="w-3.5 h-3.5" />
-                          <span>Resize & Crop Studio</span>
-                        </button>
-
-                        <label
-                          title="Upload thumbnail file from computer"
-                          className="px-3 py-1.5 bg-[#FCF4F6] hover:bg-[#FAF2F4] text-stone-200 hover:text-white text-xs font-cinzel rounded-lg flex items-center gap-1.5 border border-[#F0D5DA] transition-colors cursor-pointer"
-                        >
-                          <Upload className="w-3.5 h-3.5 text-[#7A1526]" />
-                          <span>Upload File & Crop</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                handleStoryImageUpload(e.target.files[0]);
-                                e.target.value = '';
-                              }
-                            }}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan / Master Craftsman Name</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Artisan / Master Craftsman Name</label>
                   <input
                     value={storyForm.artisanName}
                     onChange={(e) => setStoryForm({ ...storyForm, artisanName: e.target.value })}
@@ -6032,21 +6381,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   />
                 </div>
 
-                <div>
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Tags (Comma-separated)</label>
+                <div className="sm:col-span-2">
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Tags (Comma-separated)</label>
                   <input
                     value={storyForm.tags ? storyForm.tags.join(', ') : ''}
                     onChange={(e) => {
                       const tagsArr = e.target.value.split(',').map((t) => t.trim()).filter(Boolean);
                       setStoryForm({ ...storyForm, tags: tagsArr });
                     }}
-                    placeholder="Handloom, Raw Silk, Zari"
+                    placeholder="Handloom, Raw Silk, Zari, Maheshwar"
                     className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Artisan Quote / Philosophy</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Artisan Quote / Philosophy</label>
                   <input
                     value={storyForm.artisanQuote}
                     onChange={(e) => setStoryForm({ ...storyForm, artisanQuote: e.target.value })}
@@ -6056,7 +6405,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Craftsmanship Process Detail</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Craftsmanship Process Detail</label>
                   <input
                     value={storyForm.craftsmanshipDetail}
                     onChange={(e) => setStoryForm({ ...storyForm, craftsmanshipDetail: e.target.value })}
@@ -6066,7 +6415,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-[#6B3740] font-cinzel mb-1">Story Narrative / Description</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Story Narrative / Description</label>
                   <textarea
                     rows={2}
                     value={storyForm.description}
@@ -6077,7 +6426,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-[#F0D5DA]">
+              <div className="flex items-center justify-between pt-3 border-t border-[#F0D5DA] sticky bottom-0 bg-white z-20">
                 <button
                   type="button"
                   onClick={() => {
@@ -6090,10 +6439,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md transition-all cursor-pointer flex items-center gap-2 hover:scale-[1.02]"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{editingStory ? 'Update Discovery Reel' : 'Save Discovery Reel'}</span>
+                  <Database className="w-3.5 h-3.5" />
+                  <span>{editingStory ? 'Update & Save to Database' : 'Save Reel to Database'}</span>
                 </button>
               </div>
             </form>
