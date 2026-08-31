@@ -104,9 +104,10 @@ export default function App() {
   });
   const [stylesList, setStylesList] = useState<StyleCategory[]>(() => {
     const saved = safeLocalStorage.getJSON<StyleCategory[]>('label_sw_styles_list', STYLE_CATEGORIES);
-    if (Array.isArray(saved) && saved.some(s => s.id === 'kurtas' || s.title?.toLowerCase() === 'kurtas')) {
+    if (Array.isArray(saved) && saved.length > 0 && saved.some(s => s.id === 'kurtas' || s.title?.toLowerCase() === 'kurtas' || s.id === 'sherwanis' || s.id === 'jacket-set')) {
       return saved;
     }
+    safeLocalStorage.setJSON('label_sw_styles_list', STYLE_CATEGORIES);
     return STYLE_CATEGORIES;
   });
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>(() => {
@@ -155,6 +156,13 @@ export default function App() {
           categoriesList,
           discoveryStories,
         });
+      } else {
+        // Ensure stylesList in Firestore is updated with the 5 styles if missing or outdated
+        const cloudStyles = cloudData.stylesList;
+        const hasNewStyles = Array.isArray(cloudStyles) && cloudStyles.some(s => s.id === 'kurtas' || s.title?.toLowerCase() === 'kurtas' || s.id === 'sherwanis' || s.id === 'jacket-set');
+        if (!hasNewStyles) {
+          saveToCloudDatabase('stylesList', STYLE_CATEGORIES);
+        }
       }
     });
 
@@ -208,8 +216,15 @@ export default function App() {
           safeLocalStorage.setJSON('label_sw_logo_cms', data.logoCMS);
         }
         if (data.stylesList && Array.isArray(data.stylesList)) {
-          setStylesList(data.stylesList);
-          safeLocalStorage.setJSON('label_sw_styles_list', data.stylesList);
+          const hasNewStyles = data.stylesList.some(s => s.id === 'kurtas' || s.title?.toLowerCase() === 'kurtas' || s.id === 'sherwanis' || s.id === 'jacket-set');
+          if (!hasNewStyles) {
+            setStylesList(STYLE_CATEGORIES);
+            safeLocalStorage.setJSON('label_sw_styles_list', STYLE_CATEGORIES);
+            saveToCloudDatabase('stylesList', STYLE_CATEGORIES);
+          } else {
+            setStylesList(data.stylesList);
+            safeLocalStorage.setJSON('label_sw_styles_list', data.stylesList);
+          }
         }
         if (data.categoriesList && Array.isArray(data.categoriesList)) {
           setCategoriesList(data.categoriesList);

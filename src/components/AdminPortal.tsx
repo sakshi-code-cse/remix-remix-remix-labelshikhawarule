@@ -3564,10 +3564,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div>
                     <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
                       <Layers className="w-5 h-5 text-[#7A1526]" />
-                      <span>SHOP BY STYLE (ARCHITECTURAL ARCH SILHOUETTES)</span>
+                      <span>SHOP BY STYLE (ARCHITECTURAL SILHOUETTES)</span>
                     </h2>
                     <p className="text-xs text-[#7E4A53] mt-0.5">
-                      Configure the 4 iconic Mughal arch style cards featured on the storefront homepage.
+                      Curate luxury style silhouettes (Kurtas, Sherwanis, Jacket Set, Tuxedos, Indo Westerns) featured on the storefront.
                     </p>
                   </div>
                   
@@ -3605,7 +3605,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
                   {stylesList.map((style, idx) => (
                     <div key={style.id} className="bg-white rounded-xl border border-[#F0D5DA] p-4 flex flex-col justify-between space-y-3 group hover:border-[#7A1526]/60 transition-all shadow-md">
                       
