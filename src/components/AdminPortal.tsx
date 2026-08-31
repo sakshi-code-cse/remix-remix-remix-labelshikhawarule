@@ -253,6 +253,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [previewStoryModal, setPreviewStoryModal] = useState<DiscoveryStory | null>(null);
   const [isDraggingStoryVideo, setIsDraggingStoryVideo] = useState(false);
   const [isDraggingStoryThumbnail, setIsDraggingStoryThumbnail] = useState(false);
+  const [storiesSaveSuccess, setStoriesSaveSuccess] = useState(false);
   const [storyForm, setStoryForm] = useState<DiscoveryStory>({
     id: `story-${Date.now()}`,
     title: '',
@@ -4099,7 +4100,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {activeTab === 'cms-stories' && (
             <div className="space-y-6 animate-in fade-in duration-300">
               
-              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {/* Save Success Banner */}
+              {storiesSaveSuccess && (
+                <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-cinzel flex items-center justify-between animate-in fade-in duration-300 shadow-sm">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <div>
+                      <strong className="block font-bold">Watch Our Discovery Changes Saved!</strong>
+                      <span className="text-[11px] font-sans text-emerald-700">All documentary video reels, durations, quotes, and cropped thumbnails have been permanently saved & synced to the cloud database.</span>
+                    </div>
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={() => setStoriesSaveSuccess(false)}
+                    className="p-1 text-emerald-700 hover:text-emerald-900 cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              <div className="bg-white p-6 rounded-xl border border-[#F0D5DA] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
                 <div>
                   <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wider flex items-center gap-2">
                     <Tv className="w-5 h-5 text-[#7A1526]" />
@@ -4128,17 +4149,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </button>
                   )}
 
+                  {/* Primary Save Option in Header */}
                   <button
                     type="button"
                     onClick={() => {
                       onUpdateDiscoveryStories([...discoveryStories]);
-                      alert('Discovery reels and video configurations saved & synced to cloud database!');
+                      setStoriesSaveSuccess(true);
+                      setTimeout(() => setStoriesSaveSuccess(false), 4000);
                     }}
-                    className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel font-semibold rounded-lg border border-[#DFBAC2] flex items-center gap-1.5 cursor-pointer transition-all shadow-xs"
-                    title="Force save all reels to persistent database"
+                    className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-bold rounded-lg shadow-md flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 border border-[#52131F]"
+                    title="Save all discovery reels to cloud database"
                   >
-                    <Database className="w-4 h-4" />
-                    <span>Save to Database</span>
+                    <Save className="w-4 h-4" />
+                    <span>Save Watch Our Discovery</span>
                   </button>
 
                   <button
@@ -4160,7 +4183,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       });
                       setIsAddStoryOpen(true);
                     }}
-                    className="px-4 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white text-xs font-cinzel font-semibold rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+                    className="px-3.5 py-2 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white text-xs font-cinzel font-semibold rounded-lg border border-[#DFBAC2] flex items-center gap-1.5 cursor-pointer transition-all"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add Discovery Reel</span>
@@ -4248,7 +4271,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           title="Upload new video (.mp4, .webm) from computer"
                           className="w-full max-w-[140px] px-2.5 py-1.5 bg-emerald-800 hover:bg-emerald-700 text-white text-[10px] font-cinzel rounded-md flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
                         >
-                          <Video className="w-3 h-3 text-white" />
+                          <Video className="w-3.5 h-3.5 text-white" />
                           <span>Upload PC Video</span>
                           <input
                             type="file"
@@ -4371,10 +4394,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-1.5">
+                        {/* Direct Save Reel to Database Option */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onUpdateDiscoveryStories([...discoveryStories]);
+                            setStoriesSaveSuccess(true);
+                            setTimeout(() => setStoriesSaveSuccess(false), 3500);
+                          }}
+                          className="px-2 py-1 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded-md transition-colors cursor-pointer flex items-center gap-1 text-[10px] font-cinzel font-semibold border border-[#DFBAC2]"
+                          title="Save this reel configuration to database"
+                        >
+                          <Save className="w-3 h-3" />
+                          <span>Save</span>
+                        </button>
+
                         {/* Direct PC Video Upload */}
                         <label
                           title="Upload video (.mp4) directly to this reel"
-                          className="p-1.5 bg-[#FAF2F4] hover:bg-emerald-700 text-emerald-400 hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-emerald-700 text-emerald-600 hover:text-white rounded transition-colors cursor-pointer border border-[#DFBAC2]"
                         >
                           <Video className="w-3.5 h-3.5" />
                           <input
@@ -4393,7 +4431,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         {/* Direct PC Thumbnail Upload */}
                         <label
                           title="Upload thumbnail cover from computer"
-                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer border border-[#DFBAC2]"
                         >
                           <Upload className="w-3.5 h-3.5" />
                           <input
@@ -4416,7 +4454,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             setStoryForm({ ...story });
                             setIsAddStoryOpen(true);
                           }}
-                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer border border-[#DFBAC2]"
                           title="Edit Discovery Reel"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
@@ -4436,7 +4474,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               }
                             );
                           }}
-                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white rounded transition-colors cursor-pointer border border-[#DFBAC2]"
                           title="Resize / Crop Thumbnail"
                         >
                           <Crop className="w-3.5 h-3.5" />
@@ -4450,7 +4488,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               onUpdateDiscoveryStories(filtered);
                             }
                           }}
-                          className="p-1.5 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors cursor-pointer"
+                          className="p-1.5 bg-[#FCF4F6] hover:bg-red-700 text-[#7E4A53] hover:text-white rounded transition-colors cursor-pointer border border-[#F0D5DA]"
                           title="Delete Reel"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -4460,6 +4498,38 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                   </div>
                 ))}
+              </div>
+
+              {/* Floating / Sticky Bottom Save Bar */}
+              <div className="sticky bottom-4 z-20 bg-[#3B0A12] text-white p-4 rounded-xl shadow-2xl border border-[#7A1526] flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-[#7A1526] flex items-center justify-center text-white shrink-0">
+                    <Database className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-cinzel text-xs font-bold tracking-wider text-white">
+                      WATCH OUR DISCOVERY REELS MANAGER
+                    </h4>
+                    <p className="text-[11px] text-[#E8BDC4]">
+                      {discoveryStories.length} Artisan reels configured. Save changes to ensure real-time storefront synchronization.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onUpdateDiscoveryStories([...discoveryStories]);
+                      setStoriesSaveSuccess(true);
+                      setTimeout(() => setStoriesSaveSuccess(false), 4000);
+                    }}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-[#C93B53] hover:bg-[#A3263C] text-white text-xs font-cinzel font-bold tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save Watch Our Discovery</span>
+                  </button>
+                </div>
               </div>
 
             </div>
@@ -6099,6 +6169,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 } else {
                   onUpdateDiscoveryStories([...discoveryStories, { ...storyForm, id: `story-${Date.now()}` }]);
                 }
+                setStoriesSaveSuccess(true);
+                setTimeout(() => setStoriesSaveSuccess(false), 4000);
                 setIsAddStoryOpen(false);
                 setEditingStory(null);
               }}

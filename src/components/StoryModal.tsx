@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Play, Pause, Volume2, VolumeX, Sparkles, User, ArrowRight, RotateCcw, Maximize2 } from 'lucide-react';
+import { X, Play, Pause, Volume2, VolumeX, Sparkles, User, ArrowRight, RotateCcw, Maximize2, Bookmark, Check } from 'lucide-react';
 import { DiscoveryStory } from '../types';
 
 interface StoryModalProps {
@@ -22,6 +22,7 @@ export const StoryModal: React.FC<StoryModalProps> = ({
   const [duration, setDuration] = useState(0);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   // Check if videoUrl is a YouTube / Vimeo embed
   const isEmbedVideo = Boolean(
@@ -337,7 +338,20 @@ export const StoryModal: React.FC<StoryModalProps> = ({
 
               {/* Footer Action */}
               <div className="pt-5 border-t border-[#48101B] flex flex-wrap gap-3 items-center justify-between">
-                <span className="text-xs text-[#C49AA2]">Label Shikha Warule Sustainable Atelier</span>
+                <button
+                  type="button"
+                  onClick={() => setIsSaved(!isSaved)}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel rounded-lg border transition-all cursor-pointer ${
+                    isSaved
+                      ? 'bg-emerald-950/80 text-emerald-300 border-emerald-500/50'
+                      : 'bg-[#290910] text-[#E8BDC4] border-[#5E1824] hover:bg-[#3B0E17]'
+                  }`}
+                  title={isSaved ? 'Saved to Your Stories' : 'Save / Bookmark Story'}
+                >
+                  {isSaved ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bookmark className="w-3.5 h-3.5" />}
+                  <span>{isSaved ? 'Saved Reel' : 'Save Story'}</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => {
