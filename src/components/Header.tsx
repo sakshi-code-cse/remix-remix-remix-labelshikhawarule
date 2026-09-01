@@ -620,15 +620,19 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </button>
 
-                  {/* HIGH-END MUKTIKA VITH CASA STYLE MEGA DROPDOWN */}
+                  {/* HIGH-END MUKTIKA VITH CASA STYLE MEGA DROPDOWN (TEXT & CATEGORY ONLY) */}
                   {hasMegaMenu && activeDropdown === item.id && (
                     <div 
-                      className="absolute left-1/2 -translate-x-1/2 top-full pt-1 z-50 w-[640px] xl:w-[760px] animate-in fade-in slide-in-from-top-1 duration-200"
+                      className={`absolute left-1/2 -translate-x-1/2 top-full pt-1 z-50 animate-in fade-in slide-in-from-top-1 duration-200 ${
+                        (item.megaColumns?.length || 1) > 1 ? 'w-[480px] xl:w-[520px]' : 'w-[280px]'
+                      }`}
                     >
-                      <div className="bg-[#FAF6F0] rounded-xl shadow-2xl border border-[#DFCBB8] overflow-hidden p-6 grid grid-cols-12 gap-6 text-left">
+                      <div className="bg-[#FAF6F0] rounded-xl shadow-2xl border border-[#DFCBB8] overflow-hidden p-5 text-left">
                         
                         {/* Mega Menu Columns */}
-                        <div className={`space-y-4 ${item.featuredImage ? 'col-span-7' : 'col-span-12'} grid grid-cols-2 gap-4`}>
+                        <div className={`grid gap-6 ${
+                          (item.megaColumns?.length || 1) > 1 ? 'grid-cols-2' : 'grid-cols-1'
+                        }`}>
                           {item.megaColumns?.map((col, idx) => (
                             <div key={idx} className="space-y-2.5">
                               <h4 className="font-cinzel text-[11px] font-bold tracking-[0.16em] text-[#58111A] border-b border-[#EADDCF] pb-1.5 uppercase">
@@ -653,49 +657,8 @@ export const Header: React.FC<HeaderProps> = ({
                           ))}
                         </div>
 
-                        {/* Featured Editorial Lookbook Banner on Right */}
-                        {item.featuredImage && (
-                          <div className="col-span-5 flex flex-col justify-between bg-[#F3EBE1] rounded-lg p-3 border border-[#DFCBB8]/70">
-                            <div className="relative h-36 rounded-md overflow-hidden mb-2.5 border border-[#DFCBB8]">
-                              <img
-                                src={item.featuredImage}
-                                alt={item.label}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-2.5">
-                                <span className="font-cinzel text-xs font-bold text-white tracking-wider">
-                                  {item.featuredTitle}
-                                </span>
-                              </div>
-                            </div>
-
-                            <p className="text-[11px] text-[#7A6F68] line-clamp-2 italic mb-2">
-                              {item.featuredSubtitle}
-                            </p>
-
-                            {item.featuredLink && (
-                              <button
-                                onClick={() => {
-                                  if (item.featuredLink?.type === 'collection' && onNavigateCollection) {
-                                    onNavigateCollection(item.featuredLink.target);
-                                  } else if (item.featuredLink?.type === 'filter') {
-                                    onSelectCategory(item.featuredLink.target);
-                                  } else if (item.featuredLink?.type === 'page' && onNavigatePage) {
-                                    onNavigatePage(item.featuredLink.target as InfoPageSlug);
-                                  }
-                                  setActiveDropdown(null);
-                                }}
-                                className="w-full py-1.5 px-2.5 bg-[#58111A] hover:bg-[#6E1622] text-[#FAF6F0] text-[11px] font-cinzel font-semibold rounded flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                              >
-                                <span>Explore Lookbook</span>
-                                <ArrowRight className="w-3 h-3" />
-                              </button>
-                            )}
-                          </div>
-                        )}
-
                         {/* Bottom Quality Guarantee Ticker in Mega Menu */}
-                        <div className="col-span-12 pt-3 border-t border-[#EADDCF] flex items-center justify-between text-[10.5px] text-[#7A6F68]">
+                        <div className="mt-4 pt-3 border-t border-[#EADDCF] flex items-center justify-between text-[10.5px] text-[#7A6F68]">
                           <span className="flex items-center gap-1.5">
                             <ShieldCheck className="w-3.5 h-3.5 text-[#58111A]" />
                             100% Certified Authentic Indian Handlooms
