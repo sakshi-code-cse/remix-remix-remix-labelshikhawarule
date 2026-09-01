@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { Instagram, Facebook, Youtube, Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { 
+  Instagram, 
+  Facebook, 
+  Youtube, 
+  ArrowRight, 
+  CheckCircle2, 
+  Gift, 
+  Sparkles, 
+  Globe, 
+  ShieldCheck,
+  ChevronDown
+} from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { CustomerUser, LogoCMSContent } from '../types';
 
@@ -28,6 +39,8 @@ export const Footer: React.FC<FooterProps> = ({
 }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [mobileQuickLinksOpen, setMobileQuickLinksOpen] = useState(true);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(true);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,186 +54,259 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer id="main-footer" className="bg-[#241712] text-[#EADDCF] pt-14 pb-8 border-t border-[#3E2921]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer 
+      id="main-footer" 
+      className="relative bg-gradient-to-b from-[#1C120E] via-[#241712] to-[#150D0A] text-[#EADDCF] pt-16 sm:pt-20 pb-10 border-t border-[#3A241C] overflow-hidden"
+    >
+      {/* Subtle couture ambient lighting */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#52131D]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#3A241C]/25 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-12 border-b border-[#3E2921]">
+        {/* Top Decorative Line & Arch Crest Motif */}
+        <div className="flex items-center justify-center gap-4 mb-12 sm:mb-16 opacity-75">
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-[#5A3B2E] to-[#C8A97E]/40" />
+          <div className="flex items-center gap-2 px-2 text-[#C8A97E]">
+            <span className="text-[9px] tracking-[0.3em] uppercase font-cinzel font-light text-[#C8A97E]/90">
+              HAUTE COUTURE ATELIER
+            </span>
+          </div>
+          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-[#5A3B2E] to-[#C8A97E]/40" />
+        </div>
+
+        {/* Main 4-Column Luxury Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-[#362118]">
           
-          {/* Column 1: Brand Logo, Tagline & Socials */}
-          <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-start">
-              <BrandLogo variant="light" size="md" logoCMS={logoCMS} />
+          {/* COLUMN 1: Brand & Socials (3.5 cols on lg) */}
+          <div className="lg:col-span-4 flex flex-col justify-between space-y-6">
+            <div>
+              {/* Brand Logo with seamless transparent integration */}
+              <div className="inline-flex items-center mb-4">
+                <BrandLogo variant="light" size="md" logoCMS={logoCMS} />
+              </div>
+              
+              {/* Refined Italic Serif Tagline */}
+              <p className="font-serif-luxury italic text-sm sm:text-base text-[#D4C3B4] font-light leading-relaxed max-w-xs mt-1">
+                “Timeless fashion.<br />Thoughtfully made.”
+              </p>
             </div>
-            
-            <p className="font-serif-luxury italic text-sm text-[#C4B2A3] max-w-xs pt-1">
-              Timeless fashion. Thoughtfully made.
-            </p>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-4 pt-2 text-[#C4B2A3]">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="p-2 rounded-full bg-[#34221A] hover:bg-[#9E472A] hover:text-white transition-colors"
-              >
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="p-2 rounded-full bg-[#34221A] hover:bg-[#9E472A] hover:text-white transition-colors"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="YouTube"
-                className="p-2 rounded-full bg-[#34221A] hover:bg-[#9E472A] hover:text-white transition-colors"
-              >
-                <Youtube className="w-4 h-4" />
-              </a>
-              <a
-                href="https://wa.me"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="WhatsApp Concierge"
-                className="p-2 rounded-full bg-[#34221A] hover:bg-[#9E472A] hover:text-white transition-colors"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.004.577 1.764.787 2.806.787h.001c3.182 0 5.77-2.587 5.77-5.766 0-3.181-2.588-5.77-5.771-5.77zm3.393 8.163c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.124-.518-1.503-.622-2.477-2.148-2.552-2.247-.075-.099-.607-.808-.607-1.543 0-.736.388-1.097.525-1.246.137-.149.3-.186.4-.186.1 0 .2.001.288.006.09.004.21-.034.33.254.12.288.41.996.446 1.07.036.074.06.16.012.257-.048.098-.073.16-.145.244-.073.085-.153.19-.218.255-.072.072-.148.15-.064.294.084.144.373.616.801.997.552.49 1.018.642 1.162.714.144.072.228.06.312-.036.084-.096.36-.42.456-.564.096-.144.192-.12.324-.072.132.048.837.395.981.467.144.072.24.108.276.168.036.06.036.348-.108.753z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* Column 2: Quick Links */}
-          <div className="lg:col-span-2 space-y-3">
-            <h3 className="font-cinzel text-xs font-bold tracking-[0.2em] text-[#F3E7DC] uppercase">
-              QUICK LINKS
-            </h3>
-            <ul className="space-y-2 text-xs text-[#C4B2A3]">
-              <li>
-                <button onClick={onOpenAbout} className="hover:text-white transition-colors cursor-pointer text-left">
-                  About Us
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenAbout} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Our Process
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenSizeGuide} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Size Guide
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenShippingInfo} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Returns & Exchange
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenAbout} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Contact Us
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 3: Help */}
-          <div className="lg:col-span-2 space-y-3">
-            <h3 className="font-cinzel text-xs font-bold tracking-[0.2em] text-[#F3E7DC] uppercase">
-              CLIENT SERVICES
-            </h3>
-            <ul className="space-y-2 text-xs text-[#C4B2A3]">
-              <li>
-                <button 
-                  onClick={currentUser ? onOpenCustomerAccount : onOpenCustomerLogin} 
-                  className="hover:text-white transition-colors cursor-pointer text-left text-[#E08A68] font-medium"
+            {/* Circular Social Media Icons with subtle gold hover */}
+            <div>
+              <p className="font-cinzel text-[10px] font-semibold tracking-[0.2em] uppercase text-[#A89384] mb-3">
+                FOLLOW OUR JOURNEY
+              </p>
+              <div className="flex items-center gap-2.5 text-[#D4C3B4]">
+                {/* Instagram */}
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2B1B15]/80 border border-[#482F24] text-[#D4C3B4] hover:text-[#FAF6F0] hover:border-[#C8A97E] hover:bg-[#3D251C] transition-all duration-300 shadow-xs cursor-pointer group"
                 >
-                  {currentUser ? `My Account (${currentUser.name.split(' ')[0]})` : 'Client Sign In / Register'}
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenTrackOrder} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Track Order
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenShippingInfo} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Shipping & Returns
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenStoreLocator} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Flagship Atelier
-                </button>
-              </li>
-              <li>
-                <button onClick={onOpenShippingInfo} className="hover:text-white transition-colors cursor-pointer text-left">
-                  Privacy Policy
-                </button>
-              </li>
+                  <Instagram className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                </a>
+
+                {/* Facebook */}
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2B1B15]/80 border border-[#482F24] text-[#D4C3B4] hover:text-[#FAF6F0] hover:border-[#C8A97E] hover:bg-[#3D251C] transition-all duration-300 shadow-xs cursor-pointer group"
+                >
+                  <Facebook className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                </a>
+
+                {/* YouTube */}
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="YouTube"
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2B1B15]/80 border border-[#482F24] text-[#D4C3B4] hover:text-[#FAF6F0] hover:border-[#C8A97E] hover:bg-[#3D251C] transition-all duration-300 shadow-xs cursor-pointer group"
+                >
+                  <Youtube className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                </a>
+
+                {/* WhatsApp Concierge */}
+                <a
+                  href="https://wa.me"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp Concierge"
+                  className="w-9 h-9 rounded-full flex items-center justify-center bg-[#2B1B15]/80 border border-[#482F24] text-[#D4C3B4] hover:text-[#FAF6F0] hover:border-[#C8A97E] hover:bg-[#3D251C] transition-all duration-300 shadow-xs cursor-pointer group"
+                >
+                  <svg className="w-4 h-4 fill-current transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.004.577 1.764.787 2.806.787h.001c3.182 0 5.77-2.587 5.77-5.766 0-3.181-2.588-5.77-5.771-5.77zm3.393 8.163c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.124-.518-1.503-.622-2.477-2.148-2.552-2.247-.075-.099-.607-.808-.607-1.543 0-.736.388-1.097.525-1.246.137-.149.3-.186.4-.186.1 0 .2.001.288.006.09.004.21-.034.33.254.12.288.41.996.446 1.07.036.074.06.16.012.257-.048.098-.073.16-.145.244-.073.085-.153.19-.218.255-.072.072-.148.15-.064.294.084.144.373.616.801.997.552.49 1.018.642 1.162.714.144.072.228.06.312-.036.084-.096.36-.42.456-.564.096-.144.192-.12.324-.072.132.048.837.395.981.467.144.072.24.108.276.168.036.06.036.348-.108.753z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* COLUMN 2: Quick Links (2.5 cols on lg) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div 
+              onClick={() => setMobileQuickLinksOpen(!mobileQuickLinksOpen)}
+              className="flex items-center justify-between cursor-pointer md:cursor-default"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E]" />
+                <h3 className="font-cinzel text-xs font-semibold tracking-[0.2em] text-[#FAF6F0] uppercase">
+                  QUICK LINKS
+                </h3>
+              </div>
+              <ChevronDown className={`w-4 h-4 text-[#A89384] md:hidden transition-transform duration-300 ${mobileQuickLinksOpen ? 'rotate-180' : ''}`} />
+            </div>
+
+            <ul className={`space-y-0.5 text-xs text-[#C4B2A3] ${mobileQuickLinksOpen ? 'block' : 'hidden md:block'}`}>
+              {[
+                { label: 'About Us', action: onOpenAbout },
+                { label: 'Our Process', action: onOpenAbout },
+                { label: 'Size Guide', action: onOpenSizeGuide },
+                { label: 'Returns & Exchange', action: onOpenShippingInfo },
+                { label: 'Contact Us', action: onOpenAbout },
+              ].map((link, idx) => (
+                <li key={idx} className="border-b border-white/[0.04] last:border-none">
+                  <button 
+                    type="button"
+                    onClick={link.action} 
+                    className="group w-full py-2.5 flex items-center justify-between text-left text-[#C4B2A3] hover:text-[#FAF6F0] transition-colors duration-200 cursor-pointer"
+                  >
+                    <span className="font-sans font-light tracking-wide">{link.label}</span>
+                    <span className="text-[11px] text-[#A89384] opacity-0 group-hover:opacity-100 transition-all duration-200 transform -translate-x-1 group-hover:translate-x-0">
+                      →
+                    </span>
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 4: Newsletter Subscribe */}
-          <div className="lg:col-span-4 space-y-3">
-            <h3 className="font-cinzel text-xs font-bold tracking-[0.2em] text-[#F3E7DC] uppercase">
-              SUBSCRIBE
-            </h3>
-            <p className="text-xs text-[#C4B2A3] leading-relaxed">
-              Join our world for updates on new collections & more.
+          {/* COLUMN 3: Client Services (2.5 cols on lg) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div 
+              onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+              className="flex items-center justify-between cursor-pointer md:cursor-default"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E]" />
+                <h3 className="font-cinzel text-xs font-semibold tracking-[0.2em] text-[#FAF6F0] uppercase">
+                  CLIENT SERVICES
+                </h3>
+              </div>
+              <ChevronDown className={`w-4 h-4 text-[#A89384] md:hidden transition-transform duration-300 ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+            </div>
+
+            <ul className={`space-y-0.5 text-xs text-[#C4B2A3] ${mobileServicesOpen ? 'block' : 'hidden md:block'}`}>
+              {/* Primary Account Action Link */}
+              <li className="border-b border-white/[0.04]">
+                <button 
+                  type="button"
+                  onClick={currentUser ? onOpenCustomerAccount : onOpenCustomerLogin} 
+                  className="group w-full py-2.5 flex items-center justify-between text-left text-[#E0987A] hover:text-[#FAF6F0] transition-colors duration-200 cursor-pointer"
+                >
+                  <span className="font-sans font-medium tracking-wide">
+                    {currentUser ? `My Account (${currentUser.name.split(' ')[0]})` : 'Client Sign In / Register'}
+                  </span>
+                  <span className="text-[11px] text-[#E0987A] opacity-80 group-hover:opacity-100 transition-all duration-200 transform -translate-x-1 group-hover:translate-x-0">
+                    →
+                  </span>
+                </button>
+              </li>
+
+              {[
+                { label: 'Track Order', action: onOpenTrackOrder },
+                { label: 'Shipping & Returns', action: onOpenShippingInfo },
+                { label: 'Flagship Atelier', action: onOpenStoreLocator },
+                { label: 'Privacy Policy', action: onOpenShippingInfo },
+              ].map((link, idx) => (
+                <li key={idx} className="border-b border-white/[0.04] last:border-none">
+                  <button 
+                    type="button"
+                    onClick={link.action} 
+                    className="group w-full py-2.5 flex items-center justify-between text-left text-[#C4B2A3] hover:text-[#FAF6F0] transition-colors duration-200 cursor-pointer"
+                  >
+                    <span className="font-sans font-light tracking-wide">{link.label}</span>
+                    <span className="text-[11px] text-[#A89384] opacity-0 group-hover:opacity-100 transition-all duration-200 transform -translate-x-1 group-hover:translate-x-0">
+                      →
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* COLUMN 4: Newsletter (Stay in the know) (4 cols on lg) */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C8A97E]" />
+              <h3 className="font-cinzel text-xs font-semibold tracking-[0.2em] text-[#FAF6F0] uppercase">
+                STAY IN THE KNOW
+              </h3>
+            </div>
+
+            <p className="text-xs text-[#C4B2A3] leading-relaxed font-light">
+              Join our world for updates on new collections, private previews &amp; more.
             </p>
 
+            {/* Newsletter Subscription Field */}
             <form onSubmit={handleSubscribe} className="pt-1">
-              <div className="relative flex items-center border border-[#523A30] rounded-xs bg-[#2F1F18] focus-within:border-[#9E472A] transition-colors">
+              <div className="relative flex items-center border border-[#482F24] focus-within:border-[#C8A97E] rounded-xs bg-[#1A100C]/90 transition-all duration-300 shadow-inner group">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="w-full bg-transparent px-3.5 py-2.5 text-xs text-white placeholder-[#8A766A] focus:outline-none"
+                  className="w-full bg-transparent px-4 py-3 text-xs text-[#FAF6F0] placeholder-[#8A766A] focus:outline-none font-sans font-light"
                 />
                 <button
                   type="submit"
                   aria-label="Subscribe to newsletter"
-                  className="px-3.5 py-2.5 text-[#C4B2A3] hover:text-white transition-colors"
+                  className="px-4 py-3 text-[#C8A97E] hover:text-[#FAF6F0] transition-all duration-300 cursor-pointer flex items-center gap-1 group-hover:translate-x-0.5"
                 >
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="font-cinzel text-xs font-semibold tracking-widest hidden sm:inline uppercase">Join</span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </div>
 
               {subscribed && (
-                <div className="flex items-center gap-1.5 text-xs text-[#78C27E] mt-2">
+                <div className="flex items-center gap-2 text-xs text-[#78C27E] mt-2.5 font-light">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Thank you for joining our inner circle.</span>
+                  <span>Welcome to the Label Shikha Warule inner circle.</span>
                 </div>
               )}
             </form>
 
-            <span className="text-[10px] text-[#8A766A] block pt-1">
-              Complimentary gift wrapping on your first order.
-            </span>
+            {/* Complimentary Gift Wrapping Note */}
+            <div className="flex items-center gap-2 pt-1 text-[11px] text-[#A89384] font-light">
+              <Gift className="w-3.5 h-3.5 text-[#C8A97E] shrink-0" />
+              <span>Complimentary gift wrapping on your first order.</span>
+            </div>
           </div>
 
         </div>
 
-        {/* Bottom Bar: Copyright & Clean Brand Note */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8A766A] font-light gap-3">
-          <p>© 2025 Label Shikha Warule. All Rights Reserved. Handcrafted in India.</p>
-          <div className="flex items-center gap-4 text-[11px] text-[#A89384]">
-            <span>100% Artisanal Craftsmanship</span>
-            <span>•</span>
-            <span>Worldwide Insured Shipping</span>
+        {/* BOTTOM FOOTER BAR: Copyright & Couture Integrity */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-[#9E897A] font-light gap-4">
+          <p className="text-center md:text-left">
+            © 2025 Label Shikha Warule. All Rights Reserved. Handcrafted in India.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[11px] text-[#B8A596]">
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-[#C8A97E]" />
+              100% Artisanal Craftsmanship
+            </span>
+            <span className="text-[#4A3227]">•</span>
+            <span className="flex items-center gap-1.5">
+              <Globe className="w-3 h-3 text-[#C8A97E]" />
+              Worldwide Insured Shipping
+            </span>
           </div>
         </div>
 
@@ -228,3 +314,4 @@ export const Footer: React.FC<FooterProps> = ({
     </footer>
   );
 };
+
