@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { Product } from '../types';
 import { QuickShopModal } from './QuickShopModal';
+import { IndianArchCard } from './ArchShape';
 
 export interface CollectionPageProps {
   products: Product[];
@@ -675,81 +676,68 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
                   className="group flex flex-col justify-between bg-white rounded-xl p-3 sm:p-3.5 border border-[#DFCBB8]/70 hover:border-[#9E472A]/50 hover:shadow-lg transition-all duration-300 relative"
                 >
                   <div>
-                    {/* Clean Rectangular Image Box with Dual Image Flip on Hover */}
-                    <div
-                      onClick={() => onSelectProduct(product)}
-                      className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#F5F2EB] cursor-pointer transition-transform duration-300"
-                    >
-                      <img
-                        src={product.image}
+                    {/* Signature Mughal Arch Frame with Dual Image Flip on Hover */}
+                    <div className="w-full mb-1">
+                      <IndianArchCard
+                        id={`collection-item-${product.id}`}
+                        image={product.image}
+                        hoverImage={product.hoverImage}
                         alt={product.name}
-                        loading="lazy"
-                        className={`w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-                          product.hoverImage
-                            ? 'group-hover:opacity-0 group-hover:scale-105'
-                            : 'group-hover:scale-105'
-                        }`}
-                      />
-                      {product.hoverImage && (
-                        <img
-                          src={product.hoverImage}
-                          alt={`${product.name} alternate view`}
-                          loading="lazy"
-                          className="absolute inset-0 w-full h-full object-cover object-top opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
-                        />
-                      )}
-
-                      {/* Subtle Vignette Gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                      {/* Badges Overlay */}
-                      <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-20 pointer-events-none">
-                        {product.isNew && (
-                          <span className="px-2 py-0.5 rounded-2xs bg-[#9E472A] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
-                            NEW
-                          </span>
-                        )}
-                        {product.isBestSeller && !product.isNew && (
-                          <span className="px-2 py-0.5 rounded-2xs bg-[#523A30] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
-                            BEST SELLER
-                          </span>
-                        )}
-                        {discountPercent > 0 && (
-                          <span className="px-2 py-0.5 rounded-2xs bg-[#2D6A4F] text-white text-[9px] font-cinzel font-semibold tracking-wider shadow-xs">
-                            {discountPercent}% OFF
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Wishlist Heart Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onToggleWishlist(product);
-                        }}
-                        aria-label="Toggle Wishlist"
-                        className="absolute top-2.5 right-2.5 z-20 p-1.5 rounded-full bg-white/90 hover:bg-white text-[#2C2420] hover:text-[#9E472A] shadow-md transition-transform hover:scale-110 cursor-pointer"
+                        aspectRatio="aspect-[3/4]"
+                        borderColor="#9E472A"
+                        strokeWidth={1.8}
+                        showDoubleBorder={true}
+                        onClick={() => onSelectProduct(product)}
                       >
-                        <Heart
-                          className={`w-3.5 h-3.5 transition-colors ${
-                            isFav ? 'fill-[#9E472A] text-[#9E472A]' : ''
-                          }`}
-                        />
-                      </button>
+                        {/* Badges Overlay */}
+                        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-20 pointer-events-none">
+                          {product.isNew && (
+                            <span className="px-2 py-0.5 rounded-2xs bg-[#9E472A] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
+                              NEW
+                            </span>
+                          )}
+                          {product.isBestSeller && !product.isNew && (
+                            <span className="px-2 py-0.5 rounded-2xs bg-[#523A30] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
+                              BEST SELLER
+                            </span>
+                          )}
+                          {discountPercent > 0 && (
+                            <span className="px-2 py-0.5 rounded-2xs bg-[#2D6A4F] text-white text-[9px] font-cinzel font-semibold tracking-wider shadow-xs">
+                              {discountPercent}% OFF
+                            </span>
+                          )}
+                        </div>
 
-                      {/* Quick Shop Button Appearing on Hover */}
-                      <div className="absolute inset-x-2 bottom-2.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {/* Wishlist Heart Button */}
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            setQuickShopProduct(product);
+                            onToggleWishlist(product);
                           }}
-                          className="w-full py-2 px-2 bg-white/95 backdrop-blur-xs text-[#2C2420] hover:bg-[#9E472A] hover:text-white text-[10px] font-cinzel font-bold tracking-wider uppercase rounded shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#DFCBB8]"
+                          aria-label="Toggle Wishlist"
+                          className="absolute top-2.5 right-2.5 z-20 p-1.5 rounded-full bg-white/90 hover:bg-white text-[#2C2420] hover:text-[#9E472A] shadow-md transition-transform hover:scale-110 cursor-pointer"
                         >
-                          <ShoppingBag className="w-3 h-3" />
-                          <span>QUICK SHOP</span>
+                          <Heart
+                            className={`w-3.5 h-3.5 transition-colors ${
+                              isFav ? 'fill-[#9E472A] text-[#9E472A]' : ''
+                            }`}
+                          />
                         </button>
-                      </div>
+
+                        {/* Quick Shop Button Appearing on Hover */}
+                        <div className="absolute inset-x-2 bottom-2.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setQuickShopProduct(product);
+                            }}
+                            className="w-full py-2 px-2 bg-white/95 backdrop-blur-xs text-[#2C2420] hover:bg-[#9E472A] hover:text-white text-[10px] font-cinzel font-bold tracking-wider uppercase rounded shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#DFCBB8]"
+                          >
+                            <ShoppingBag className="w-3 h-3" />
+                            <span>QUICK SHOP</span>
+                          </button>
+                        </div>
+                      </IndianArchCard>
                     </div>
 
                     {/* Product Details */}

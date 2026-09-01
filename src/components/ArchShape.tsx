@@ -93,6 +93,7 @@ export interface IndianArchCardProps {
   strokeWidth?: number;
   overlayGradient?: boolean;
   objectPosition?: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   children?: React.ReactNode;
 }
 
@@ -108,7 +109,8 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
   borderColor = '#9E472A',
   strokeWidth = 1.8,
   overlayGradient = true,
-  objectPosition = 'object-center',
+  objectPosition = 'object-top',
+  onClick,
   children,
 }) => {
   // Unique clip id to prevent SVG clip-path collision across cards
@@ -117,9 +119,10 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
 
   return (
     <div 
-      className={`relative w-full ${aspectRatio} select-none ${className}`}
+      className={`relative w-full ${aspectRatio} select-none ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
     >
       {/* SVG Defs for objectBoundingBox clip-path */}
       <svg className="absolute w-0 h-0 pointer-events-none opacity-0" aria-hidden="true" tabIndex={-1}>
@@ -132,7 +135,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
 
       {/* Clipped Image Wrapper with Warm Luxury Texture Background */}
       <div
-        className="w-full h-full relative overflow-hidden bg-[#F3E8DB] transition-all duration-300"
+        className="w-full h-full relative overflow-hidden bg-[#F3E8DB] transition-all duration-300 shadow-sm"
         style={{
           clipPath: `url(#${clipId})`,
           WebkitClipPath: `url(#${clipId})`,
@@ -143,7 +146,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
           src={image}
           alt={alt}
           loading="lazy"
-          className={`w-full h-full object-cover ${objectPosition} transition-all duration-700 ease-out group-hover:scale-105 ${
+          className={`w-full h-full object-cover ${objectPosition} transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108 ${
             hoverImage && isHovered ? 'opacity-0' : 'opacity-100'
           }`}
         />
@@ -154,7 +157,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
             src={hoverImage}
             alt={`${alt} alternate angle`}
             loading="lazy"
-            className={`w-full h-full object-cover ${objectPosition} absolute inset-0 transition-all duration-700 ease-out group-hover:scale-105 ${
+            className={`w-full h-full object-cover ${objectPosition} absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108 ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
           />
@@ -173,7 +176,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
       <svg
         viewBox="0 0 400 560"
         preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full pointer-events-none z-10"
+        className="absolute inset-0 w-full h-full pointer-events-none z-10 drop-shadow-xs"
         aria-hidden="true"
       >
         {/* Outer subtle decorative aura line */}
@@ -183,7 +186,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
             fill="none"
             stroke={borderColor}
             strokeWidth="1"
-            strokeOpacity="0.3"
+            strokeOpacity="0.25"
             strokeDasharray="4 3"
             vectorEffect="non-scaling-stroke"
           />
@@ -209,7 +212,7 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeOpacity="0.95"
+          strokeOpacity="0.9"
           vectorEffect="non-scaling-stroke"
         />
       </svg>

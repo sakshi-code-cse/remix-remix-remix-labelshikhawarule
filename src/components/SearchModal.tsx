@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { X, Search, ArrowRight, Sparkles, Heart, ShoppingBag } from 'lucide-react';
 import { Product } from '../types';
+import { IndianArchCard } from './ArchShape';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -121,11 +122,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                         }}
                         className="flex gap-3 p-2.5 bg-white rounded border border-[#EADDCF] hover:border-[#9E472A] transition-all cursor-pointer group shadow-2xs"
                       >
-                        <div className="w-16 h-20 bg-[#EFE5D8] rounded overflow-hidden shrink-0">
-                          <img
-                            src={product.image}
+                        <div className="w-16 h-20 shrink-0">
+                          <IndianArchCard
+                            id={`search-item-${product.id}`}
+                            image={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                            aspectRatio="aspect-[3/4]"
+                            borderColor="#9E472A"
+                            strokeWidth={1.5}
+                            showDoubleBorder={false}
                           />
                         </div>
                         <div className="flex-1 flex flex-col justify-between">

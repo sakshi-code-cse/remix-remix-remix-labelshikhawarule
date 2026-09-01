@@ -37,8 +37,21 @@ const STORE_CONFIG_DOC = 'main_store_data';
 const MEDIA_COLLECTION = 'media_assets';
 
 // Helper to sanitize large or undefined data before saving
-function sanitizeForFirestore<T>(data: T): T {
-  return JSON.parse(JSON.stringify(data));
+function sanitizeForFirestore<T>(data: T, keyName?: string): T {
+  const cloned = JSON.parse(JSON.stringify(data));
+  if (keyName === 'discoveryStories' && Array.isArray(cloned)) {
+    return cloned.map((story: any) => {
+      if (story && typeof story.videoUrl === 'string' && story.videoUrl.startsWith('data:video/')) {
+        return {
+          ...story,
+          videoUrl: '', // Large video file is saved in IndexedDB
+          hasLocalVideo: true,
+        };
+      }
+      return story;
+    }) as unknown as T;
+  }
+  return cloned;
 }
 
 /**
@@ -50,7 +63,7 @@ export async function saveToCloudDatabase<K extends keyof AppDatabaseState>(
   key: K,
   value: AppDatabaseState[K]
 ): Promise<void> {
-  const sanitized = sanitizeForFirestore(value);
+  const sanitized = sanitizeForFirestore(value, key as string);
   const now = new Date().toISOString();
 
   // 1. Save to dedicated collection document for this key (giving full 1MB budget per feature)

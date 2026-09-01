@@ -24,6 +24,7 @@ import {
   Sparkle
 } from 'lucide-react';
 import { Product } from '../types';
+import { IndianArchCard } from './ArchShape';
 
 export interface ProductPageProps {
   product: Product;
@@ -160,71 +161,72 @@ export const ProductPage: React.FC<ProductPageProps> = ({
               </div>
             )}
 
-            {/* Main Showcase Image (Rectangular 3:4) */}
-            <div className="relative flex-1 aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#F0EBE1] border border-[#E4D7C8] shadow-lg group">
-              <img
-                src={selectedImage}
+            {/* Main Showcase Image (Signature Mughal Arch) */}
+            <div className="relative flex-1 w-full max-w-[500px] mx-auto group">
+              <IndianArchCard
+                id={`product-page-${product.id}`}
+                image={selectedImage}
                 alt={product.name}
-                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              />
+                aspectRatio="aspect-[3/4]"
+                borderColor="#9E472A"
+                strokeWidth={2}
+                showDoubleBorder={true}
+              >
+                {/* Floating Badges */}
+                <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 pointer-events-none">
+                  {product.isNew && (
+                    <span className="bg-[#9E472A] text-white text-[11px] font-medium tracking-[0.14em] px-3 py-1 uppercase rounded-md shadow-sm">
+                      New In
+                    </span>
+                  )}
+                  {product.isBestSeller && !product.isNew && (
+                    <span className="bg-[#2C2420] text-[#F8F4EC] text-[11px] font-medium tracking-[0.14em] px-3 py-1 uppercase rounded-md shadow-sm">
+                      Bestseller
+                    </span>
+                  )}
+                  {discountPercent > 0 && (
+                    <span className="bg-[#B58A3A] text-white text-[11px] font-semibold tracking-wider px-2.5 py-1 uppercase rounded-md shadow-sm">
+                      {discountPercent}% Off
+                    </span>
+                  )}
+                </div>
 
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                {/* Floating Action Buttons: Wishlist & Share */}
+                <div className="absolute top-4 right-4 z-20 flex flex-col gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => onToggleWishlist(product)}
+                    aria-label={isFav ? 'Remove from wishlist' : 'Add to wishlist'}
+                    className={`w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer ${
+                      isFav
+                        ? 'bg-[#9E472A] text-white scale-105'
+                        : 'bg-white/90 text-[#2C2420] hover:bg-white hover:text-[#9E472A]'
+                    }`}
+                  >
+                    <Heart
+                      className="w-5 h-5"
+                      fill={isFav ? 'currentColor' : 'none'}
+                      strokeWidth={isFav ? 0 : 1.8}
+                    />
+                  </button>
 
-              {/* Floating Badges */}
-              <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 pointer-events-none">
-                {product.isNew && (
-                  <span className="bg-[#9E472A] text-white text-[11px] font-medium tracking-[0.14em] px-3 py-1 uppercase rounded-md shadow-sm">
-                    New In
-                  </span>
-                )}
-                {product.isBestSeller && !product.isNew && (
-                  <span className="bg-[#2C2420] text-[#F8F4EC] text-[11px] font-medium tracking-[0.14em] px-3 py-1 uppercase rounded-md shadow-sm">
-                    Bestseller
-                  </span>
-                )}
-                {discountPercent > 0 && (
-                  <span className="bg-[#B58A3A] text-white text-[11px] font-semibold tracking-wider px-2.5 py-1 uppercase rounded-md shadow-sm">
-                    {discountPercent}% Off
-                  </span>
-                )}
-              </div>
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    aria-label="Share product"
+                    className="w-11 h-11 rounded-full flex items-center justify-center bg-white/90 text-[#2C2420] hover:bg-white hover:text-[#9E472A] backdrop-blur-md shadow-md transition-all duration-300 cursor-pointer"
+                    title="Share this piece"
+                  >
+                    {copiedLink ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-4.5 h-4.5" />}
+                  </button>
+                </div>
 
-              {/* Floating Action Buttons: Wishlist & Share */}
-              <div className="absolute top-4 right-4 z-20 flex flex-col gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => onToggleWishlist(product)}
-                  aria-label={isFav ? 'Remove from wishlist' : 'Add to wishlist'}
-                  className={`w-11 h-11 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer ${
-                    isFav
-                      ? 'bg-[#9E472A] text-white scale-105'
-                      : 'bg-white/90 text-[#2C2420] hover:bg-white hover:text-[#9E472A]'
-                  }`}
-                >
-                  <Heart
-                    className="w-5 h-5"
-                    fill={isFav ? 'currentColor' : 'none'}
-                    strokeWidth={isFav ? 0 : 1.8}
-                  />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  aria-label="Share product"
-                  className="w-11 h-11 rounded-full flex items-center justify-center bg-white/90 text-[#2C2420] hover:bg-white hover:text-[#9E472A] backdrop-blur-md shadow-md transition-all duration-300 cursor-pointer"
-                  title="Share this piece"
-                >
-                  {copiedLink ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-4.5 h-4.5" />}
-                </button>
-              </div>
-
-              {/* Zoom Callout Hint */}
-              <div className="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-md text-white text-[11px] font-sans flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
-                <Eye className="w-3.5 h-3.5" />
-                <span>Handcrafted Artisan Details</span>
-              </div>
+                {/* Zoom Callout Hint */}
+                <div className="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-md text-white text-[11px] font-sans flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Handcrafted Artisan Details</span>
+                </div>
+              </IndianArchCard>
             </div>
           </div>
 
@@ -557,7 +559,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
               </div>
             </div>
 
-            {/* Grid of Related Pieces in Rectangular Cards */}
+            {/* Grid of Related Pieces in Signature Mughal Arch Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               {relatedProducts.map((relProduct) => {
                 const relFav = isWishlisted(relProduct.id);
@@ -565,33 +567,35 @@ export const ProductPage: React.FC<ProductPageProps> = ({
                   <article
                     key={relProduct.id}
                     onClick={() => onSelectProduct(relProduct)}
-                    className="group flex flex-col bg-white rounded-xl overflow-hidden border border-[#E4D7C8] hover:border-[#9E472A]/60 transition-all duration-500 hover:shadow-lg cursor-pointer"
+                    className="group flex flex-col bg-white rounded-xl p-2.5 border border-[#E4D7C8] hover:border-[#9E472A]/60 transition-all duration-500 hover:shadow-lg cursor-pointer"
                   >
-                    <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F0EBE1]">
-                      <img
-                        src={relProduct.image}
+                    <div className="w-full">
+                      <IndianArchCard
+                        id={`rel-product-${relProduct.id}`}
+                        image={relProduct.image}
                         alt={relProduct.name}
-                        loading="lazy"
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-108"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onToggleWishlist(relProduct);
-                        }}
-                        aria-label="Wishlist"
-                        className={`absolute top-2.5 right-2.5 p-2 rounded-full z-20 backdrop-blur-md transition-colors ${
-                          relFav ? 'bg-[#9E472A] text-white shadow-md' : 'bg-white/80 text-[#2C2420] hover:bg-white hover:text-[#9E472A]'
-                        }`}
+                        aspectRatio="aspect-[3/4]"
+                        borderColor="#9E472A"
+                        strokeWidth={1.8}
+                        showDoubleBorder={true}
                       >
-                        <Heart className="w-3.5 h-3.5" fill={relFav ? 'currentColor' : 'none'} />
-                      </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleWishlist(relProduct);
+                          }}
+                          aria-label="Wishlist"
+                          className={`absolute top-2.5 right-2.5 p-2 rounded-full z-20 backdrop-blur-md transition-colors ${
+                            relFav ? 'bg-[#9E472A] text-white shadow-md' : 'bg-white/80 text-[#2C2420] hover:bg-white hover:text-[#9E472A]'
+                          }`}
+                        >
+                          <Heart className="w-3.5 h-3.5" fill={relFav ? 'currentColor' : 'none'} />
+                        </button>
+                      </IndianArchCard>
                     </div>
 
-                    <div className="p-3.5 flex flex-col flex-1 justify-between">
+                    <div className="p-2.5 flex flex-col flex-1 justify-between">
                       <div>
                         <p className="text-[10px] font-medium tracking-[0.14em] uppercase text-[#9E472A] mb-1 font-sans">
                           {relProduct.category || relProduct.style}

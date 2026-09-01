@@ -88,6 +88,7 @@ import {
 } from '../types';
 import { INITIAL_LOGO_CMS } from '../data/mockData';
 import { compressImageFile, compressDataUrl } from '../utils/imageCompressor';
+import { saveStoryVideoToDB } from '../utils/mediaDb';
 
 interface AdminPortalProps {
   products: Product[];
@@ -624,10 +625,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       reader.onload = (e) => {
         const videoDataUrl = (e.target?.result as string) || '';
         if (videoDataUrl) {
+          // If storyForm already has an ID, store to IndexedDB
+          if (storyForm.id) {
+            saveStoryVideoToDB(storyForm.id, videoDataUrl);
+          }
           // Offscreen video to extract duration and auto-thumbnail
           const tempVideo = document.createElement('video');
           tempVideo.src = videoDataUrl;
           tempVideo.preload = 'metadata';
+          tempVideo.muted = true;
+          tempVideo.playsInline = true;
           tempVideo.onloadedmetadata = () => {
             const sec = Math.round(tempVideo.duration || 0);
             const m = Math.floor(sec / 60);
@@ -662,12 +669,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setUploadProgressMsg('Uploading video directly to discovery reel...');
     try {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const videoDataUrl = (e.target?.result as string) || '';
         if (videoDataUrl) {
+          const targetStory = discoveryStories[storyIdx];
+          if (targetStory && targetStory.id) {
+            await saveStoryVideoToDB(targetStory.id, videoDataUrl);
+          }
+
           const tempVideo = document.createElement('video');
           tempVideo.src = videoDataUrl;
           tempVideo.preload = 'metadata';
+          tempVideo.muted = true;
+          tempVideo.playsInline = true;
           tempVideo.onloadedmetadata = () => {
             const sec = Math.round(tempVideo.duration || 0);
             const m = Math.floor(sec / 60);
@@ -681,6 +695,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               videoType: 'mp4',
             };
             onUpdateDiscoveryStories(updated);
+            setStoriesSaveSuccess(true);
+            setTimeout(() => setStoriesSaveSuccess(false), 4000);
           };
           tempVideo.onerror = () => {
             const updated = [...discoveryStories];
@@ -690,6 +706,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               videoType: 'mp4',
             };
             onUpdateDiscoveryStories(updated);
+            setStoriesSaveSuccess(true);
+            setTimeout(() => setStoriesSaveSuccess(false), 4000);
           };
         }
       };
@@ -6163,11 +6181,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                const storyId = editingStory ? editingStory.id : (storyForm.id || `story-${Date.now()}`);
+                const finalStory = { ...storyForm, id: storyId };
+                if (finalStory.videoUrl) {
+                  saveStoryVideoToDB(storyId, finalStory.videoUrl);
+                }
                 if (editingStory) {
-                  const updated = discoveryStories.map((s) => (s.id === editingStory.id ? { ...storyForm } : s));
+                  const updated = discoveryStories.map((s) => (s.id === editingStory.id ? finalStory : s));
                   onUpdateDiscoveryStories(updated);
                 } else {
-                  onUpdateDiscoveryStories([...discoveryStories, { ...storyForm, id: `story-${Date.now()}` }]);
+                  onUpdateDiscoveryStories([...discoveryStories, finalStory]);
                 }
                 setStoriesSaveSuccess(true);
                 setTimeout(() => setStoriesSaveSuccess(false), 4000);

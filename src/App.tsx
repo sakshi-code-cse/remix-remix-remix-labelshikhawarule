@@ -26,6 +26,7 @@ import { CustomerAccountDrawer } from './components/CustomerAccountDrawer';
 import { CollectionPage } from './components/CollectionPage';
 import { ProductPage } from './components/ProductPage';
 import { safeLocalStorage } from './utils/storage';
+import { hydrateStoriesWithStoredVideos, saveStoryVideoToDB } from './utils/mediaDb';
 import { 
   saveToCloudDatabase, 
   subscribeToCloudStoreData, 
@@ -136,6 +137,13 @@ export default function App() {
   useEffect(() => {
     let isMounted = true;
 
+    // Hydrate initial local stories with any videos in IndexedDB
+    hydrateStoriesWithStoredVideos(discoveryStories).then((hydrated) => {
+      if (isMounted && hydrated) {
+        setDiscoveryStories(hydrated);
+      }
+    });
+
     // 1. First fetch or initialize cloud data
     fetchCloudStoreData().then((cloudData) => {
       if (!isMounted) return;
@@ -231,8 +239,12 @@ export default function App() {
           safeLocalStorage.setJSON('label_sw_categories_list', data.categoriesList);
         }
         if (data.discoveryStories && Array.isArray(data.discoveryStories)) {
-          setDiscoveryStories(data.discoveryStories);
-          safeLocalStorage.setJSON('label_sw_discovery_stories', data.discoveryStories);
+          hydrateStoriesWithStoredVideos(data.discoveryStories).then((hydrated) => {
+            if (isMounted) {
+              setDiscoveryStories(hydrated);
+              safeLocalStorage.setJSON('label_sw_discovery_stories', hydrated);
+            }
+          });
         }
       },
       (err) => {
@@ -768,9 +780,15 @@ export default function App() {
           }}
           onUpdateDiscoveryStories={(list) => {
             setDiscoveryStories(list);
+            // Save video payloads to IndexedDB for persistent local storage
+            list.forEach((story) => {
+              if (story && story.id && story.videoUrl) {
+                saveStoryVideoToDB(story.id, story.videoUrl);
+              }
+            });
             safeLocalStorage.setJSON('label_sw_discovery_stories', list);
             saveToCloudDatabase('discoveryStories', list);
-            addToast('success', 'Discovery Reels Saved to Database', 'Artisan craft reels synced.');
+            addToast('success', 'Discovery Reels Saved to Database', 'All artisan reels and video assets permanently saved.');
           }}
           onUpdateClientDiaries={(list) => {
             setClientDiaries(list);

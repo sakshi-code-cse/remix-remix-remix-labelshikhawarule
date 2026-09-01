@@ -51,6 +51,21 @@ export const safeLocalStorage = {
 
   setJSON: <T>(key: string, value: T): void => {
     try {
+      // If saving discovery stories, strip out massive data:video URLs from localStorage to prevent QuotaExceededError
+      if (key === 'label_sw_discovery_stories' && Array.isArray(value)) {
+        const lightweight = (value as any[]).map((story) => {
+          if (story && typeof story.videoUrl === 'string' && story.videoUrl.startsWith('data:video/')) {
+            return {
+              ...story,
+              videoUrl: '', // Stripped for localStorage, kept in IndexedDB and state
+              hasLocalVideo: true,
+            };
+          }
+          return story;
+        });
+        safeLocalStorage.setItem(key, JSON.stringify(lightweight));
+        return;
+      }
       safeLocalStorage.setItem(key, JSON.stringify(value));
     } catch {
       // Serialization error

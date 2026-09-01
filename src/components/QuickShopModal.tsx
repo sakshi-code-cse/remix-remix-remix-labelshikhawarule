@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Star, ShoppingBag, Heart, Check, Sparkles, Ruler, ArrowRight, ShieldCheck, Truck } from 'lucide-react';
 import { Product } from '../types';
+import { IndianArchCard } from './ArchShape';
 
 interface QuickShopModalProps {
   product: Product | null;
@@ -64,36 +65,40 @@ export const QuickShopModal: React.FC<QuickShopModalProps> = ({
           </button>
 
           <div className="grid grid-cols-1 sm:grid-cols-12 items-center">
-            {/* Left: Clean Rectangular Product Image */}
+            {/* Left: Signature Mughal Arch Product Image */}
             <div className="sm:col-span-5 p-4 sm:p-5 flex items-center justify-center bg-[#EADDCF]/60 border-b sm:border-b-0 sm:border-r border-[#DFCBB8]">
-              <div className="relative w-full max-w-[240px] aspect-[3/4] rounded-xl overflow-hidden bg-[#F0EBE1] border border-[#DFCBB8] shadow-sm">
-                <img
-                  src={product.image}
+              <div className="w-full max-w-[240px]">
+                <IndianArchCard
+                  id={`quickshop-${product.id}`}
+                  image={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover object-top"
-                />
-
-                {/* Badges on image */}
-                <div className="absolute top-3 left-2.5 flex flex-col gap-1 z-20 pointer-events-none">
-                  {product.isNew && (
-                    <span className="px-2 py-0.5 rounded-2xs bg-[#9E472A] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
-                      NEW
-                    </span>
-                  )}
-                  {discountPercent > 0 && (
-                    <span className="px-2 py-0.5 rounded-2xs bg-[#2D6A4F] text-white text-[9px] font-cinzel font-semibold tracking-wider shadow-xs">
-                      {discountPercent}% OFF
-                    </span>
-                  )}
-                </div>
-
-                <button
-                  onClick={() => onToggleWishlist(product)}
-                  aria-label="Wishlist"
-                  className="absolute bottom-2.5 right-2.5 z-20 p-2 rounded-full bg-white/90 text-[#2C2420] hover:text-[#9E472A] shadow-md transition-transform hover:scale-110 cursor-pointer"
+                  aspectRatio="aspect-[3/4]"
+                  borderColor="#9E472A"
+                  strokeWidth={1.8}
+                  showDoubleBorder={true}
                 >
-                  <Heart className={`w-3.5 h-3.5 ${isWishlisted(product.id) ? 'fill-[#9E472A] text-[#9E472A]' : ''}`} />
-                </button>
+                  {/* Badges on image */}
+                  <div className="absolute top-3 left-2.5 flex flex-col gap-1 z-20 pointer-events-none">
+                    {product.isNew && (
+                      <span className="px-2 py-0.5 rounded-2xs bg-[#9E472A] text-white text-[9px] font-cinzel font-semibold tracking-wider uppercase shadow-xs">
+                        NEW
+                      </span>
+                    )}
+                    {discountPercent > 0 && (
+                      <span className="px-2 py-0.5 rounded-2xs bg-[#2D6A4F] text-white text-[9px] font-cinzel font-semibold tracking-wider shadow-xs">
+                        {discountPercent}% OFF
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => onToggleWishlist(product)}
+                    aria-label="Wishlist"
+                    className="absolute bottom-2.5 right-2.5 z-20 p-2 rounded-full bg-white/90 text-[#2C2420] hover:text-[#9E472A] shadow-md transition-transform hover:scale-110 cursor-pointer"
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${isWishlisted(product.id) ? 'fill-[#9E472A] text-[#9E472A]' : ''}`} />
+                  </button>
+                </IndianArchCard>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Heart, ShoppingBag, Star, ShieldCheck, Ruler, Sparkles, Check, Truck, RotateCcw, Award } from 'lucide-react';
 import { Product } from '../types';
+import { IndianArchCard } from './ArchShape';
 
 interface ProductDetailModalProps {
   product: Product | null;
@@ -67,23 +68,27 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             
             {/* Left: Gallery & Zoom Preview */}
             <div className="md:col-span-6 bg-[#EFE5D8] p-4 sm:p-6 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-[#DFCBB8]">
-              {/* Main Image with Clean Rectangular Frame */}
-              <div className="relative w-full max-w-[340px] aspect-[3/4] rounded-xl overflow-hidden bg-[#F0EBE1] border border-[#DFCBB8] shadow-md">
-                <img
-                  src={selectedImage}
+              {/* Main Image with Signature Mughal Arch Frame */}
+              <div className="w-full max-w-[340px]">
+                <IndianArchCard
+                  id={`detail-modal-${product.id}`}
+                  image={selectedImage}
                   alt={product.name}
-                  className="w-full h-full object-cover object-top"
-                />
-
-                {product.tags && product.tags.length > 0 && (
-                  <div className="absolute top-3 left-3 z-10 flex flex-col gap-1 pointer-events-none">
-                    {product.tags.map((t) => (
-                      <span key={t} className="bg-[#9E472A] text-white text-[10px] font-cinzel font-semibold px-2.5 py-1 tracking-wider uppercase rounded-xs shadow-xs">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                  aspectRatio="aspect-[3/4]"
+                  borderColor="#9E472A"
+                  strokeWidth={2}
+                  showDoubleBorder={true}
+                >
+                  {product.tags && product.tags.length > 0 && (
+                    <div className="absolute top-3 left-3 z-20 flex flex-col gap-1 pointer-events-none">
+                      {product.tags.map((t) => (
+                        <span key={t} className="bg-[#9E472A] text-white text-[10px] font-cinzel font-semibold px-2.5 py-1 tracking-wider uppercase rounded-xs shadow-xs">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </IndianArchCard>
               </div>
 
               {/* Thumbnail Selector */}
