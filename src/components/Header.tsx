@@ -180,26 +180,10 @@ export const Header: React.FC<HeaderProps> = ({
       ],
     },
     {
-      id: 'footwear',
-      label: 'FOOTWEAR',
-      filter: 'Accessories',
-      type: 'category',
-      items: [
-        { label: 'Handcrafted Leather Juttis', filter: 'Accessories', type: 'category' },
-        { label: 'Embroidered Mojaris', filter: 'Accessories', type: 'category' },
-        { label: 'Silk Pocket Squares', filter: 'Accessories', type: 'category' },
-      ],
-    },
-    {
       id: 'book-appointment',
       label: 'BOOK AN APPOINTMENT',
       action: 'appointment',
       isHighlight: true,
-    },
-    {
-      id: 'blogs',
-      label: 'BLOGS',
-      pageSlug: 'our-process',
     },
     {
       id: 'about-us',
@@ -222,15 +206,6 @@ export const Header: React.FC<HeaderProps> = ({
         { label: 'Track Client Order', pageSlug: 'track-order' },
         { label: 'Shipping & Exchange Policy', pageSlug: 'shipping-returns' },
       ],
-    },
-    {
-      id: 'sale',
-      label: 'SALE',
-      isHighlight: true,
-      badgeText: 'SALE',
-      filter: 'All',
-      type: 'all',
-      collectionSlug: 'all',
     },
   ];
 
