@@ -1,6 +1,5 @@
 import React from 'react';
-import { Calendar, ArrowRight, Sparkles, Clock } from 'lucide-react';
-import { ARCH_STROKE_PATH_D } from './ArchShape';
+import { Calendar, ArrowRight, Sparkles, Video } from 'lucide-react';
 
 interface BookAppointmentProps {
   onOpenBooking: () => void;
@@ -8,53 +7,105 @@ interface BookAppointmentProps {
 
 export const BookAppointment: React.FC<BookAppointmentProps> = ({ onOpenBooking }) => {
   return (
-    <section id="book-appointment-section" className="w-full bg-[#52131D] py-14 md:py-20 text-white border-y border-[#6B1826]">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section 
+      id="book-appointment-section" 
+      className="relative w-full bg-gradient-to-br from-[#450E18] via-[#52131D] to-[#360911] text-white py-16 sm:py-20 lg:py-24 border-y border-[#6B1826]/80 overflow-hidden"
+    >
+      {/* Subtle luxury ambient glow and delicate grain atmosphere */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#851E30]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#2B060C]/40 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
-        {/* Calendar / Clock Center Icon */}
-        <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#6B1826] border border-white/30 mb-5 shadow-lg">
-          <Calendar className="w-7 h-7 sm:w-8 sm:h-8 text-white" strokeWidth={1.75} />
+        {/* Eyebrow with refined icon */}
+        <div className="inline-flex items-center justify-center gap-2 mb-4 text-[#EADDCF]/90">
+          <Sparkles className="w-3.5 h-3.5 text-[#EADDCF]" />
+          <span className="font-cinzel text-[11px] sm:text-xs font-semibold tracking-[0.24em] uppercase text-[#EADDCF]">
+            A PERSONALIZED COUTURE EXPERIENCE
+          </span>
         </div>
 
-        {/* Heading in Clean White */}
-        <h2 className="font-cinzel text-2xl sm:text-3xl md:text-4xl font-bold tracking-[0.16em] uppercase text-white mb-3 leading-tight">
-          BOOK AN ATELIER VISIT & CONSULTATION
+        {/* Main High-Fashion Serif Heading */}
+        <h2 className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-normal tracking-[0.05em] uppercase text-[#FAF6F0] leading-[1.15] mb-5 max-w-3xl mx-auto">
+          BOOK AN ATELIER VISIT <br className="hidden sm:inline" />
+          <span className="font-light text-[#EADDCF]">&amp; CONSULTATION</span>
         </h2>
 
-        {/* Subtitle in Crisp White */}
-        <p className="font-serif-luxury text-base sm:text-lg md:text-xl text-white max-w-2xl mx-auto mb-8 font-light leading-relaxed">
-          Enjoy a personalized styling and bespoke fitting experience with our master couturiers. We would love to craft something exceptional for you.
+        {/* Editorial Description */}
+        <p className="font-sans text-sm sm:text-base md:text-lg text-[#EADDCF]/85 font-light leading-relaxed max-w-2xl mx-auto mb-9">
+          Step into our atelier for a private styling consultation, bespoke fitting and a truly personal couture experience.
         </p>
 
-        {/* Action Button */}
-        <div>
+        {/* Action Buttons: Atelier Visit & Virtual Consultation */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 mb-14">
           <button
             id="book-appointment-cta-button"
             onClick={onOpenBooking}
-            className="group inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 bg-[#6B1826] hover:bg-[#851E30] text-white border-2 border-white rounded-xs font-cinzel text-xs sm:text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300 shadow-xl hover:-translate-y-0.5 cursor-pointer"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-9 py-4 bg-[#6B1826]/60 hover:bg-[#FAF6F0] text-[#FAF6F0] hover:text-[#52131D] border border-[#FAF6F0]/40 hover:border-[#FAF6F0] rounded-xs font-cinzel text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-xl cursor-pointer"
           >
-            <Calendar className="w-4 h-4 text-white" />
-            <span className="text-white">BOOK ATELIER VISIT</span>
-            <ArrowRight className="w-4 h-4 text-white transition-transform duration-300 group-hover:translate-x-1" />
+            <Calendar className="w-4 h-4 text-[#FAF6F0] group-hover:text-[#52131D] transition-colors" />
+            <span>BOOK YOUR PRIVATE VISIT</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+          </button>
+
+          <button
+            id="book-virtual-consultation-button"
+            type="button"
+            onClick={onOpenBooking}
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 sm:px-8 py-4 bg-white/5 hover:bg-[#FAF6F0] text-[#FAF6F0] hover:text-[#52131D] border border-white/30 hover:border-[#FAF6F0] rounded-xs font-cinzel text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-md backdrop-blur-sm cursor-pointer"
+          >
+            <Video className="w-4 h-4 text-[#EADDCF] group-hover:text-[#52131D] transition-colors" />
+            <span>PREFER VIRTUAL CONSULTATION?</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
           </button>
         </div>
 
-        {/* Micro highlights in Pure White */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-white font-light">
-          <span className="flex items-center gap-1.5 text-white">
-            <Sparkles className="w-3.5 h-3.5 text-white" />
-            1-on-1 Master Stylist
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-white/70" />
-          <span className="flex items-center gap-1.5 text-white">
-            <Clock className="w-3.5 h-3.5 text-white" />
-            Flagship Studio Visit or Virtual Consultation
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-white/70" />
-          <span className="text-white">Bespoke Measurements & Custom Weaves</span>
+        {/* 3 Refined Experience Detail Blocks */}
+        <div className="pt-10 border-t border-white/15 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 text-left">
+          
+          {/* Block 01 */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-white/[0.03] md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-none border border-white/5 md:border-none">
+            <span className="font-cinzel text-[11px] font-bold text-[#EADDCF]/60 tracking-[0.18em] mb-2">
+              01
+            </span>
+            <h4 className="font-cinzel text-xs sm:text-sm font-semibold text-[#FAF6F0] tracking-[0.14em] uppercase mb-1.5">
+              ONE-ON-ONE STYLING
+            </h4>
+            <p className="font-sans text-xs sm:text-sm text-[#EADDCF]/75 font-light leading-relaxed">
+              Personalized styling with our master couturiers.
+            </p>
+          </div>
+
+          {/* Block 02 */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-white/[0.03] md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-none border border-white/5 md:border-none md:border-l md:border-white/15 md:pl-6 lg:pl-8">
+            <span className="font-cinzel text-[11px] font-bold text-[#EADDCF]/60 tracking-[0.18em] mb-2">
+              02
+            </span>
+            <h4 className="font-cinzel text-xs sm:text-sm font-semibold text-[#FAF6F0] tracking-[0.14em] uppercase mb-1.5">
+              ATELIER OR VIRTUAL
+            </h4>
+            <p className="font-sans text-xs sm:text-sm text-[#EADDCF]/75 font-light leading-relaxed">
+              Visit our flagship studio or consult virtually.
+            </p>
+          </div>
+
+          {/* Block 03 */}
+          <div className="flex flex-col items-center md:items-start text-center md:text-left bg-white/[0.03] md:bg-transparent p-5 md:p-0 rounded-lg md:rounded-none border border-white/5 md:border-none md:border-l md:border-white/15 md:pl-6 lg:pl-8">
+            <span className="font-cinzel text-[11px] font-bold text-[#EADDCF]/60 tracking-[0.18em] mb-2">
+              03
+            </span>
+            <h4 className="font-cinzel text-xs sm:text-sm font-semibold text-[#FAF6F0] tracking-[0.14em] uppercase mb-1.5">
+              BESPOKE FITTING
+            </h4>
+            <p className="font-sans text-xs sm:text-sm text-[#EADDCF]/75 font-light leading-relaxed">
+              Precise measurements and custom couture detailing.
+            </p>
+          </div>
+
         </div>
 
       </div>
     </section>
   );
 };
+
