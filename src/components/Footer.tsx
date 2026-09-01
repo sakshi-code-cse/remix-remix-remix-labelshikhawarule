@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { CustomerUser, LogoCMSContent } from '../types';
+import { InfoPageSlug } from './CoutureInfoPages';
 
 interface FooterProps {
   onOpenSizeGuide: () => void;
@@ -20,6 +21,7 @@ interface FooterProps {
   onOpenShippingInfo: () => void;
   onOpenTrackOrder: () => void;
   onOpenAbout: () => void;
+  onNavigatePage?: (slug: InfoPageSlug) => void;
   onOpenCustomerLogin?: () => void;
   onOpenCustomerAccount?: () => void;
   currentUser?: CustomerUser | null;
@@ -32,6 +34,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenShippingInfo,
   onOpenTrackOrder,
   onOpenAbout,
+  onNavigatePage,
   onOpenCustomerLogin,
   onOpenCustomerAccount,
   currentUser,
@@ -41,6 +44,14 @@ export const Footer: React.FC<FooterProps> = ({
   const [subscribed, setSubscribed] = useState(false);
   const [mobileQuickLinksOpen, setMobileQuickLinksOpen] = useState(true);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(true);
+
+  const handleNavigate = (slug: InfoPageSlug, fallbackFn?: () => void) => {
+    if (onNavigatePage) {
+      onNavigatePage(slug);
+    } else if (fallbackFn) {
+      fallbackFn();
+    }
+  };
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -164,11 +175,11 @@ export const Footer: React.FC<FooterProps> = ({
 
             <ul className={`space-y-0.5 text-xs text-[#C4B2A3] ${mobileQuickLinksOpen ? 'block' : 'hidden md:block'}`}>
               {[
-                { label: 'About Us', action: onOpenAbout },
-                { label: 'Our Process', action: onOpenAbout },
-                { label: 'Size Guide', action: onOpenSizeGuide },
-                { label: 'Returns & Exchange', action: onOpenShippingInfo },
-                { label: 'Contact Us', action: onOpenAbout },
+                { label: 'About Us', action: () => handleNavigate('about-us', onOpenAbout) },
+                { label: 'Our Process', action: () => handleNavigate('our-process', onOpenAbout) },
+                { label: 'Size Guide', action: () => handleNavigate('size-guide', onOpenSizeGuide) },
+                { label: 'Returns & Exchange', action: () => handleNavigate('returns-exchange', onOpenShippingInfo) },
+                { label: 'Contact Us', action: () => handleNavigate('contact-us', onOpenAbout) },
               ].map((link, idx) => (
                 <li key={idx} className="border-b border-white/[0.04] last:border-none">
                   <button 
@@ -219,10 +230,10 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
 
               {[
-                { label: 'Track Order', action: onOpenTrackOrder },
-                { label: 'Shipping & Returns', action: onOpenShippingInfo },
-                { label: 'Flagship Atelier', action: onOpenStoreLocator },
-                { label: 'Privacy Policy', action: onOpenShippingInfo },
+                { label: 'Track Order', action: () => handleNavigate('track-order', onOpenTrackOrder) },
+                { label: 'Shipping & Returns', action: () => handleNavigate('shipping-returns', onOpenShippingInfo) },
+                { label: 'Flagship Atelier', action: () => handleNavigate('flagship-atelier', onOpenStoreLocator) },
+                { label: 'Privacy Policy', action: () => handleNavigate('privacy-policy', onOpenShippingInfo) },
               ].map((link, idx) => (
                 <li key={idx} className="border-b border-white/[0.04] last:border-none">
                   <button 

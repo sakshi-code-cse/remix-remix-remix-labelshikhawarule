@@ -25,6 +25,7 @@ import { CustomerAuthModal } from './components/CustomerAuthModal';
 import { CustomerAccountDrawer } from './components/CustomerAccountDrawer';
 import { CollectionPage } from './components/CollectionPage';
 import { ProductPage } from './components/ProductPage';
+import { CoutureInfoPages, InfoPageSlug } from './components/CoutureInfoPages';
 import { safeLocalStorage } from './utils/storage';
 import { hydrateStoriesWithStoredVideos, saveStoryVideoToDB } from './utils/mediaDb';
 import { 
@@ -301,8 +302,8 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedStory, setSelectedStory] = useState<DiscoveryStory | null>(null);
 
-  // Page View Routing (home vs collection vs product)
-  const [currentView, setCurrentView] = useState<'home' | 'collection' | 'product'>('home');
+  // Page View Routing (home vs collection vs product vs dedicated info pages)
+  const [currentView, setCurrentView] = useState<'home' | 'collection' | 'product' | InfoPageSlug>('home');
   const [currentCollectionSlug, setCurrentCollectionSlug] = useState<string>('new-arrivals');
   const [activeProductPage, setActiveProductPage] = useState<Product | null>(null);
 
@@ -312,7 +313,7 @@ export default function App() {
     value: string;
   }>({ type: 'all', value: 'All' });
 
-  // Dedicated Route & Shortcut Listener (#admin, #/collections/..., #/product/..., Ctrl+Shift+A)
+  // Dedicated Route & Shortcut Listener (#admin, #/collections/..., #/product/..., #/about-us, etc.)
   useEffect(() => {
     const handleRouteChange = () => {
       if (typeof window === 'undefined') return;
@@ -345,6 +346,24 @@ export default function App() {
       } else if (hash === '#/all' || hash === '#all') {
         setCurrentView('collection');
         setCurrentCollectionSlug('all');
+      } else if (hash === '#/about-us' || hash === '#about-us' || hash === '#/about' || hash === '#about' || hash === '#/story' || hash === '#story') {
+        setCurrentView('about-us');
+      } else if (hash === '#/our-process' || hash === '#our-process' || hash === '#/process' || hash === '#process') {
+        setCurrentView('our-process');
+      } else if (hash === '#/size-guide' || hash === '#size-guide' || hash === '#/sizing' || hash === '#sizing') {
+        setCurrentView('size-guide');
+      } else if (hash === '#/returns-exchange' || hash === '#returns-exchange' || hash === '#/returns' || hash === '#returns' || hash === '#/exchange') {
+        setCurrentView('returns-exchange');
+      } else if (hash === '#/contact-us' || hash === '#contact-us' || hash === '#/contact' || hash === '#contact') {
+        setCurrentView('contact-us');
+      } else if (hash === '#/track-order' || hash === '#track-order' || hash === '#/tracking' || hash === '#tracking') {
+        setCurrentView('track-order');
+      } else if (hash === '#/shipping-returns' || hash === '#shipping-returns' || hash === '#/shipping' || hash === '#shipping' || hash === '#/delivery') {
+        setCurrentView('shipping-returns');
+      } else if (hash === '#/flagship-atelier' || hash === '#flagship-atelier' || hash === '#/atelier' || hash === '#atelier' || hash === '#/stores' || hash === '#/store-locator') {
+        setCurrentView('flagship-atelier');
+      } else if (hash === '#/privacy-policy' || hash === '#privacy-policy' || hash === '#/privacy' || hash === '#privacy' || hash === '#/terms') {
+        setCurrentView('privacy-policy');
       } else if (hash === '#/' || hash === '' || hash === '#') {
         setCurrentView('home');
       }
@@ -828,6 +847,11 @@ export default function App() {
           }
         }}
         onNavigateCollection={navigateToCollection}
+        onNavigatePage={(slug) => {
+          setCurrentView(slug);
+          window.location.hash = `#/${slug}`;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         onOpenCustomerLogin={() => setIsCustomerAuthModalOpen(true)}
         onOpenCustomerAccount={() => setIsCustomerAccountDrawerOpen(true)}
         currentUser={currentCustomer}
@@ -838,9 +862,24 @@ export default function App() {
         logoCMS={logoCMS}
       />
 
-      {/* Main Page Body: Product View OR Collection View OR Home View */}
+      {/* Main Page Body: Info Page View OR Product View OR Collection View OR Home View */}
       <main className="flex-1">
-        {currentView === 'product' && activeProductPage ? (
+        {['about-us', 'our-process', 'size-guide', 'returns-exchange', 'contact-us', 'track-order', 'shipping-returns', 'flagship-atelier', 'privacy-policy'].includes(currentView) ? (
+          <CoutureInfoPages
+            pageSlug={currentView as InfoPageSlug}
+            onNavigateHome={navigateToHome}
+            onNavigatePage={(slug) => {
+              setCurrentView(slug);
+              window.location.hash = `#/${slug}`;
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenAppointment={() => setIsAppointmentOpen(true)}
+            onOpenCustomerLogin={() => setIsCustomerAuthModalOpen(true)}
+            onOpenCustomerAccount={() => setIsCustomerAccountDrawerOpen(true)}
+            currentUser={currentCustomer}
+            onAddToast={addToast}
+          />
+        ) : currentView === 'product' && activeProductPage ? (
           <ProductPage
             product={activeProductPage}
             allProducts={products}
@@ -976,35 +1015,40 @@ export default function App() {
 
       {/* 9. Main Footer */}
       <Footer
-        onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
-        onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
-        onOpenShippingInfo={() => setIsShippingInfoOpen(true)}
+        onOpenSizeGuide={() => {
+          setCurrentView('size-guide');
+          window.location.hash = '#/size-guide';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenStoreLocator={() => {
+          setCurrentView('flagship-atelier');
+          window.location.hash = '#/flagship-atelier';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenShippingInfo={() => {
+          setCurrentView('shipping-returns');
+          window.location.hash = '#/shipping-returns';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         onOpenTrackOrder={() => {
-          if (currentCustomer) {
-            setIsCustomerAccountDrawerOpen(true);
-          } else {
-            addToast('info', 'Order Tracking', 'Sign in to your client account or check your SMS confirmation.');
-            setIsShippingInfoOpen(true);
-          }
+          setCurrentView('track-order');
+          window.location.hash = '#/track-order';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenAbout={() => {
+          setCurrentView('about-us');
+          window.location.hash = '#/about-us';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onNavigatePage={(slug) => {
+          setCurrentView(slug);
+          window.location.hash = `#/${slug}`;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onOpenCustomerLogin={() => setIsCustomerAuthModalOpen(true)}
         onOpenCustomerAccount={() => setIsCustomerAccountDrawerOpen(true)}
         currentUser={currentCustomer}
         logoCMS={logoCMS}
-        onOpenAbout={() => {
-          setSelectedStory({
-            id: 'about-atelier',
-            title: 'The Philosophy of Label Shikha Warule',
-            subtitle: 'Crafting Heritage for Contemporary Lives',
-            thumbnail: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=800&auto=format&fit=crop',
-            videoDuration: '03:15',
-            description: 'Label Shikha Warule was founded on the belief that clothing is a wearable piece of art. We work directly with over 120 traditional weaving and embroidery families across Maharashtra, Madhya Pradesh, Bengal, and Rajasthan to create slow, sustainable luxury fashion.',
-            craftsmanshipDetail: '100% natural, biodegradable silks and cottons with zero synthetic blends.',
-            artisanQuote: '"To preserve our heritage, we must make it relevant, comfortable, and breathtaking for today."',
-            artisanName: 'Shikha Warule, Founder & Creative Director',
-            tags: ['Ethical Luxury', 'Zero Waste', 'Women Led'],
-          });
-        }}
       />
 
       {/* Interactive Drawers & Modals */}
