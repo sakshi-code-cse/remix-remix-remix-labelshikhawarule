@@ -255,29 +255,12 @@ export const Header: React.FC<HeaderProps> = ({
       <header id="main-header" className="sticky top-0 z-40 w-full bg-[#FAF6F0] border-b border-[#EADDCF] shadow-xs">
         
         <div id="top-announcement-bar" className="bg-[#480E16] text-[#FDF8F3] text-[11px] py-2 px-3 sm:px-6 border-b border-[#360910]">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            
-            <div className="hidden md:flex items-center gap-4 text-[#E8D3C4] text-[11px]">
-              <a href="tel:+919820012345" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                <Phone className="w-3 h-3 text-[#D99B72]" />
-                <span>Concierge: +91 98200 12345</span>
-              </a>
-              <span className="text-white/30">•</span>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3 h-3 text-[#D99B72]" />
-                <span>Flagship: Nerul, Navi Mumbai</span>
-              </span>
-            </div>
+          <div className="max-w-7xl mx-auto flex items-center justify-center text-center relative">
+            <span className="font-cinzel tracking-[0.2em] uppercase text-[#FAF6F0] font-medium text-[11px]">
+              {announcementText || 'WELCOME TO LABEL SHIKHA WARULE'}
+            </span>
 
-            <div className="flex-1 text-center flex items-center justify-center gap-2">
-              <Sparkles className="w-3 h-3 text-[#E8A57D] shrink-0" />
-              <span className="font-cinzel tracking-[0.2em] uppercase text-[#FAF6F0] font-medium text-[11px]">
-                {announcementText || 'COMPLIMENTARY WORLDWIDE EXPRESS DELIVERY ON ORDERS OVER ₹15,000'}
-              </span>
-              <Sparkles className="w-3 h-3 text-[#E8A57D] shrink-0 hidden sm:inline" />
-            </div>
-
-            <div className="hidden lg:flex items-center gap-3 text-[11px] text-[#E8D3C4]">
+            <div className="hidden lg:flex items-center gap-3 text-[11px] text-[#E8D3C4] absolute right-0">
               <button 
                 onClick={onOpenAppointment}
                 className="hover:text-white transition-colors underline underline-offset-2 flex items-center gap-1 cursor-pointer"
@@ -288,7 +271,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-white/30">•</span>
               <span className="font-semibold text-white/90">INR ₹ (IN)</span>
             </div>
-
           </div>
         </div>
 

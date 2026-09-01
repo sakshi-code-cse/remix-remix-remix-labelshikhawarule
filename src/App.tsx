@@ -88,7 +88,7 @@ export default function App() {
     return safeLocalStorage.getJSON<ClientDiary[]>('label_sw_client_diaries', CLIENT_DIARIES);
   });
   const [announcementText, setAnnouncementText] = useState<string>(() => {
-    return safeLocalStorage.getItem('label_sw_announcement_text') || 'WELCOME TO OUR STORE!';
+    return safeLocalStorage.getItem('label_sw_announcement_text') || 'WELCOME TO LABEL SHIKHA WARULE';
   });
 
   // Full CMS State
