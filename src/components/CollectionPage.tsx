@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Filter, 
   X, 
@@ -11,7 +11,7 @@ import {
   ShoppingBag, 
   Star, 
   Sparkles, 
-  ArrowRight, 
+  ArrowRight,
   RotateCcw, 
   Ruler, 
   ShieldCheck, 
@@ -58,7 +58,7 @@ export interface CollectionMeta {
 export const COLLECTIONS_LIST: CollectionMeta[] = [
   {
     slug: 'all',
-    title: 'ALL CREATIONS',
+    title: 'All Creations',
     tagline: 'The Complete Atelier Archive',
     description: 'Explore the full spectrum of Label Shikha Warule heritage weaves, bespoke ensembles, luxury menswear, handcrafted kurtas, sarees, and fine accessories.',
     bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
@@ -66,25 +66,25 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'kurtas',
-    title: 'KURTAS',
+    title: 'Kurtas',
     tagline: 'Handspun Grace & Pure Mulberry Silks',
     description: 'Bespoke hand-blocked mulmul, raw silk, and handloom Chanderi kurtas finished with delicate zardozi, aari needlework, and fine mother-of-pearl buttons.',
     bannerImage: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1920&auto=format&fit=crop',
-    accentBadge: '48+ Silhouettes',
+    accentBadge: 'Handcrafted Kurtas',
     defaultFilter: { category: 'Kurtas' },
   },
   {
     slug: 'sherwanis',
-    title: 'SHERWANIS',
+    title: 'Sherwanis',
     tagline: 'Royal Regalia & Heirloom Groom Couture',
     description: 'Architectural raw silk and matka sherwanis adorned with antique dabka, mukaish, and seed pearl zardozi for grand wedding ceremonies and pheras.',
     bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
-    accentBadge: 'Royal Wedding',
+    accentBadge: 'Groom Couture',
     defaultFilter: { category: 'Sherwanis' },
   },
   {
     slug: 'jacket-set',
-    title: 'JACKET SETS',
+    title: 'Jacket Sets',
     tagline: 'Structured Layering & Bandhgalas',
     description: 'Hand-tailored Nehru jackets, asymmetric overlapping drapes, and structured Mughal bandhgala sets in pure raw silks and textured handlooms.',
     bannerImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1920&auto=format&fit=crop',
@@ -93,7 +93,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'tuxedos',
-    title: 'TUXEDOS',
+    title: 'Tuxedos',
     tagline: 'Midnight Black-Tie & Silk Velvet Galas',
     description: 'Shawl-collar silk velvet dinner jackets with satin lapels, hand-cast stud buttons, and tailored trousers crafted with bespoke canvas construction.',
     bannerImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1920&auto=format&fit=crop',
@@ -102,7 +102,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'indo-westerns',
-    title: 'INDO-WESTERNS',
+    title: 'Indo-Westerns',
     tagline: 'Modern Fusion & Asymmetric Cowl Drapes',
     description: 'Fluid asymmetrical silhouettes, pleated cowl kurtas, and contemporary crossover jackets celebrating the union of global tailoring and Indian craft.',
     bannerImage: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1920&auto=format&fit=crop',
@@ -111,7 +111,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'sarees',
-    title: 'SAREES',
+    title: 'Sarees',
     tagline: 'Handloom Chanderi & Banarasi Brocades',
     description: 'Timeless nine-yard and six-yard drapes in champagne tussar silk, pure organza tissue, and heritage Banarasi zari borders handwoven across India.',
     bannerImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920&auto=format&fit=crop',
@@ -120,7 +120,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'new-arrivals',
-    title: 'NEW ARRIVALS',
+    title: 'New Arrivals',
     tagline: 'Autumn / Festive Haute Couture Edit',
     description: 'Discover the latest hand-draped silhouettes, featuring pure raw silks, delicate zardozi needlework, and contemporary royal tailoring directly from the atelier.',
     bannerImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920&auto=format&fit=crop',
@@ -129,7 +129,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'men',
-    title: "MEN'S ATELIER",
+    title: "Men's Atelier",
     tagline: 'Regal Bandhgalas, Sherwanis & Linen Kurtas',
     description: 'Structured silhouettes tailored in high-thread mulberry raw silk, handspun khadi, and Belgian flax linen with bespoke shoulder moulding.',
     bannerImage: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=1920&auto=format&fit=crop',
@@ -138,7 +138,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'women',
-    title: "WOMEN'S COUTURE",
+    title: "Women's Couture",
     tagline: 'Handloom Sarees, Anarkalis & Co-ord Sets',
     description: 'Graceful silhouettes celebrating India’s timeless textile traditions in Chanderi silk, Tussar georgette, and Bagru hand-block prints.',
     bannerImage: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1920&auto=format&fit=crop',
@@ -147,7 +147,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'wedding',
-    title: 'ROYAL WEDDING & BESPOKE',
+    title: 'Royal Wedding',
     tagline: 'Groom Couture & Bridal Trousseau',
     description: 'Handcrafted masterworks adorned with antique dabka, mukaish, seed pearls, and hand-woven gold zari for life’s grandest celebrations.',
     bannerImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1920&auto=format&fit=crop',
@@ -156,7 +156,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'festive',
-    title: 'FESTIVE SPLENDOUR',
+    title: 'Festive Splendour',
     tagline: 'Sangeet, Cocktail & Puja Edits',
     description: 'Vibrant celebratory ensembles finished with exquisite gota patti, aari needlework, and featherlight organza dupattas.',
     bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
@@ -165,7 +165,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'ready-to-wear',
-    title: 'READY TO SHIP',
+    title: 'Ready to Ship',
     tagline: 'Express Dispatches Within 24-48 Hours',
     description: 'Curated luxury pieces pre-crafted in standard sizes, ready for immediate express delivery across India and worldwide.',
     bannerImage: 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=1920&auto=format&fit=crop',
@@ -174,7 +174,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
   },
   {
     slug: 'accessories',
-    title: 'FINE ACCESSORIES',
+    title: 'Fine Accessories',
     tagline: 'Vegetable Tanned Leather & Tissue Dupattas',
     description: 'Hand-burnished saddle bags with solid brass fittings, handwoven Varanasi tissue silk dupattas, and handcrafted juttis.',
     bannerImage: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1920&auto=format&fit=crop',
@@ -473,236 +473,175 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#2C2420]">
-      {/* 1. Collection Breadcrumb & Header Banner */}
-      <section className="relative bg-[#FAF6F0] border-b border-[#DFCBB8] pt-6 pb-10 sm:py-12 overflow-hidden">
-        {/* Subtle decorative archival watermark */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-5 pointer-events-none bg-[radial-gradient(#9E472A_1px,transparent_1px)] [background-size:16px_16px]" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* 1. Minimal Luxury Header & Category Nav */}
+      <section className="bg-[#FAF6F0] border-b border-[#DFCBB8]/70 pt-5 pb-5 sm:pt-7 sm:pb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
           {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-[11px] font-cinzel text-[#7A6F68] uppercase tracking-wider mb-4">
+          <nav className="flex items-center gap-1.5 text-[11px] font-cinzel text-[#8A7D75] uppercase tracking-wider mb-2.5">
             <button
               onClick={onBackToHome}
               className="hover:text-[#9E472A] transition-colors cursor-pointer"
             >
               Home
             </button>
-            <span>/</span>
-            <span className="text-[#9E472A] font-semibold">Collections</span>
-            <span>/</span>
-            <span className="text-[#2C2420] font-bold">{currentCollection.title}</span>
+            <span className="text-[#DFCBB8]">/</span>
+            <button 
+              onClick={() => onSelectCollection('all')}
+              className="hover:text-[#9E472A] transition-colors cursor-pointer"
+            >
+              Collections
+            </button>
+            <span className="text-[#DFCBB8]">/</span>
+            <span className="text-[#9E472A] font-semibold">{currentCollection.title}</span>
           </nav>
 
-          {/* Collection Title & Editorial Statement */}
-          <div className="max-w-3xl">
-            <span className="inline-block px-3 py-1 bg-[#F3E8DB] text-[#9E472A] font-cinzel text-[11px] font-semibold tracking-widest uppercase rounded-full mb-3 border border-[#DFCBB8]">
-              {currentCollection.tagline}
-            </span>
-            <h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C2420] tracking-wide leading-tight">
-              {currentCollection.title}
-            </h1>
-            <p className="font-serif-luxury italic text-sm sm:text-base text-[#685C54] mt-3 leading-relaxed">
-              {currentCollection.description}
-            </p>
-          </div>
-
-          {/* Collection Switcher Pills */}
-          <div className="mt-8 pt-6 border-t border-[#DFCBB8]/60 flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
-            {COLLECTIONS_LIST.map((col) => {
-              const isActive = col.slug === currentCollectionSlug;
-              return (
-                <button
-                  key={col.slug}
-                  onClick={() => onSelectCollection(col.slug)}
-                  className={`px-4 py-2 rounded-full text-xs font-cinzel tracking-wider whitespace-nowrap transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-[#9E472A] text-white font-bold shadow-sm'
-                      : 'bg-white text-[#523A30] border border-[#DFCBB8] hover:border-[#9E472A] hover:bg-[#F8F2EA]'
-                  }`}
-                >
-                  {col.slug === 'new-arrivals' ? '✨ ' : ''}
-                  {col.title}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Quick Sub-Filter Chips Bar (Mukti & Kavith Casa Luxury Pattern) */}
-          <div className="mt-3 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-[11px] font-cinzel">
-            <span className="text-[#7A6F68] uppercase text-[10px] tracking-wider whitespace-nowrap mr-1">
-              Quick Filter:
-            </span>
+          {/* Title & Concise Editorial Note */}
+          <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-5">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h1 className="font-cinzel text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C2420] tracking-wide">
+                  {currentCollection.title}
+                </h1>
+                {currentCollection.accentBadge && (
+                  <span className="hidden sm:inline-block px-2.5 py-0.5 bg-[#F3E8DB] text-[#9E472A] font-cinzel text-[10px] font-semibold tracking-wider uppercase rounded-full border border-[#DFCBB8]/80">
+                    {currentCollection.accentBadge}
+                  </span>
+                )}
+              </div>
+              <p className="font-serif-luxury italic text-xs sm:text-sm text-[#685C54] mt-1 max-w-2xl line-clamp-2 sm:line-clamp-none">
+                {currentCollection.description}
+              </p>
+            </div>
             
-            <button
-              onClick={() => setSelectedGenders(selectedGenders.includes('Men') ? [] : ['Men'])}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                selectedGenders.includes('Men')
-                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              Men's Edit
-            </button>
-
-            <button
-              onClick={() => setSelectedGenders(selectedGenders.includes('Women') ? [] : ['Women'])}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                selectedGenders.includes('Women')
-                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              Women's Couture
-            </button>
-
-            <button
-              onClick={() => setSelectedFabrics(selectedFabrics.includes('Raw Silk') ? [] : ['Raw Silk'])}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                selectedFabrics.includes('Raw Silk')
-                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              Pure Raw Silk
-            </button>
-
-            <button
-              onClick={() => setSelectedOccasions(selectedOccasions.includes('Wedding & Pheras') ? [] : ['Wedding & Pheras'])}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                selectedOccasions.includes('Wedding & Pheras')
-                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              Royal Wedding
-            </button>
-
-            <button
-              onClick={() => setOnlyReadyToShip(!onlyReadyToShip)}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                onlyReadyToShip
-                  ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              ⚡ Ready to Ship
-            </button>
-
-            <button
-              onClick={() => setPriceRange(priceRange === 10000 ? 40000 : 10000)}
-              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
-                priceRange === 10000
-                  ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
-                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
-              }`}
-            >
-              Under ₹10,000
-            </button>
+            <div className="text-right hidden md:block shrink-0">
+              <span className="text-xs font-cinzel text-[#8A7D75]">
+                <strong className="text-[#2C2420] font-semibold">{filteredProducts.length}</strong> Creations Available
+              </span>
+            </div>
           </div>
+
+          {/* Single Streamlined Category Carousel / Pills */}
+          <div className="relative">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 pt-0.5">
+              {COLLECTIONS_LIST.map((col) => {
+                const isActive = col.slug === currentCollectionSlug;
+                return (
+                  <button
+                    key={col.slug}
+                    onClick={() => onSelectCollection(col.slug)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-cinzel tracking-wider whitespace-nowrap transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-[#9E472A] text-white font-semibold shadow-xs'
+                        : 'bg-white text-[#523A30] border border-[#DFCBB8] hover:border-[#9E472A] hover:bg-[#FAF6F0]'
+                    }`}
+                  >
+                    {col.title}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* 2. Top Control Bar (Filter trigger, Grid Switcher, Sorting, Count) */}
-      <section className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#DFCBB8] py-3.5 shadow-xs">
+      {/* 2. Compact Sticky Filter & Control Toolbar */}
+      <section className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#DFCBB8] py-2.5 shadow-2xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
           
-          {/* Left: Filter Drawer Trigger Button */}
+          {/* Left: Filter Drawer Trigger & Quick Stats */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setFilterDrawerOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-md border border-[#DFCBB8] hover:border-[#9E472A] text-xs font-cinzel font-semibold tracking-wider text-[#2C2420] hover:text-[#9E472A] shadow-2xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white rounded-full border border-[#DFCBB8] hover:border-[#9E472A] text-xs font-cinzel font-semibold tracking-wider text-[#2C2420] hover:text-[#9E472A] shadow-2xs transition-all cursor-pointer"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#9E472A]" />
               <span>FILTER & REFINE</span>
               {activeFiltersCount > 0 && (
-                <span className="w-5 h-5 rounded-full bg-[#9E472A] text-white text-[10px] flex items-center justify-center font-bold">
+                <span className="w-4 h-4 rounded-full bg-[#9E472A] text-white text-[10px] flex items-center justify-center font-bold">
                   {activeFiltersCount}
                 </span>
               )}
             </button>
 
-            {/* Active Items Count */}
-            <span className="hidden sm:inline-block text-xs font-cinzel text-[#7A6F68]">
-              Showing <strong className="text-[#2C2420]">{filteredProducts.length}</strong> creations
+            <span className="text-xs font-cinzel text-[#8A7D75]">
+              {filteredProducts.length} items
             </span>
           </div>
 
           {/* Right: Grid Switcher & Sorting */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3">
             
             {/* Grid Layout Switcher (Desktop) */}
-            <div className="hidden md:flex items-center border border-[#DFCBB8] rounded-md bg-white p-0.5">
+            <div className="hidden md:flex items-center border border-[#DFCBB8] rounded-full bg-white p-0.5">
               <button
                 onClick={() => setGridColumns(2)}
                 title="2 Columns Editorial View"
-                className={`p-1.5 rounded transition-colors cursor-pointer ${
+                className={`p-1.5 rounded-full transition-colors cursor-pointer ${
                   gridColumns === 2 ? 'bg-[#9E472A] text-white' : 'text-[#7A6F68] hover:text-[#2C2420]'
                 }`}
               >
-                <Grid2X2 className="w-4 h-4" />
+                <Grid2X2 className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setGridColumns(3)}
                 title="3 Columns Balanced View"
-                className={`p-1.5 rounded transition-colors cursor-pointer ${
+                className={`p-1.5 rounded-full transition-colors cursor-pointer ${
                   gridColumns === 3 ? 'bg-[#9E472A] text-white' : 'text-[#7A6F68] hover:text-[#2C2420]'
                 }`}
               >
-                <Grid3X3 className="w-4 h-4" />
+                <Grid3X3 className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setGridColumns(4)}
                 title="4 Columns Compact Grid"
-                className={`p-1.5 rounded transition-colors cursor-pointer ${
+                className={`p-1.5 rounded-full transition-colors cursor-pointer ${
                   gridColumns === 4 ? 'bg-[#9E472A] text-white' : 'text-[#7A6F68] hover:text-[#2C2420]'
                 }`}
               >
-                <LayoutGrid className="w-4 h-4" />
+                <LayoutGrid className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {/* Sort Dropdown */}
-            <div className="flex items-center gap-2">
-              <span className="hidden lg:inline-block text-xs font-cinzel text-[#7A6F68]">Sort By:</span>
-              <div className="relative">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none bg-white border border-[#DFCBB8] rounded-md px-3 py-2 pr-8 text-xs font-cinzel text-[#2C2420] focus:outline-none focus:border-[#9E472A] cursor-pointer shadow-2xs"
-                >
-                  <option value="featured">Featured & Curated</option>
-                  <option value="newest">Latest / New Arrivals</option>
-                  <option value="bestsellers">Best Selling</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="rating">Top Customer Rated</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-[#7A6F68] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="appearance-none bg-white border border-[#DFCBB8] rounded-full px-3.5 py-1.5 pr-8 text-xs font-cinzel text-[#2C2420] focus:outline-none focus:border-[#9E472A] cursor-pointer shadow-2xs"
+              >
+                <option value="featured">Featured</option>
+                <option value="newest">New Arrivals</option>
+                <option value="bestsellers">Best Selling</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-[#7A6F68] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* 3. Active Filters Chips */}
+      {/* 3. Compact Active Filters Chips (Only if filters active) */}
       {activeFiltersCount > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-          <div className="flex flex-wrap items-center gap-2 p-3 bg-[#FAF6F0] rounded-lg border border-[#DFCBB8]">
-            <span className="text-xs font-cinzel font-semibold text-[#523A30] flex items-center gap-1.5 mr-1">
-              <Filter className="w-3.5 h-3.5 text-[#9E472A]" />
-              <span>Active Filters:</span>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3">
+          <div className="flex flex-wrap items-center gap-1.5 py-2 px-3 bg-white/80 rounded-lg border border-[#DFCBB8]/70">
+            <span className="text-[11px] font-cinzel font-semibold text-[#8A7D75] mr-1">
+              Active:
             </span>
 
             {selectedGenders.map((g) => (
               <span
                 key={g}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
               >
                 <span>{g}</span>
                 <button
                   onClick={() => setSelectedGenders(selectedGenders.filter((x) => x !== g))}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -712,12 +651,12 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             {selectedCategories.map((c) => (
               <span
                 key={c}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
               >
                 <span>{c}</span>
                 <button
                   onClick={() => setSelectedCategories(selectedCategories.filter((x) => x !== c))}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -727,12 +666,12 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             {selectedStyles.map((s) => (
               <span
                 key={s}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
               >
                 <span>Style: {s}</span>
                 <button
                   onClick={() => setSelectedStyles(selectedStyles.filter((x) => x !== s))}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -742,12 +681,12 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             {selectedFabrics.map((f) => (
               <span
                 key={f}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
               >
                 <span>Fabric: {f}</span>
                 <button
                   onClick={() => setSelectedFabrics(selectedFabrics.filter((x) => x !== f))}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -757,12 +696,12 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             {selectedOccasions.map((o) => (
               <span
                 key={o}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]"
               >
-                <span>Occasion: {o}</span>
+                <span>{o}</span>
                 <button
                   onClick={() => setSelectedOccasions(selectedOccasions.filter((x) => x !== o))}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -770,11 +709,11 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             ))}
 
             {priceRange < 40000 && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
                 <span>Under ₹{priceRange.toLocaleString('en-IN')}</span>
                 <button
                   onClick={() => setPriceRange(40000)}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -782,11 +721,11 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             )}
 
             {onlyReadyToShip && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
                 <span>Ready to Ship</span>
                 <button
                   onClick={() => setOnlyReadyToShip(false)}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -794,11 +733,11 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             )}
 
             {onlyOnSale && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-[#FAF6F0] border border-[#DFCBB8] rounded-full text-[11px] font-cinzel text-[#2C2420]">
                 <span>Special Offers</span>
                 <button
                   onClick={() => setOnlyOnSale(false)}
-                  className="text-[#7A6F68] hover:text-[#9E472A] cursor-pointer"
+                  className="text-[#8A7D75] hover:text-[#9E472A] cursor-pointer ml-0.5"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -807,7 +746,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
             <button
               onClick={handleClearAllFilters}
-              className="text-[11px] font-cinzel text-[#9E472A] font-bold hover:underline ml-auto cursor-pointer"
+              className="text-[11px] font-cinzel text-[#9E472A] font-semibold hover:underline ml-auto cursor-pointer"
             >
               Clear All
             </button>
