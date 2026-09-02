@@ -68,16 +68,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             
             {/* Left: Gallery & Zoom Preview */}
             <div className="md:col-span-6 bg-[#EFE5D8] p-4 sm:p-6 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r border-[#DFCBB8]">
-              {/* Main Image with Signature Mughal Arch Frame */}
-              <div className="w-full max-w-[340px]">
+              {/* Main Image with Rectangular Frame */}
+              <div className="w-full max-w-[360px]">
                 <IndianArchCard
                   id={`detail-modal-${product.id}`}
                   image={selectedImage}
                   alt={product.name}
                   aspectRatio="aspect-[3/4]"
-                  borderColor="#9E472A"
-                  strokeWidth={2}
-                  showDoubleBorder={true}
+                  overlayGradient={false}
                 >
                   {product.tags && product.tags.length > 0 && (
                     <div className="absolute top-3 left-3 z-20 flex flex-col gap-1 pointer-events-none">

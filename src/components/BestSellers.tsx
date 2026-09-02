@@ -53,8 +53,8 @@ export const BestSellers: React.FC<BestSellersProps> = ({
                 id={`product-card-${product.id}`}
                 className="group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
-                {/* Signature Mughal Arch Card (3:4 ratio) */}
-                <div className="w-full max-w-[280px] mb-3">
+                {/* Rectangular Product Card (3:4 ratio) */}
+                <div className="w-full mb-3">
                   <IndianArchCard
                     id={`bestseller-${product.id}`}
                     image={product.image}

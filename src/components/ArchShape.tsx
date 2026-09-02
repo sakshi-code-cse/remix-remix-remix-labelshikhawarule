@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
 
 /**
- * Reusable Indian Architectural Stepped Cusped Arch (Mughal / Rajputana Jharokha Arch)
- * Precisely calibrated to match the uploaded architectural arch silhouette:
- * 1. Straight vertical side walls
- * 2. Smooth convex shoulder curve transitioning into a horizontal stepped ledge
- * 3. 90-degree crisp vertical step
- * 4. Rounded outer scallop lobes (cusped arches)
- * 5. Inflected central ogee pointed apex at the peak
- * 6. Symmetrical descending path to bottom edge
+ * Architectural SVG Constants preserved for hero and branding elements
  */
-
-// Normalized 0 to 1 clip-path coordinates for clipPathUnits="objectBoundingBox"
 export const ARCH_CLIP_PATH_D = `
   M 0,1
   L 0,0.36
@@ -29,7 +20,6 @@ export const ARCH_CLIP_PATH_D = `
   Z
 `.trim().replace(/\s+/g, ' ');
 
-// High-resolution SVG Stroke Path for 400x560 ViewBox (1:1.4 aspect ratio)
 export const ARCH_STROKE_PATH_D = `
   M 0,560
   L 0,201.6
@@ -46,7 +36,6 @@ export const ARCH_STROKE_PATH_D = `
   L 400,560
 `.trim().replace(/\s+/g, ' ');
 
-// Subtle concentric outer decorative echo line for luxury couture framing
 export const ARCH_OUTER_STROKE_PATH_D = `
   M -5,560
   L -5,198
@@ -63,7 +52,6 @@ export const ARCH_OUTER_STROKE_PATH_D = `
   L 405,560
 `.trim().replace(/\s+/g, ' ');
 
-// Inner luxury gold hairline inlay
 export const ARCH_INNER_STROKE_PATH_D = `
   M 6,560
   L 6,204
@@ -97,6 +85,11 @@ export interface IndianArchCardProps {
   children?: React.ReactNode;
 }
 
+/**
+ * Premium Rectangular Product Card Component
+ * Restores all product, category, and style images to crisp, clean rectangles (3:4 ratio)
+ * with smooth zoom, secondary hover crossfade, and clean luxury borders.
+ */
 export const IndianArchCard: React.FC<IndianArchCardProps> = ({
   id,
   image,
@@ -104,119 +97,52 @@ export const IndianArchCard: React.FC<IndianArchCardProps> = ({
   alt,
   aspectRatio = 'aspect-[3/4]',
   className = '',
-  showDoubleBorder = true,
-  showInnerGoldInlay = false,
-  borderColor = '#9E472A',
-  strokeWidth = 1.8,
   overlayGradient = true,
   objectPosition = 'object-top',
   onClick,
   children,
 }) => {
-  // Unique clip id to prevent SVG clip-path collision across cards
-  const clipId = `mughal-arch-clip-${id.replace(/[^a-zA-Z0-9-_]/g, '_')}`;
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div 
-      className={`relative w-full ${aspectRatio} select-none ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      id={`rect-card-${id}`}
+      className={`group relative w-full ${aspectRatio} overflow-hidden rounded-md bg-[#F3E8DB] border border-[#DFCBB8]/80 hover:border-[#9E472A]/70 shadow-2xs transition-all duration-300 select-none ${
+        onClick ? 'cursor-pointer' : ''
+      } ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-      {/* SVG Defs for objectBoundingBox clip-path */}
-      <svg className="absolute w-0 h-0 pointer-events-none opacity-0" aria-hidden="true" tabIndex={-1}>
-        <defs>
-          <clipPath id={clipId} clipPathUnits="objectBoundingBox">
-            <path d={ARCH_CLIP_PATH_D} />
-          </clipPath>
-        </defs>
-      </svg>
+      {/* Primary Image */}
+      <img
+        src={image}
+        alt={alt}
+        loading="lazy"
+        className={`w-full h-full object-cover ${objectPosition} transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 ${
+          hoverImage && isHovered ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
 
-      {/* Clipped Image Wrapper with Warm Luxury Texture Background */}
-      <div
-        className="w-full h-full relative overflow-hidden bg-[#F3E8DB] transition-all duration-300 shadow-sm"
-        style={{
-          clipPath: `url(#${clipId})`,
-          WebkitClipPath: `url(#${clipId})`,
-        }}
-      >
-        {/* Primary Image */}
+      {/* Secondary Hover Image (if present) */}
+      {hoverImage && (
         <img
-          src={image}
-          alt={alt}
+          src={hoverImage}
+          alt={`${alt} alternate angle`}
           loading="lazy"
-          className={`w-full h-full object-cover ${objectPosition} transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108 ${
-            hoverImage && isHovered ? 'opacity-0' : 'opacity-100'
+          className={`w-full h-full object-cover ${objectPosition} absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         />
+      )}
 
-        {/* Secondary Hover Image (if present) */}
-        {hoverImage && (
-          <img
-            src={hoverImage}
-            alt={`${alt} alternate angle`}
-            loading="lazy"
-            className={`w-full h-full object-cover ${objectPosition} absolute inset-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-108 ${
-              isHovered ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        )}
+      {/* Subtle royal vignette shadow at bottom */}
+      {overlayGradient && (
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2C2420]/35 via-transparent to-transparent pointer-events-none" />
+      )}
 
-        {/* Subtle royal vignette shadow at bottom */}
-        {overlayGradient && (
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2C2420]/45 via-transparent to-transparent pointer-events-none" />
-        )}
-
-        {/* Interactive children inside the arch (e.g. wishlist, badges, quick actions) */}
-        {children}
-      </div>
-
-      {/* High-Precision SVG Decorative Stroke Border Outline */}
-      <svg
-        viewBox="0 0 400 560"
-        preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full pointer-events-none z-10 drop-shadow-xs"
-        aria-hidden="true"
-      >
-        {/* Outer subtle decorative aura line */}
-        {showDoubleBorder && (
-          <path
-            d={ARCH_OUTER_STROKE_PATH_D}
-            fill="none"
-            stroke={borderColor}
-            strokeWidth="1"
-            strokeOpacity="0.25"
-            strokeDasharray="4 3"
-            vectorEffect="non-scaling-stroke"
-          />
-        )}
-
-        {/* Inner gold luxury hairline */}
-        {showInnerGoldInlay && (
-          <path
-            d={ARCH_INNER_STROKE_PATH_D}
-            fill="none"
-            stroke="#D4AF37"
-            strokeWidth="1"
-            strokeOpacity="0.5"
-            vectorEffect="non-scaling-stroke"
-          />
-        )}
-
-        {/* Main crisp arch outline precisely following the user reference silhouette */}
-        <path
-          d={ARCH_STROKE_PATH_D}
-          fill="none"
-          stroke={borderColor}
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeOpacity="0.9"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
+      {/* Interactive children inside the card (badges, wishlist, quick actions) */}
+      {children}
     </div>
   );
 };
-
