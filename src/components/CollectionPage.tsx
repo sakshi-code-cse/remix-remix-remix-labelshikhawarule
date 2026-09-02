@@ -3,6 +3,8 @@ import {
   Filter, 
   X, 
   ChevronDown, 
+  ChevronLeft,
+  ChevronRight,
   SlidersHorizontal, 
   Grid2X2, 
   Grid3X3, 
@@ -1039,8 +1041,77 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
               {/* Drawer Scrollable Content */}
               <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
                 
-                {/* 1. Price Range Slider */}
+                {/* 0. Curated Quick Presets */}
                 <div>
+                  <label className="block text-xs font-cinzel font-bold text-[#2C2420] uppercase tracking-wider mb-2.5">
+                    Curated Quick Presets
+                  </label>
+                  <div className="flex flex-wrap gap-1.5 text-[11px] font-cinzel">
+                    <button
+                      onClick={() => setSelectedGenders(selectedGenders.includes('Men') ? [] : ['Men'])}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        selectedGenders.includes('Men')
+                          ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      Men's Edit
+                    </button>
+                    <button
+                      onClick={() => setSelectedGenders(selectedGenders.includes('Women') ? [] : ['Women'])}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        selectedGenders.includes('Women')
+                          ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      Women's Couture
+                    </button>
+                    <button
+                      onClick={() => setSelectedFabrics(selectedFabrics.includes('Raw Silk') ? [] : ['Raw Silk'])}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        selectedFabrics.includes('Raw Silk')
+                          ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      Pure Raw Silk
+                    </button>
+                    <button
+                      onClick={() => setSelectedOccasions(selectedOccasions.includes('Wedding & Pheras') ? [] : ['Wedding & Pheras'])}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        selectedOccasions.includes('Wedding & Pheras')
+                          ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      Royal Wedding
+                    </button>
+                    <button
+                      onClick={() => setOnlyReadyToShip(!onlyReadyToShip)}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        onlyReadyToShip
+                          ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      ⚡ Ready to Ship
+                    </button>
+                    <button
+                      onClick={() => setPriceRange(priceRange === 10000 ? 40000 : 10000)}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        priceRange === 10000
+                          ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
+                          : 'bg-white text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+                      }`}
+                    >
+                      Under ₹10,000
+                    </button>
+                  </div>
+                </div>
+
+                {/* 1. Price Range Slider */}
+                <div className="pt-4 border-t border-[#DFCBB8]">
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-cinzel font-bold text-[#2C2420] uppercase tracking-wider">
                       Max Price: ₹{priceRange.toLocaleString('en-IN')}
