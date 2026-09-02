@@ -1,17 +1,31 @@
-import React from 'react';
-import { DISCOVERY_PRODUCTS, DiscoveryProduct, toGlobalProduct } from './types';
+import React, { useMemo } from 'react';
+import { DISCOVERY_PRODUCTS, DiscoveryProduct, toGlobalProduct, discoveryStoryToDiscoveryProduct } from './types';
 import { DiscoveryCarousel } from './DiscoveryCarousel';
-import { Product } from '../../types';
+import { Product, DiscoveryStory } from '../../types';
 
 interface DiscoverySectionProps {
   onSelectProduct?: (product: Product) => void;
   products?: DiscoveryProduct[];
+  discoveryStories?: DiscoveryStory[];
 }
 
 export const DiscoverySection: React.FC<DiscoverySectionProps> = ({
   onSelectProduct,
-  products = DISCOVERY_PRODUCTS,
+  products,
+  discoveryStories,
 }) => {
+  const renderedProducts: DiscoveryProduct[] = useMemo(() => {
+    if (discoveryStories && discoveryStories.length > 0) {
+      return discoveryStories
+        .filter((s) => s.isActive !== false)
+        .map((s, idx) => discoveryStoryToDiscoveryProduct(s, idx));
+    }
+    if (products && products.length > 0) {
+      return products;
+    }
+    return DISCOVERY_PRODUCTS;
+  }, [discoveryStories, products]);
+
   const handleProductSelect = (dp: DiscoveryProduct) => {
     if (onSelectProduct) {
       onSelectProduct(toGlobalProduct(dp));
@@ -41,7 +55,7 @@ export const DiscoverySection: React.FC<DiscoverySectionProps> = ({
 
       {/* HORIZONTAL DISCOVERY CAROUSEL */}
       <DiscoveryCarousel
-        products={products}
+        products={renderedProducts}
         onSelectProduct={handleProductSelect}
       />
     </section>

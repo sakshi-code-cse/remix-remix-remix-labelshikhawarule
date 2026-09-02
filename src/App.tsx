@@ -992,6 +992,7 @@ export default function App() {
 
             {/* 6. Discovery Product Carousel Section */}
             <DiscoverySection
+              discoveryStories={discoveryStories}
               onSelectProduct={(product) => navigateToProduct(product)}
             />
 

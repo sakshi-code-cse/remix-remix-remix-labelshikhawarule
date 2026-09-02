@@ -6446,14 +6446,45 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* SECTION 3: STORY & ARTISAN DETAILS */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Story / Reel Title *</label>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Story / Product Title *</label>
                   <input
                     required
                     value={storyForm.title}
                     onChange={(e) => setStoryForm({ ...storyForm, title: e.target.value })}
-                    placeholder="e.g. The Weaves of Maheshwar"
+                    placeholder="e.g. SIGNATURE EMBROIDERED LEHENGA"
                     className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2.5 text-[#3B0A12] text-sm font-semibold focus:outline-none focus:border-[#7A1526]"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Category (e.g. LEHENGA, BRIDAL, SAREE, COUTURE)</label>
+                  <input
+                    value={storyForm.category || ''}
+                    onChange={(e) => setStoryForm({ ...storyForm, category: e.target.value.toUpperCase() })}
+                    placeholder="e.g. LEHENGA"
+                    className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526] uppercase font-mono text-xs"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Price (₹)</label>
+                    <input
+                      value={storyForm.price || ''}
+                      onChange={(e) => setStoryForm({ ...storyForm, price: e.target.value })}
+                      placeholder="e.g. ₹85,000"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526] font-mono text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[#6B3740] font-cinzel mb-1 font-semibold">Original Price (₹)</label>
+                    <input
+                      value={storyForm.originalPrice || ''}
+                      onChange={(e) => setStoryForm({ ...storyForm, originalPrice: e.target.value })}
+                      placeholder="e.g. ₹95,000"
+                      className="w-full bg-white border border-[#F0D5DA] rounded-lg p-2 text-[#3B0A12] focus:outline-none focus:border-[#7A1526] font-mono text-xs"
+                    />
+                  </div>
                 </div>
 
                 <div>

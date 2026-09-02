@@ -1,4 +1,4 @@
-import { Product } from '../../types';
+import { Product, DiscoveryStory } from '../../types';
 
 export interface DiscoveryProduct {
   id: string;
@@ -20,6 +20,37 @@ export interface DiscoveryProduct {
   careInstructions: string[];
   artisanNote: string;
   sizes: string[];
+}
+
+export function discoveryStoryToDiscoveryProduct(story: DiscoveryStory, index: number = 0): DiscoveryProduct {
+  const defaultPrices = [85000, 125000, 68000, 48000, 95000, 78000, 72000, 110000];
+  const numPrice = story.numericPrice || (story.price ? parseInt(story.price.replace(/[^\d]/g, ''), 10) : null) || defaultPrices[index % defaultPrices.length];
+  const priceStr = story.price || `₹${numPrice.toLocaleString('en-IN')}`;
+  const origPriceStr = story.originalPrice || `₹${Math.round(numPrice * 1.15).toLocaleString('en-IN')}`;
+  const categoryStr = story.category || (story.tags && story.tags[0]) || (story.subtitle ? story.subtitle.toUpperCase() : 'COUTURE');
+  const imageUrl = story.thumbnail || story.image || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1000&auto=format&fit=crop';
+
+  return {
+    id: story.id,
+    name: story.title ? story.title.toUpperCase() : 'HERITAGE COUTURE ENSEMBLE',
+    category: categoryStr,
+    price: priceStr,
+    numericPrice: numPrice,
+    originalPrice: origPriceStr,
+    reviews: story.reviews || (16 + ((index * 7) % 20)),
+    rating: story.rating || 5,
+    image: imageUrl,
+    videoUrl: story.videoUrl,
+    videoDuration: story.videoDuration || '0:20',
+    hoverImage: story.thumbnail || imageUrl,
+    slug: story.slug || story.id,
+    productUrl: `/product/${story.slug || story.id}`,
+    description: story.description || story.craftsmanshipDetail || 'A bespoke handcrafted atelier ensemble woven with royal heritage zardozi, tilla and fine silk.',
+    fabric: story.craftsmanshipDetail || 'Pure Raw Silk with Tonal Organza Dupatta',
+    careInstructions: ['Dry clean only', 'Store wrapped in pristine muslin cloth', 'Steam press on reverse'],
+    artisanNote: story.artisanQuote ? `"${story.artisanQuote}" — ${story.artisanName || 'Master Artisan'}` : 'Handcrafted over 160 hours by master artisans in our Jaipur & Pune ateliers.',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'Custom Fit'],
+  };
 }
 
 export const DISCOVERY_PRODUCTS: DiscoveryProduct[] = [

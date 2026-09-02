@@ -96,6 +96,14 @@ export interface DiscoveryStory {
   thumbnailMediaId?: string;
   isActive?: boolean;
   displayOrder?: number;
+  category?: string;
+  price?: string;
+  numericPrice?: number;
+  originalPrice?: string;
+  reviews?: number;
+  rating?: number;
+  slug?: string;
+  image?: string;
 }
 
 export interface ClientDiary {
