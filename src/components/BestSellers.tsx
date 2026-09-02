@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, ArrowRight, ShoppingBag, Eye } from 'lucide-react';
 import { Product } from '../types';
 import { IndianArchCard } from './ArchShape';
+import { HorizontalScrollSection } from './common/HorizontalScrollSection';
 
 interface BestSellersProps {
   products: Product[];
@@ -20,12 +21,8 @@ export const BestSellers: React.FC<BestSellersProps> = ({
   isWishlisted,
   onViewAllClick,
 }) => {
-  const [showAllPieces, setShowAllPieces] = React.useState(false);
-
-  const visibleProducts = showAllPieces || products.length <= 8 ? products : products.slice(0, 8);
-
   return (
-    <section id="best-sellers-section" className="py-10 md:py-16 bg-[#FAF6F0]">
+    <section id="best-sellers-section" className="py-10 md:py-16 bg-[#FAF6F0] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -41,9 +38,16 @@ export const BestSellers: React.FC<BestSellersProps> = ({
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Product Cards Grid: Responsive 2-4 columns Mughal arch pattern */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {visibleProducts.map((product) => {
+        {/* Product Cards Horizontal Carousel: 4 items on desktop, smooth swipe/drag */}
+        <HorizontalScrollSection
+          id="best-sellers-track"
+          ariaLabel="Shop Our Bestsellers carousel"
+          gap="gap-4 sm:gap-6"
+          padding="px-1"
+          showArrows={true}
+          showProgressBar={true}
+        >
+          {products.map((product) => {
             const wish = isWishlisted(product.id);
             const secondImg = product.images && product.images.length > 1 ? product.images[1] : product.hoverImage;
 
@@ -51,7 +55,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({
               <div
                 key={product.id}
                 id={`product-card-${product.id}`}
-                className="group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
+                className="group flex flex-col items-center flex-none w-[72vw] sm:w-[46vw] md:w-[32vw] lg:w-[calc((100%-3*24px)/4)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
                 {/* Rectangular Product Card (3:4 ratio) */}
                 <div className="w-full mb-3">
@@ -138,26 +142,22 @@ export const BestSellers: React.FC<BestSellersProps> = ({
               </div>
             );
           })}
-        </div>
+        </HorizontalScrollSection>
 
-        {/* View All / Expand Pieces Button */}
-        {products.length > 8 && (
-          <div className="mt-10 md:mt-12 flex justify-center">
-            <button
-              id="view-all-best-sellers-button"
-              onClick={() => {
-                setShowAllPieces(!showAllPieces);
-                onViewAllClick();
-              }}
-              className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[#9E472A] text-[#9E472A] hover:bg-[#9E472A] hover:text-white rounded text-xs font-cinzel font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
-            >
-              <span>{showAllPieces ? 'SHOW FEWER PIECES' : `VIEW ALL ${products.length} ENSEMBLES`}</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
-          </div>
-        )}
+        {/* View All Pieces Button */}
+        <div className="mt-8 flex justify-center">
+          <button
+            id="view-all-best-sellers-button"
+            onClick={onViewAllClick}
+            className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[#9E472A] text-[#9E472A] hover:bg-[#9E472A] hover:text-white rounded text-xs font-cinzel font-semibold tracking-[0.18em] uppercase transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer"
+          >
+            <span>VIEW ALL {products.length} ENSEMBLES</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+        </div>
 
       </div>
     </section>
   );
 };
+

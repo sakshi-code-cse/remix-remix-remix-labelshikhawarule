@@ -2,6 +2,7 @@ import React from 'react';
 import { STYLE_CATEGORIES } from '../data/mockData';
 import { StyleCategory } from '../types';
 import { IndianArchCard } from './ArchShape';
+import { HorizontalScrollSection } from './common/HorizontalScrollSection';
 
 interface ShopByStyleProps {
   onSelectStyle: (styleId: string) => void;
@@ -13,7 +14,7 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
   const styles = stylesList && stylesList.length > 0 ? stylesList : STYLE_CATEGORIES;
 
   return (
-    <section id="shop-by-style-section" className="py-10 md:py-16 bg-[#FAF6F0]">
+    <section id="shop-by-style-section" className="py-10 md:py-16 bg-[#FAF6F0] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with Elegant Divider Line */}
@@ -29,8 +30,15 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Style Cards Grid: 4 items per row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        {/* Horizontal Scrolling Style Carousel */}
+        <HorizontalScrollSection
+          id="shop-by-style-track"
+          ariaLabel="Shop by Style carousel"
+          gap="gap-4 sm:gap-6"
+          padding="px-1"
+          showArrows={true}
+          showProgressBar={true}
+        >
           {styles.map((style) => {
             const isSelected = selectedStyle?.toLowerCase() === style.title.toLowerCase();
 
@@ -39,7 +47,7 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
                 key={style.id}
                 id={`style-card-${style.id}`}
                 onClick={() => onSelectStyle(style.title)}
-                className="group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
+                className="group flex flex-col items-center flex-none w-[72vw] sm:w-[46vw] md:w-[32vw] lg:w-[calc((100%-3*24px)/4)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
                 {/* Rectangular Image Frame */}
                 <div className={`w-full mb-3 transition-transform duration-300 ${isSelected ? 'scale-[1.02]' : ''}`}>
@@ -68,9 +76,10 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
               </div>
             );
           })}
-        </div>
+        </HorizontalScrollSection>
 
       </div>
     </section>
   );
 };
+

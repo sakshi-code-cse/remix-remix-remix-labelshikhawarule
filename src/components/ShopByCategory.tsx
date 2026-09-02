@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { CATEGORIES_LIST } from '../data/mockData';
 import { CategoryItem } from '../types';
 import { IndianArchCard } from './ArchShape';
+import { HorizontalScrollSection } from './common/HorizontalScrollSection';
 
 interface ShopByCategoryProps {
   onSelectCategory: (categorySlug: string) => void;
@@ -20,7 +21,7 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
   const categories = categoriesList && categoriesList.length > 0 ? categoriesList : CATEGORIES_LIST;
 
   return (
-    <section id="shop-by-category-section" className="py-10 md:py-16 bg-[#FAF6F0]">
+    <section id="shop-by-category-section" className="py-10 md:py-16 bg-[#FAF6F0] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -36,8 +37,15 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Collection Cards Grid: 4 items per row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        {/* Horizontal Scrolling Collection Carousel */}
+        <HorizontalScrollSection
+          id="shop-by-collection-track"
+          ariaLabel="Shop by Collection carousel"
+          gap="gap-4 sm:gap-6"
+          padding="px-1"
+          showArrows={true}
+          showProgressBar={true}
+        >
           {categories.map((cat) => {
             const isSelected = selectedCategory?.toLowerCase() === cat.title.toLowerCase();
 
@@ -46,7 +54,7 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
                 key={cat.id}
                 id={`category-card-${cat.id}`}
                 onClick={() => onSelectCategory(cat.title)}
-                className="group flex flex-col items-center w-full cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
+                className="group flex flex-col items-center flex-none w-[72vw] sm:w-[46vw] md:w-[32vw] lg:w-[calc((100%-3*24px)/4)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
                 {/* Rectangular Image Frame */}
                 <div className={`w-full mb-3 transition-transform duration-300 ${isSelected ? 'scale-[1.02]' : ''}`}>
@@ -75,10 +83,10 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
               </div>
             );
           })}
-        </div>
+        </HorizontalScrollSection>
 
         {/* View All Categories Link */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <button
             id="view-all-categories-link"
             onClick={onViewAllCategories}
@@ -93,3 +101,4 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
     </section>
   );
 };
+

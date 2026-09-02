@@ -15,6 +15,8 @@ export const DiscoveryCarousel: React.FC<DiscoveryCarouselProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [thumbRatio, setThumbRatio] = useState(0.25);
 
   // Mouse Drag to Scroll States
   const [isDragging, setIsDragging] = useState(false);
@@ -27,7 +29,18 @@ export const DiscoveryCarousel: React.FC<DiscoveryCarouselProps> = ({
     if (!containerRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
     setCanScrollLeft(scrollLeft > 10);
+    const maxScroll = scrollWidth - clientWidth;
     setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 15);
+
+    if (maxScroll > 0) {
+      const progress = Math.min(Math.max(scrollLeft / maxScroll, 0), 1);
+      setScrollProgress(progress);
+      const ratio = Math.min(Math.max(clientWidth / scrollWidth, 0.15), 0.6);
+      setThumbRatio(ratio);
+    } else {
+      setScrollProgress(0);
+      setThumbRatio(1);
+    }
   }, []);
 
   useEffect(() => {
@@ -132,6 +145,25 @@ export const DiscoveryCarousel: React.FC<DiscoveryCarouselProps> = ({
             }}
           />
         ))}
+      </div>
+
+      {/* SUBTLE LUXURY PROGRESS BAR INDICATOR */}
+      <div className="flex items-center justify-center mt-5 sm:mt-7">
+        <div 
+          className="w-32 sm:w-44 h-[2.5px] bg-[#D4C3B2]/40 rounded-full overflow-hidden relative"
+          role="progressbar"
+          aria-valuenow={Math.round(scrollProgress * 100)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <div
+            className="h-full bg-[#9E472A] rounded-full transition-transform duration-100 ease-out"
+            style={{
+              width: `${thumbRatio * 100}%`,
+              transform: `translateX(${scrollProgress * ((1 - thumbRatio) / thumbRatio) * 100}%)`,
+            }}
+          />
+        </div>
       </div>
     </div>
   );
