@@ -940,9 +940,8 @@ export default function App() {
             <ShopByStyle
               stylesList={stylesList}
               onSelectStyle={(style) => {
-                setActiveFilter({ type: 'style', value: style });
-                const el = document.getElementById('best-sellers-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                const slug = style.toLowerCase().replace(/\s+/g, '-');
+                navigateToCollection(slug);
               }}
               selectedStyle={activeFilter.type === 'style' ? activeFilter.value : undefined}
             />
@@ -982,9 +981,8 @@ export default function App() {
             <ShopByCategory
               categoriesList={categoriesList}
               onSelectCategory={(cat) => {
-                setActiveFilter({ type: 'category', value: cat });
-                const el = document.getElementById('best-sellers-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                const slug = cat.toLowerCase().replace(/\s+/g, '-');
+                navigateToCollection(slug);
               }}
               selectedCategory={activeFilter.type === 'category' ? activeFilter.value : undefined}
               onViewAllCategories={() => navigateToCollection('all')}

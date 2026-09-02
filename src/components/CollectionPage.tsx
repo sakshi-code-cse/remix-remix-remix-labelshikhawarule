@@ -23,6 +23,7 @@ import {
 import { Product } from '../types';
 import { QuickShopModal } from './QuickShopModal';
 import { IndianArchCard } from './ArchShape';
+import { HorizontalScrollSection } from './common/HorizontalScrollSection';
 
 export interface CollectionPageProps {
   products: Product[];
@@ -37,12 +38,13 @@ export interface CollectionPageProps {
   onBackToHome: () => void;
 }
 
-interface CollectionMeta {
+export interface CollectionMeta {
   slug: string;
   title: string;
   tagline: string;
   description: string;
   bannerImage: string;
+  accentBadge?: string;
   defaultFilter?: {
     gender?: string;
     category?: string;
@@ -55,19 +57,75 @@ interface CollectionMeta {
 
 export const COLLECTIONS_LIST: CollectionMeta[] = [
   {
+    slug: 'all',
+    title: 'ALL CREATIONS',
+    tagline: 'The Complete Atelier Archive',
+    description: 'Explore the full spectrum of Label Shikha Warule heritage weaves, bespoke ensembles, luxury menswear, handcrafted kurtas, sarees, and fine accessories.',
+    bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Complete Archive',
+  },
+  {
+    slug: 'kurtas',
+    title: 'KURTAS',
+    tagline: 'Handspun Grace & Pure Mulberry Silks',
+    description: 'Bespoke hand-blocked mulmul, raw silk, and handloom Chanderi kurtas finished with delicate zardozi, aari needlework, and fine mother-of-pearl buttons.',
+    bannerImage: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: '48+ Silhouettes',
+    defaultFilter: { category: 'Kurtas' },
+  },
+  {
+    slug: 'sherwanis',
+    title: 'SHERWANIS',
+    tagline: 'Royal Regalia & Heirloom Groom Couture',
+    description: 'Architectural raw silk and matka sherwanis adorned with antique dabka, mukaish, and seed pearl zardozi for grand wedding ceremonies and pheras.',
+    bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Royal Wedding',
+    defaultFilter: { category: 'Sherwanis' },
+  },
+  {
+    slug: 'jacket-set',
+    title: 'JACKET SETS',
+    tagline: 'Structured Layering & Bandhgalas',
+    description: 'Hand-tailored Nehru jackets, asymmetric overlapping drapes, and structured Mughal bandhgala sets in pure raw silks and textured handlooms.',
+    bannerImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Structured Cuts',
+    defaultFilter: { category: 'Jacket Set' },
+  },
+  {
+    slug: 'tuxedos',
+    title: 'TUXEDOS',
+    tagline: 'Midnight Black-Tie & Silk Velvet Galas',
+    description: 'Shawl-collar silk velvet dinner jackets with satin lapels, hand-cast stud buttons, and tailored trousers crafted with bespoke canvas construction.',
+    bannerImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Black-Tie Edit',
+    defaultFilter: { style: 'Tuxedos' },
+  },
+  {
+    slug: 'indo-westerns',
+    title: 'INDO-WESTERNS',
+    tagline: 'Modern Fusion & Asymmetric Cowl Drapes',
+    description: 'Fluid asymmetrical silhouettes, pleated cowl kurtas, and contemporary crossover jackets celebrating the union of global tailoring and Indian craft.',
+    bannerImage: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Contemporary Drape',
+    defaultFilter: { category: 'Indo Westerns' },
+  },
+  {
+    slug: 'sarees',
+    title: 'SAREES',
+    tagline: 'Handloom Chanderi & Banarasi Brocades',
+    description: 'Timeless nine-yard and six-yard drapes in champagne tussar silk, pure organza tissue, and heritage Banarasi zari borders handwoven across India.',
+    bannerImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Heritage Weaves',
+    defaultFilter: { category: 'Sarees' },
+  },
+  {
     slug: 'new-arrivals',
     title: 'NEW ARRIVALS',
     tagline: 'Autumn / Festive Haute Couture Edit',
     description: 'Discover the latest hand-draped silhouettes, featuring pure raw silks, delicate zardozi needlework, and contemporary royal tailoring directly from the atelier.',
     bannerImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Latest Season',
     defaultFilter: { isNew: true },
-  },
-  {
-    slug: 'all',
-    title: 'ALL CREATIONS',
-    tagline: 'The Complete Atelier Archive',
-    description: 'Explore the full spectrum of Label Shikha Warule heritage weaves, bespoke ensembles, luxury menswear, sarees, and fine handcrafted accessories.',
-    bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
   },
   {
     slug: 'men',
@@ -75,6 +133,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
     tagline: 'Regal Bandhgalas, Sherwanis & Linen Kurtas',
     description: 'Structured silhouettes tailored in high-thread mulberry raw silk, handspun khadi, and Belgian flax linen with bespoke shoulder moulding.',
     bannerImage: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Menswear',
     defaultFilter: { gender: 'Men' },
   },
   {
@@ -83,6 +142,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
     tagline: 'Handloom Sarees, Anarkalis & Co-ord Sets',
     description: 'Graceful silhouettes celebrating India’s timeless textile traditions in Chanderi silk, Tussar georgette, and Bagru hand-block prints.',
     bannerImage: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Womenswear',
     defaultFilter: { gender: 'Women' },
   },
   {
@@ -91,6 +151,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
     tagline: 'Groom Couture & Bridal Trousseau',
     description: 'Handcrafted masterworks adorned with antique dabka, mukaish, seed pearls, and hand-woven gold zari for life’s grandest celebrations.',
     bannerImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Wedding Edit',
     defaultFilter: { style: 'Royal Wedding' },
   },
   {
@@ -99,6 +160,7 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
     tagline: 'Sangeet, Cocktail & Puja Edits',
     description: 'Vibrant celebratory ensembles finished with exquisite gota patti, aari needlework, and featherlight organza dupattas.',
     bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Festive 2026',
     defaultFilter: { style: 'Festive' },
   },
   {
@@ -107,14 +169,16 @@ export const COLLECTIONS_LIST: CollectionMeta[] = [
     tagline: 'Express Dispatches Within 24-48 Hours',
     description: 'Curated luxury pieces pre-crafted in standard sizes, ready for immediate express delivery across India and worldwide.',
     bannerImage: 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: '24h Dispatch',
     defaultFilter: { readyToShip: true },
   },
   {
     slug: 'accessories',
     title: 'FINE ACCESSORIES',
     tagline: 'Vegetable Tanned Leather & Tissue Dupattas',
-    description: 'Hand-burnished saddle bags with solid brass fittings and handwoven Varanasi tissue silk dupattas.',
+    description: 'Hand-burnished saddle bags with solid brass fittings, handwoven Varanasi tissue silk dupattas, and handcrafted juttis.',
     bannerImage: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1920&auto=format&fit=crop',
+    accentBadge: 'Accessories',
     defaultFilter: { category: 'Accessories' },
   },
 ];
@@ -131,9 +195,32 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
   onOpenSizeGuide,
   onBackToHome,
 }) => {
-  // Find current collection meta
+  // Find current collection meta with intelligent fallback
   const currentCollection = useMemo(() => {
-    return COLLECTIONS_LIST.find((c) => c.slug === currentCollectionSlug) || COLLECTIONS_LIST[0];
+    const directMatch = COLLECTIONS_LIST.find((c) => c.slug === currentCollectionSlug);
+    if (directMatch) return directMatch;
+
+    // Fuzzy matching for any dynamic category or style slug (e.g. 'kurtas', 'sherwani', 'jacket-set', 'indo-western')
+    const normalized = (currentCollectionSlug || '').toLowerCase().replace(/[-_ ]/g, '');
+    const found = COLLECTIONS_LIST.find(
+      (c) => c.slug.toLowerCase().replace(/[-_ ]/g, '') === normalized
+    );
+    if (found) return found;
+
+    // Dynamic fallback for any custom style or category
+    const title = (currentCollectionSlug || 'Collection')
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+    return {
+      slug: currentCollectionSlug || 'all',
+      title: title.toUpperCase(),
+      tagline: `Atelier Haute Couture • ${title}`,
+      description: `Explore handcrafted luxury ${title.toLowerCase()} in fine silks, organic cottons, and master artisan hand-embroidery.`,
+      bannerImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1920&auto=format&fit=crop',
+      accentBadge: title,
+    };
   }, [currentCollectionSlug]);
 
   // UI state
@@ -212,7 +299,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
   }, []);
 
   const availableStyles = useMemo(() => {
-    return ['Ethnic', 'Classic', 'Festive', 'Everyday', 'Royal Wedding'];
+    return ['Ethnic', 'Classic', 'Festive', 'Everyday', 'Royal Wedding', 'Tuxedos'];
   }, []);
 
   // Check how many filters are active
@@ -252,11 +339,19 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
   // Filter and Sort Logic
   const filteredProducts = useMemo(() => {
     let list = [...products];
+    const slug = (currentCollection.slug || '').toLowerCase();
+    const slugClean = slug.replace(/s$/, '').replace(/[-_ ]/g, '');
 
     // Base collection filter
-    if (currentCollection.slug === 'new-arrivals') {
+    if (slug === 'all') {
+      // Show all
+    } else if (slug === 'new-arrivals') {
       list = list.filter((p) => p.isNew || p.collectionSlug === 'new-arrivals');
-    } else if (currentCollection.slug === 'wedding') {
+    } else if (slug === 'men') {
+      list = list.filter((p) => p.gender?.toLowerCase() === 'men' || p.gender === 'Unisex');
+    } else if (slug === 'women') {
+      list = list.filter((p) => p.gender?.toLowerCase() === 'women' || p.gender === 'Unisex');
+    } else if (slug === 'wedding') {
       list = list.filter(
         (p) =>
           p.style === 'Royal Wedding' ||
@@ -265,7 +360,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
           p.occasion?.toLowerCase().includes('wedding') ||
           p.tags?.some((t) => t.toLowerCase().includes('wedding') || t.toLowerCase().includes('groom'))
       );
-    } else if (currentCollection.slug === 'festive') {
+    } else if (slug === 'festive') {
       list = list.filter(
         (p) =>
           p.style === 'Festive' ||
@@ -273,8 +368,31 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
           p.occasion?.toLowerCase().includes('festive') ||
           p.tags?.some((t) => t.toLowerCase().includes('festive'))
       );
-    } else if (currentCollection.slug === 'ready-to-wear') {
+    } else if (slug === 'ready-to-wear') {
       list = list.filter((p) => p.readyToShip || p.inStock);
+    } else if (slug === 'accessories') {
+      list = list.filter((p) => p.category?.toLowerCase() === 'accessories');
+    } else {
+      // Dynamic matching for specific styles/categories (e.g. kurtas, sherwanis, jacket-set, tuxedos, indo-westerns, sarees)
+      const matched = list.filter((p) => {
+        const cat = (p.category || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const style = (p.style || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const name = (p.name || '').toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, '');
+        const tags = (p.tags || []).map((t) => t.toLowerCase().replace(/s$/, '').replace(/[-_ ]/g, ''));
+        return (
+          cat === slugClean ||
+          cat.includes(slugClean) ||
+          slugClean.includes(cat) ||
+          style === slugClean ||
+          style.includes(slugClean) ||
+          slugClean.includes(style) ||
+          name.includes(slugClean) ||
+          tags.some((t) => t.includes(slugClean) || slugClean.includes(t))
+        );
+      });
+      if (matched.length > 0) {
+        list = matched;
+      }
     }
 
     // Category filter
@@ -407,6 +525,79 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
                 </button>
               );
             })}
+          </div>
+
+          {/* Quick Sub-Filter Chips Bar (Mukti & Kavith Casa Luxury Pattern) */}
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-[11px] font-cinzel">
+            <span className="text-[#7A6F68] uppercase text-[10px] tracking-wider whitespace-nowrap mr-1">
+              Quick Filter:
+            </span>
+            
+            <button
+              onClick={() => setSelectedGenders(selectedGenders.includes('Men') ? [] : ['Men'])}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                selectedGenders.includes('Men')
+                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              Men's Edit
+            </button>
+
+            <button
+              onClick={() => setSelectedGenders(selectedGenders.includes('Women') ? [] : ['Women'])}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                selectedGenders.includes('Women')
+                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              Women's Couture
+            </button>
+
+            <button
+              onClick={() => setSelectedFabrics(selectedFabrics.includes('Raw Silk') ? [] : ['Raw Silk'])}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                selectedFabrics.includes('Raw Silk')
+                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              Pure Raw Silk
+            </button>
+
+            <button
+              onClick={() => setSelectedOccasions(selectedOccasions.includes('Wedding & Pheras') ? [] : ['Wedding & Pheras'])}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                selectedOccasions.includes('Wedding & Pheras')
+                  ? 'bg-[#523A30] text-white border-[#523A30] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              Royal Wedding
+            </button>
+
+            <button
+              onClick={() => setOnlyReadyToShip(!onlyReadyToShip)}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                onlyReadyToShip
+                  ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              ⚡ Ready to Ship
+            </button>
+
+            <button
+              onClick={() => setPriceRange(priceRange === 10000 ? 40000 : 10000)}
+              className={`px-3 py-1 rounded-full border transition-all whitespace-nowrap cursor-pointer ${
+                priceRange === 10000
+                  ? 'bg-[#9E472A] text-white border-[#9E472A] font-semibold'
+                  : 'bg-[#F3E8DB]/70 text-[#523A30] border-[#DFCBB8] hover:border-[#9E472A]'
+              }`}
+            >
+              Under ₹10,000
+            </button>
           </div>
         </div>
       </section>
@@ -812,6 +1003,70 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
             })}
           </div>
         )}
+      </section>
+
+      {/* 4.5. Explore Other Styles & Curated Edits Carousel (Mukti & Kavith Casa Style) */}
+      <section className="bg-[#FAF6F0] border-t border-b border-[#DFCBB8] py-10 sm:py-14 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <span className="text-[11px] font-cinzel text-[#9E472A] tracking-widest uppercase font-semibold">
+                Curated Atelier Edits
+              </span>
+              <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-[#2C2420]">
+                EXPLORE OTHER STYLES
+              </h3>
+            </div>
+            <button
+              onClick={() => onSelectCollection('all')}
+              className="text-xs font-cinzel text-[#9E472A] font-bold hover:underline flex items-center gap-1 cursor-pointer"
+            >
+              <span>View All</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <HorizontalScrollSection
+            id="collection-explore-other-styles-track"
+            ariaLabel="Explore other styles"
+            gap="gap-4 sm:gap-6"
+            padding="px-1"
+            showArrows={true}
+            showProgressBar={true}
+          >
+            {COLLECTIONS_LIST.filter((c) => c.slug !== currentCollectionSlug && c.slug !== 'all').map((styleCol) => (
+              <div
+                key={styleCol.slug}
+                onClick={() => {
+                  onSelectCollection(styleCol.slug);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="group flex flex-col items-center flex-none w-[68vw] sm:w-[42vw] md:w-[28vw] lg:w-[calc((100%-3*24px)/4)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
+              >
+                <div className="w-full mb-3">
+                  <IndianArchCard
+                    id={`explore-col-${styleCol.slug}`}
+                    image={styleCol.bannerImage}
+                    alt={styleCol.title}
+                    aspectRatio="aspect-[4/5]"
+                    borderColor="#9E472A"
+                    strokeWidth={1.8}
+                    showDoubleBorder={true}
+                    objectPosition="object-center"
+                  />
+                </div>
+
+                <span className="font-cinzel text-sm sm:text-base font-bold tracking-wider text-[#2C2420] group-hover:text-[#9E472A] transition-colors text-center">
+                  {styleCol.title}
+                </span>
+
+                <span className="text-xs text-[#7A6F68] font-serif-luxury italic text-center mt-0.5 line-clamp-1">
+                  {styleCol.tagline}
+                </span>
+              </div>
+            ))}
+          </HorizontalScrollSection>
+        </div>
       </section>
 
       {/* 5. Filter & Refine Slide-Over Drawer (Mukti & Kavith Casa Style) */}
