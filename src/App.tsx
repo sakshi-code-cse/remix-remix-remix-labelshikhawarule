@@ -890,6 +890,8 @@ export default function App() {
                 navigateToCollection('new-arrivals');
               }
             }}
+            onNavigateToHome={navigateToHome}
+            onNavigateToCollection={(slug) => navigateToCollection(slug)}
             onAddToCart={(prod, size, qty, custom) => {
               handleAddToCart(prod, size, qty);
               addToast('success', `Added ${prod.name} (${size}) to your Shopping Bag`);
