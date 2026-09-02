@@ -29,8 +29,8 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Signature Mughal Arch Style Silhouette Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
+        {/* Style Cards Grid: 4 items per row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {styles.map((style) => {
             const isSelected = selectedStyle?.toLowerCase() === style.title.toLowerCase();
 
@@ -39,10 +39,10 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
                 key={style.id}
                 id={`style-card-${style.id}`}
                 onClick={() => onSelectStyle(style.title)}
-                className="group flex flex-col items-center cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
+                className="group flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
-                {/* Mughal Arch Frame */}
-                <div className={`w-full max-w-[280px] transition-transform duration-300 ${isSelected ? 'scale-105' : ''}`}>
+                {/* Rectangular Image Frame */}
+                <div className={`w-full mb-3 transition-transform duration-300 ${isSelected ? 'scale-[1.02]' : ''}`}>
                   <IndianArchCard
                     id={`style-arch-${style.id}`}
                     image={style.image}
@@ -56,13 +56,13 @@ export const ShopByStyle: React.FC<ShopByStyleProps> = ({ onSelectStyle, selecte
                 </div>
 
                 {/* Card Title Below */}
-                <span className={`mt-3 font-cinzel text-sm sm:text-base font-semibold tracking-wider transition-colors duration-200 ${
+                <span className={`font-cinzel text-sm sm:text-base font-semibold tracking-wider transition-colors duration-200 text-center ${
                   isSelected ? 'text-[#9E472A]' : 'text-[#2C2420] group-hover:text-[#9E472A]'
                 }`}>
                   {style.title}
                 </span>
 
-                <span className="text-[11px] text-[#7A6F68] font-normal mt-0.5 opacity-80 font-sans">
+                <span className="text-xs text-[#7A6F68] font-normal mt-1 opacity-80 font-sans">
                   {style.itemCount} Designs
                 </span>
               </div>

@@ -138,7 +138,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
   // UI state
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
-  const [gridColumns, setGridColumns] = useState<2 | 3 | 4>(3);
+  const [gridColumns, setGridColumns] = useState<2 | 3 | 4>(4);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [quickShopProduct, setQuickShopProduct] = useState<Product | null>(null);
 

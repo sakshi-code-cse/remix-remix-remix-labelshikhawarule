@@ -36,8 +36,8 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
 
-        {/* Signature Mughal Arch Category/Collection Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 justify-items-center">
+        {/* Collection Cards Grid: 4 items per row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {categories.map((cat) => {
             const isSelected = selectedCategory?.toLowerCase() === cat.title.toLowerCase();
 
@@ -46,10 +46,10 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
                 key={cat.id}
                 id={`category-card-${cat.id}`}
                 onClick={() => onSelectCategory(cat.title)}
-                className="group flex flex-col items-center w-full max-w-[280px] cursor-pointer transition-transform duration-300 hover:-translate-y-1.5"
+                className="group flex flex-col items-center w-full cursor-pointer transition-all duration-300 hover:-translate-y-1.5"
               >
-                {/* Mughal Arch Frame */}
-                <div className={`w-full transition-transform duration-300 ${isSelected ? 'scale-105' : ''}`}>
+                {/* Rectangular Image Frame */}
+                <div className={`w-full mb-3 transition-transform duration-300 ${isSelected ? 'scale-[1.02]' : ''}`}>
                   <IndianArchCard
                     id={`category-arch-${cat.id}`}
                     image={cat.image}
@@ -63,13 +63,13 @@ export const ShopByCategory: React.FC<ShopByCategoryProps> = ({
                 </div>
 
                 {/* Category Title */}
-                <span className={`mt-3 font-cinzel text-sm sm:text-base font-semibold tracking-wider transition-colors duration-200 text-center ${
+                <span className={`font-cinzel text-sm sm:text-base font-semibold tracking-wider transition-colors duration-200 text-center ${
                   isSelected ? 'text-[#9E472A]' : 'text-[#2C2420] group-hover:text-[#9E472A]'
                 }`}>
                   {cat.title}
                 </span>
 
-                <span className="text-[11px] sm:text-xs text-[#7A6F68] font-normal mt-0.5 opacity-80 font-sans">
+                <span className="text-xs text-[#7A6F68] font-normal mt-1 opacity-80 font-sans">
                   {cat.itemCount} Ensembles
                 </span>
               </div>
