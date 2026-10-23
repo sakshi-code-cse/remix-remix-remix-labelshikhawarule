@@ -82,7 +82,9 @@
 }
 
 /* Position -2 & +2 (Outer Cards - Slightly draped, 70%+ visible) */
-.client-card[style*="--position: 2"] {
+.client-card.pos-2,
+.client-card[style*="--position: 2"],
+.client-card[style*="--position:2"] {
   width: 245px;
   height: 360px;
   opacity: 0.90;
@@ -92,7 +94,9 @@
   box-shadow: 0 10px 28px rgba(50, 40, 30, 0.12);
 }
 
-.client-card[style*="--position: -2"] {
+.client-card.pos-neg-2,
+.client-card[style*="--position: -2"],
+.client-card[style*="--position:-2"] {
   width: 245px;
   height: 360px;
   opacity: 0.90;
@@ -103,7 +107,9 @@
 }
 
 /* Position -1 & +1 (Immediate Side Cards - Subtle drape under center card) */
-.client-card[style*="--position: 1"] {
+.client-card.pos-1,
+.client-card[style*="--position: 1"],
+.client-card[style*="--position:1"] {
   width: 290px;
   height: 420px;
   opacity: 0.97;
@@ -113,7 +119,9 @@
   box-shadow: 0 16px 38px rgba(70, 55, 40, 0.16);
 }
 
-.client-card[style*="--position: -1"] {
+.client-card.pos-neg-1,
+.client-card[style*="--position: -1"],
+.client-card[style*="--position:-1"] {
   width: 290px;
   height: 420px;
   opacity: 0.97;
@@ -124,8 +132,10 @@
 }
 
 /* Position 0 (Center Active Card - Forefront Stage, Regal Presence) */
+.client-card.pos-0,
 .client-card.active-card,
-.client-card[style*="--position: 0"] {
+.client-card[style*="--position: 0"],
+.client-card[style*="--position:0"] {
   width: 340px;
   height: 480px;
   opacity: 1;
@@ -244,25 +254,33 @@
     height: 450px;
   }
 
+  .client-card.pos-0,
   .client-card.active-card,
-  .client-card[style*="--position: 0"] {
+  .client-card[style*="--position: 0"],
+  .client-card[style*="--position:0"] {
     width: 280px;
     height: 400px;
   }
 
-  .client-card[style*="--position: 1"] {
+  .client-card.pos-1,
+  .client-card[style*="--position: 1"],
+  .client-card[style*="--position:1"] {
     width: 235px;
     height: 350px;
     transform: translate(calc(-50% + 180px), -50%) scale(0.95);
   }
 
-  .client-card[style*="--position: -1"] {
+  .client-card.pos-neg-1,
+  .client-card[style*="--position: -1"],
+  .client-card[style*="--position:-1"] {
     width: 235px;
     height: 350px;
     transform: translate(calc(-50% - 180px), -50%) scale(0.95);
   }
 
-  .client-card[style*="--position: 2"] {
+  .client-card.pos-2,
+  .client-card[style*="--position: 2"],
+  .client-card[style*="--position:2"] {
     width: 195px;
     height: 295px;
     display: block;
@@ -270,7 +288,9 @@
     transform: translate(calc(-50% + 340px), -50%) scale(0.90);
   }
 
-  .client-card[style*="--position: -2"] {
+  .client-card.pos-neg-2,
+  .client-card[style*="--position: -2"],
+  .client-card[style*="--position:-2"] {
     width: 195px;
     height: 295px;
     display: block;
@@ -303,25 +323,33 @@
     height: 350px;
   }
 
+  .client-card.pos-0,
   .client-card.active-card,
-  .client-card[style*="--position: 0"] {
+  .client-card[style*="--position: 0"],
+  .client-card[style*="--position:0"] {
     width: 185px;
     height: 275px;
   }
 
-  .client-card[style*="--position: 1"] {
+  .client-card.pos-1,
+  .client-card[style*="--position: 1"],
+  .client-card[style*="--position:1"] {
     width: 150px;
     height: 230px;
     transform: translate(calc(-50% + 115px), -50%) scale(0.95);
   }
 
-  .client-card[style*="--position: -1"] {
+  .client-card.pos-neg-1,
+  .client-card[style*="--position: -1"],
+  .client-card[style*="--position:-1"] {
     width: 150px;
     height: 230px;
     transform: translate(calc(-50% - 115px), -50%) scale(0.95);
   }
 
-  .client-card[style*="--position: 2"] {
+  .client-card.pos-2,
+  .client-card[style*="--position: 2"],
+  .client-card[style*="--position:2"] {
     width: 120px;
     height: 185px;
     display: block;
@@ -329,7 +357,9 @@
     transform: translate(calc(-50% + 215px), -50%) scale(0.88);
   }
 
-  .client-card[style*="--position: -2"] {
+  .client-card.pos-neg-2,
+  .client-card[style*="--position: -2"],
+  .client-card[style*="--position:-2"] {
     width: 120px;
     height: 185px;
     display: block;

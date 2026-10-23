@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { X, MapPin, Calendar, Sparkles, Share2, Check, Eye } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, MapPin, Calendar, Sparkles, Share2, Check, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClientDiary } from '../types';
-import { HorizontalScrollSection } from './common/HorizontalScrollSection';
+import './ClientDiaries.css';
 
 export interface ClientItem {
   id?: string;
@@ -110,8 +110,11 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
   onOpenReviewModal,
   onBookAppointment
 }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedStory, setSelectedStory] = useState<ClientItem | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   // Sync with prop list or default clients
   const clients: ClientItem[] = React.useMemo(() => {
@@ -133,6 +136,55 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
     return DEFAULT_CLIENTS;
   }, [diariesList]);
 
+  // Autoplay rotation every 5.5 seconds, paused on hover or when modal is open
+  useEffect(() => {
+    if (isPaused || selectedStory || clients.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % clients.length);
+    }, 5500);
+    return () => clearInterval(interval);
+  }, [isPaused, selectedStory, clients.length]);
+
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + clients.length) % clients.length);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % clients.length);
+  };
+
+  // Cyclic distance calculation (-2, -1, 0, 1, 2)
+  const getCardPosition = (index: number, current: number, total: number) => {
+    let diff = index - current;
+    while (diff > total / 2) diff -= total;
+    while (diff < -total / 2) diff += total;
+    return diff;
+  };
+
+  const handleCardClick = (index: number, pos: number, client: ClientItem) => {
+    if (pos === 0) {
+      setSelectedStory(client);
+    } else {
+      setActiveIndex(index);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    if (diff > 45) {
+      handleNext();
+    } else if (diff < -45) {
+      handlePrev();
+    }
+    touchStartX.current = null;
+  };
+
   const handleShare = (story: ClientItem, e: React.MouseEvent) => {
     e.stopPropagation();
     if (navigator.share) {
@@ -148,12 +200,18 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
     }
   };
 
+  const currentClient = clients[activeIndex];
+
   return (
-    <section id="client-diaries-section" className="py-10 md:py-16 bg-[#FAF6F0] overflow-hidden">
-      
+    <section 
+      id="client-diaries-section" 
+      className="client-diaries"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* 1. SECTION HEADER */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="flex items-center justify-center gap-4 mb-8 md:mb-12">
+        <div className="flex items-center justify-center gap-4 mb-3 md:mb-5">
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rotate-45 bg-[#9E472A]" />
@@ -164,92 +222,153 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
           </div>
           <div className="h-[1px] bg-[#D4C3B2] flex-1 max-w-[120px] sm:max-w-[200px]" />
         </div>
+        <p className="text-center text-xs sm:text-sm font-serif-luxury italic text-[#7A6F68] -mt-1 mb-2">
+          Patrons & Connoisseurs in Bespoke Label Shikha Warule Creations
+        </p>
       </div>
 
-      {/* 2. HORIZONTAL SCROLLING CLIENT CAROUSEL */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <HorizontalScrollSection
-          id="client-diaries-track"
-          ariaLabel="Client Diaries patron carousel"
-          gap="gap-5 sm:gap-6 lg:gap-7"
-          padding="px-1"
-          showArrows={true}
-          showProgressBar={true}
+      {/* 2. 3D COVERFLOW STAGE CAROUSEL */}
+      <div 
+        className="client-carousel"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="carousel-arrow arrow-left"
+          aria-label="Previous client"
         >
-          {clients.map((client, index) => (
-            <div
-              key={client.id || client.name || index}
-              id={`client-card-${index}`}
-              onClick={() => setSelectedStory(client)}
-              className="group flex flex-col flex-none w-[76vw] sm:w-[48vw] md:w-[34vw] lg:w-[300px] xl:w-[320px] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-2"
-            >
-              {/* Editorial Frame with non-cropped face positioning */}
-              <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-[#2C2420] shadow-md group-hover:shadow-2xl border border-[#DFCBB8]/50 transition-all duration-500">
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+
+        <div className="client-stage">
+          {clients.map((client, index) => {
+            const pos = getCardPosition(index, activeIndex, clients.length);
+            const posClass = pos === 0 
+              ? 'pos-0 active-card' 
+              : pos > 0 
+                ? `pos-${pos}` 
+                : `pos-neg-${Math.abs(pos)}`;
+
+            return (
+              <div
+                key={client.id || `${client.name}-${index}`}
+                id={`client-card-${index}`}
+                className={`client-card ${posClass}`}
+                style={{ '--position': pos } as React.CSSProperties}
+                onClick={() => handleCardClick(index, pos, client)}
+                role="button"
+                tabIndex={pos === 0 ? 0 : -1}
+                aria-label={`${client.name} - ${client.outfit || 'Client Diary'}`}
+              >
                 <img
                   src={client.image}
                   alt={client.name}
                   draggable="false"
                   loading="lazy"
-                  className="w-full h-full object-cover object-[center_16%] filter brightness-[0.97] group-hover:brightness-105 group-hover:scale-105 transition-all duration-700 ease-out"
+                  className="w-full h-full object-cover object-[center_16%]"
                 />
 
                 {/* Subtle Luxury Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30 opacity-80 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/30 opacity-75 group-hover:opacity-60 transition-opacity pointer-events-none" />
 
-                {/* Top Badge: Category */}
+                {/* Top Category Badge */}
                 {client.category && (
-                  <div className="absolute top-3.5 left-3.5 z-10">
+                  <div className="absolute top-3.5 left-3.5 z-10 pointer-events-none">
                     <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-[9.5px] font-cinzel font-semibold tracking-[0.18em] text-white uppercase rounded-full border border-white/20">
                       {client.category}
                     </span>
                   </div>
                 )}
 
-                {/* Hover Story Prompt Icon */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
-                  <div className="px-3.5 py-1.5 rounded-full bg-white/90 text-[#2C2420] text-xs font-cinzel font-semibold tracking-wider flex items-center gap-1.5 shadow-xl">
-                    <Eye className="w-3.5 h-3.5 text-[#9E472A]" />
-                    <span>View Story</span>
+                {/* Center Active Card Hover Story Prompt */}
+                {pos === 0 && (
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
+                    <div className="px-4 py-2 rounded-full bg-white/95 text-[#2C2420] text-xs font-cinzel font-semibold tracking-wider flex items-center gap-1.5 shadow-xl">
+                      <Eye className="w-3.5 h-3.5 text-[#9E472A]" />
+                      <span>View Story</span>
+                    </div>
                   </div>
-                </div>
-
-                {/* Bottom Overlay Info inside card */}
-                <div className="absolute inset-x-0 bottom-0 p-4 z-10 text-center">
-                  <h3 className="font-cinzel text-sm sm:text-base font-bold tracking-[0.16em] text-white uppercase drop-shadow-md">
-                    {client.name}
-                  </h3>
-                  {(client.venue || client.city || client.occasion) && (
-                    <p className="text-[11px] text-[#F3D7C5] font-light mt-0.5 line-clamp-1 opacity-90">
-                      {client.venue || client.city || client.occasion}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
+            );
+          })}
+        </div>
 
-              {/* Outfit details subtitle below card */}
-              {client.outfit && (
-                <span className="text-[11px] text-[#7A6F68] font-sans text-center mt-2.5 line-clamp-1 px-1 opacity-85">
-                  {client.outfit}
-                </span>
-              )}
-            </div>
-          ))}
-        </HorizontalScrollSection>
-
-        {/* 3. SUBMIT ATELIER STORY LINK */}
-        {onOpenReviewModal && (
-          <div className="text-center mt-6">
-            <button
-              onClick={onOpenReviewModal}
-              className="text-[11px] font-sans text-[#7A6F68] hover:text-[#9E472A] tracking-[0.2em] uppercase transition-colors cursor-pointer"
-            >
-              Submit Your Atelier Story
-            </button>
-          </div>
-        )}
+        <button
+          type="button"
+          onClick={handleNext}
+          className="carousel-arrow arrow-right"
+          aria-label="Next client"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
       </div>
 
-      {/* 4. LIGHTBOX STORY MODAL */}
+      {/* 3. ACTIVE CLIENT NAME & EDITORIAL DETAILS */}
+      {currentClient && (
+        <div className="text-center px-4">
+          <div 
+            className="active-client-name cursor-pointer hover:opacity-85 transition-opacity inline-block"
+            onClick={() => setSelectedStory(currentClient)}
+          >
+            {currentClient.name}
+          </div>
+
+          {(currentClient.venue || currentClient.city || currentClient.occasion) && (
+            <p className="text-xs sm:text-sm text-[#7A6F68] font-serif-luxury italic mt-1">
+              {currentClient.venue || currentClient.city || currentClient.occasion}
+            </p>
+          )}
+
+          {currentClient.outfit && (
+            <p className="text-[11px] sm:text-xs text-[#8C827A] mt-1 max-w-md mx-auto line-clamp-1">
+              {currentClient.outfit}
+            </p>
+          )}
+
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setSelectedStory(currentClient)}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white border border-[#DFCBB8] text-xs font-cinzel text-[#2C2420] hover:text-[#9E472A] hover:border-[#9E472A] transition-colors shadow-2xs cursor-pointer"
+            >
+              <Eye className="w-3.5 h-3.5 text-[#9E472A]" />
+              <span>View Story Details</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 4. DOT INDICATORS */}
+      <div className="flex items-center justify-center gap-2 mt-5">
+        {clients.map((c, i) => (
+          <button
+            key={c.id || i}
+            onClick={() => setActiveIndex(i)}
+            aria-label={`Go to client slide ${i + 1}`}
+            className={`transition-all cursor-pointer rounded-full ${
+              i === activeIndex
+                ? 'w-6 h-1.5 bg-[#9E472A]'
+                : 'w-1.5 h-1.5 bg-[#DFCBB8] hover:bg-[#9E472A]/60'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* 5. SUBMIT ATELIER STORY LINK */}
+      {onOpenReviewModal && (
+        <div className="text-center mt-5">
+          <button
+            onClick={onOpenReviewModal}
+            className="text-[11px] font-sans text-[#7A6F68] hover:text-[#9E472A] tracking-[0.2em] uppercase transition-colors cursor-pointer"
+          >
+            Submit Your Atelier Story
+          </button>
+        </div>
+      )}
+
+      {/* 6. LIGHTBOX STORY MODAL */}
       <AnimatePresence>
         {selectedStory && (
           <div className="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
