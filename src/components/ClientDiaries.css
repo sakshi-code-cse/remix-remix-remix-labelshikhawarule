@@ -229,11 +229,12 @@
 -------------------------------- */
 
 .active-client-name {
-  margin-top: 22px;
+  margin-top: 18px;
   text-align: center;
 
-  font-family: Cinzel, Georgia, serif;
-  font-size: 18px;
+  font-family: inherit;
+  font-size: 19px;
+  font-weight: 700;
   letter-spacing: 0.16em;
 
   color: #9E472A;

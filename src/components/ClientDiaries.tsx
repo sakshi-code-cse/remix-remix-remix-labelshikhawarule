@@ -145,6 +145,46 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
     return () => clearInterval(interval);
   }, [isPaused, selectedStory, clients.length]);
 
+  // Lock body scroll when story lightbox modal is open
+  useEffect(() => {
+    if (selectedStory) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedStory]);
+
+  // Keyboard navigation: Left/Right arrows for carousel, Escape for modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedStory) {
+        if (e.key === 'Escape') {
+          setSelectedStory(null);
+        }
+        return;
+      }
+
+      // Check if client diaries is in viewport or focused
+      const el = document.getElementById('client-diaries-section');
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedStory, clients.length]);
+
   const handlePrev = () => {
     setActiveIndex((prev) => (prev - 1 + clients.length) % clients.length);
   };
@@ -291,6 +331,18 @@ export const ClientDiaries: React.FC<ClientDiariesProps> = ({
                     </div>
                   </div>
                 )}
+
+                {/* Bottom Overlay with Patron Name */}
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 z-10 text-center pointer-events-none">
+                  <h3 className="font-cinzel text-xs sm:text-sm font-bold tracking-[0.16em] text-white uppercase drop-shadow-md line-clamp-1">
+                    {client.name}
+                  </h3>
+                  {(client.venue || client.city || client.occasion) && (
+                    <p className="text-[10px] sm:text-[11px] text-[#F3D7C5] font-light mt-0.5 line-clamp-1 opacity-90 drop-shadow-xs">
+                      {client.venue || client.city || client.occasion}
+                    </p>
+                  )}
+                </div>
               </div>
             );
           })}
