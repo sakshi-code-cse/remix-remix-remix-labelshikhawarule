@@ -228,6 +228,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [productCategoryFilter, setProductCategoryFilter] = useState('All');
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [productFormError, setProductFormError] = useState<string | null>(null);
 
   // Order Filters & Modal
   const [orderSearch, setOrderSearch] = useState('');
@@ -1272,6 +1273,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             </div>
 
             <button
+              onClick={() => {
+                setProductFormError(null);
+                setProductFormImage('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop');
+                setProductFormHoverImage('');
+                setProductFormGallery([]);
+                setEditingProduct(null);
+                setIsAddProductOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#7A1526] hover:bg-[#61101E] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ Add Garment</span>
+            </button>
+
+            <button
               onClick={onCloseAdminPortal}
               className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#7A1526] via-[#851628] to-[#991B30] hover:from-[#61101E] hover:to-[#801426] text-white rounded-lg text-xs font-cinzel font-semibold shadow-md transition-all cursor-pointer"
             >
@@ -1347,8 +1363,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="mt-3 text-2xl sm:text-3xl font-bold font-serif-luxury text-[#3B0A12]">
                     {metrics.totalProducts} <span className="text-xs text-[#7E4A53] font-sans font-normal">({metrics.inStockCount} In Stock)</span>
                   </div>
-                  <div className="mt-2 text-xs text-[#6B3740]">
-                    4 Style Collections • 6 Categories
+                  <div className="mt-3 flex items-center justify-between gap-2 pt-2 border-t border-[#F0D5DA]/60">
+                    <button
+                      onClick={() => {
+                        setProductFormError(null);
+                        setProductFormImage('https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop');
+                        setProductFormHoverImage('');
+                        setProductFormGallery([]);
+                        setEditingProduct(null);
+                        setIsAddProductOpen(true);
+                      }}
+                      className="text-[11px] font-cinzel font-bold text-[#7A1526] hover:text-[#61101E] flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Add New Piece</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('products')}
+                      className="text-[11px] font-cinzel text-[#7E4A53] hover:text-[#3B0A12] cursor-pointer"
+                    >
+                      Manage ({products.length}) →
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1523,14 +1558,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       placeholder="Search pieces, fabric, style..."
                       value={productSearch}
                       onChange={(e) => setProductSearch(e.target.value)}
-                      className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
+                      className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-[#3B0A12] placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
                     />
                   </div>
 
                   <select
                     value={productCategoryFilter}
                     onChange={(e) => setProductCategoryFilter(e.target.value)}
-                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#7A1526]"
+                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   >
                     <option value="All">All Categories</option>
                     <option value="Kurtas">Kurtas</option>
@@ -1701,7 +1736,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 setProductFormGallery(prod.images || []);
                                 setEditingProduct(prod);
                               }}
-                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-white transition-colors cursor-pointer"
+                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#7A1526] text-[#7A1526] hover:text-white transition-colors cursor-pointer"
                               title="Edit piece"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -1713,7 +1748,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                   onDeleteProduct(prod.id);
                                 }
                               }}
-                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#FF4D4F] text-white transition-colors cursor-pointer"
+                              className="p-1.5 rounded bg-[#FAF2F4] hover:bg-[#FF4D4F] text-[#CF1322] hover:text-white transition-colors cursor-pointer"
                               title="Delete piece"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1743,7 +1778,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     placeholder="Search by order #, client name, city..."
                     value={orderSearch}
                     onChange={(e) => setOrderSearch(e.target.value)}
-                    className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
+                    className="w-full bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg pl-9 pr-3 py-2 text-xs text-[#3B0A12] placeholder-[#B59199] focus:outline-none focus:border-[#7A1526]"
                   />
                 </div>
 
@@ -1752,7 +1787,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <select
                     value={orderStatusFilter}
                     onChange={(e) => setOrderStatusFilter(e.target.value)}
-                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#7A1526]"
+                    className="bg-[#FCF4F6] border border-[#F0D5DA] rounded-lg px-3 py-2 text-xs text-[#3B0A12] focus:outline-none focus:border-[#7A1526]"
                   >
                     <option value="All">All Statuses</option>
                     <option value="Processing">Processing</option>
@@ -5332,42 +5367,84 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       {/* MODAL: ADD / EDIT PRODUCT */}
       {(isAddProductOpen || editingProduct) && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-[#DFBAC2] rounded-2xl max-w-2xl w-full p-6 space-y-4 text-xs my-8 text-[#3B0A12]">
+          <div className="bg-white border border-[#DFBAC2] rounded-2xl max-w-2xl w-full p-6 space-y-4 text-xs my-8 text-[#3B0A12] shadow-2xl">
             <div className="flex items-center justify-between pb-3 border-b border-[#F0D5DA]">
-              <h2 className="font-cinzel text-base font-bold text-white">
-                {editingProduct ? `Edit Piece: ${editingProduct.name}` : 'Add New Handcrafted Ensemble'}
-              </h2>
+              <div className="flex items-center gap-2">
+                <Package className="w-5 h-5 text-[#7A1526]" />
+                <h2 className="font-cinzel text-base font-bold text-[#3B0A12] tracking-wide">
+                  {editingProduct ? `Edit Piece: ${editingProduct.name}` : 'Add New Handcrafted Ensemble'}
+                </h2>
+              </div>
               <button
+                type="button"
                 onClick={() => {
                   setIsAddProductOpen(false);
                   setEditingProduct(null);
+                  setProductFormError(null);
                 }}
-                className="p-1 text-[#7E4A53] hover:text-white"
+                className="p-1.5 rounded-lg text-[#7E4A53] hover:text-[#7A1526] hover:bg-[#FAF2F4] transition-colors cursor-pointer"
+                title="Close"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
+            {productFormError && (
+              <div className="p-3 bg-[#FFF1F0] border border-[#FFCCC7] rounded-lg text-[#CF1322] flex items-center gap-2 animate-shake">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span className="font-medium">{productFormError}</span>
+              </div>
+            )}
+
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                setProductFormError(null);
                 const formEl = e.currentTarget;
                 const formData = new FormData(formEl);
 
+                const name = ((formData.get('name') as string) || '').trim();
+                const rawPrice = formData.get('price') as string;
+                const price = parseFloat(rawPrice);
+
+                if (!name) {
+                  setProductFormError('Please enter an ensemble name.');
+                  return;
+                }
+
+                if (isNaN(price) || price <= 0) {
+                  setProductFormError('Please enter a valid positive selling price.');
+                  return;
+                }
+
+                const rawOriginalPrice = formData.get('originalPrice') as string;
+                const originalPrice = rawOriginalPrice ? parseFloat(rawOriginalPrice) : undefined;
+                const category = (formData.get('category') as Product['category']) || 'Kurtas';
+                const style = (formData.get('style') as Product['style']) || 'Ethnic';
+                const gender = (formData.get('gender') as Product['gender']) || 'Women';
+                const fabric = ((formData.get('fabric') as string) || '').trim() || 'Pure Handloom Silk with Zari Border';
+                const description = ((formData.get('description') as string) || '').trim() || 'Exquisitely tailored couture piece crafted with heritage techniques.';
+                const artisanNote = ((formData.get('artisanNote') as string) || '').trim() || 'Handwoven by master artisans using traditional looms.';
+
+                // Fallback image if user left image field empty
+                const finalImage = productFormImage.trim() || 
+                  (formData.get('image') as string)?.trim() || 
+                  'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop';
+
                 const itemData: Product = {
                   id: editingProduct ? editingProduct.id : `sw-${Date.now()}`,
-                  name: formData.get('name') as string,
-                  price: parseFloat(formData.get('price') as string) || 0,
-                  originalPrice: formData.get('originalPrice') ? parseFloat(formData.get('originalPrice') as string) : undefined,
-                  category: formData.get('category') as Product['category'],
-                  style: formData.get('style') as Product['style'],
-                  gender: formData.get('gender') as Product['gender'],
-                  image: productFormImage || (formData.get('image') as string) || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop',
-                  hoverImage: productFormHoverImage || undefined,
+                  name,
+                  price,
+                  originalPrice: originalPrice && !isNaN(originalPrice) ? originalPrice : undefined,
+                  category,
+                  style,
+                  gender,
+                  image: finalImage,
+                  hoverImage: productFormHoverImage.trim() || undefined,
                   images: productFormGallery.length > 0 ? productFormGallery : undefined,
-                  fabric: formData.get('fabric') as string,
-                  description: formData.get('description') as string,
-                  artisanNote: formData.get('artisanNote') as string,
+                  fabric,
+                  description,
+                  artisanNote,
                   careInstructions: ['Dry Clean Only', 'Steam Iron Low', 'Store in Mulmul Cloth'],
                   sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
                   rating: editingProduct?.rating || 4.9,
@@ -5383,8 +5460,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   onAddProduct(itemData);
                 }
 
+                setActiveTab('products');
                 setIsAddProductOpen(false);
                 setEditingProduct(null);
+                setProductFormError(null);
               }}
               className="space-y-4"
             >
@@ -5625,7 +5704,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <div>
                           <input
                             name="image"
-                            required
                             value={productFormImage}
                             onChange={(e) => setProductFormImage(e.target.value)}
                             placeholder="Or paste direct image URL (https://...)"

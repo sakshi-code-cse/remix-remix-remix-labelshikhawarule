@@ -21,9 +21,9 @@ export const compressImageFile = (
     }
 
     const {
-      maxWidth = 1000,
-      maxHeight = 1333,
-      quality = 0.84,
+      maxWidth = 720,
+      maxHeight = 960,
+      quality = 0.76,
       mimeType = 'image/jpeg',
     } = options;
 

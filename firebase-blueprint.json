@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Handcrafted luxury couture garments and apparel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "category": { "type": "string" },
+        "style": { "type": "string" },
+        "gender": { "type": "string" },
+        "image": { "type": "string" },
+        "hoverImage": { "type": "string" },
+        "fabric": { "type": "string" },
+        "description": { "type": "string" },
+        "artisanNote": { "type": "string" },
+        "inStock": { "type": "boolean" },
+        "isBestSeller": { "type": "boolean" },
+        "isNew": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" }
+      },
+      "required": ["id", "name", "price", "category", "image"]
+    },
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "Store configuration, products collection, CMS and orders settings",
+      "type": "object",
+      "properties": {
+        "value": { "type": "object" },
+        "lastUpdated": { "type": "string" }
+      }
+    },
+    "MediaAsset": {
+      "title": "MediaAsset",
+      "description": "Uploaded media images or videos for the luxury couture house",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": ["id", "url"]
+    }
+  },
+  "firestore": {
+    "/store_settings/{settingId}": {
+      "schema": "StoreSettings",
+      "description": "Dedicated store data, products list, orders and CMS sections"
+    },
+    "/media_assets/{assetId}": {
+      "schema": "MediaAsset",
+      "description": "Brand media and lookbook assets library"
+    }
+  }
+}

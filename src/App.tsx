@@ -185,8 +185,13 @@ export default function App() {
         }
 
         if (data.products && Array.isArray(data.products) && data.products.length > 0) {
-          setProducts(data.products);
-          safeLocalStorage.setJSON('label_sw_products', data.products);
+          setProducts((currentLocal) => {
+            const cloudIds = new Set(data.products!.map((p) => p.id));
+            const localOnly = currentLocal.filter((p) => !cloudIds.has(p.id));
+            const merged = [...localOnly, ...data.products!];
+            safeLocalStorage.setJSON('label_sw_products', merged);
+            return merged;
+          });
         }
         if (data.orders && Array.isArray(data.orders)) {
           setOrders(data.orders);
